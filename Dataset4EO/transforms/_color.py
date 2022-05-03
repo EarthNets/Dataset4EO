@@ -4,8 +4,8 @@ from typing import Any, Dict, Union, Tuple, Optional, Sequence, Callable, TypeVa
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.transforms import Transform, functional as F
+from Dataset4EO import features
+from Dataset4EO.transforms import Transform, functional as F
 from torchvision.transforms import functional as _F
 
 from ._transform import _RandomApplyTransform

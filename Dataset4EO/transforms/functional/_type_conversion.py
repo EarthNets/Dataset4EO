@@ -6,7 +6,7 @@ import PIL.Image
 import torch
 from torch.nn.functional import one_hot
 from torchvision.io.video import read_video
-from torchvision.prototype.utils._internal import ReadOnlyTensorBuffer
+from Dataset4EO.utils._internal import ReadOnlyTensorBuffer
 from torchvision.transforms import functional as _F
 
 

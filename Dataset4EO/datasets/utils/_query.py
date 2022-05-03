@@ -1,7 +1,7 @@
 import collections.abc
 from typing import Any, Callable, Iterator, Optional, Tuple, TypeVar, cast
 
-from torchvision.prototype.features import BoundingBox, Image
+from Dataset4EO.features import BoundingBox, Image
 
 T = TypeVar("T")
 

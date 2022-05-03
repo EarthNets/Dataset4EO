@@ -2,11 +2,38 @@ from typing import Optional, List
 
 import PIL.Image
 import torch
+from torch import Tensor
 from torchvision.transforms import functional_tensor as _FT
 from torchvision.transforms.functional import pil_to_tensor, to_pil_image
 
 
-normalize_image_tensor = _FT.normalize
+def normalize(tensor: Tensor, mean: List[float], std: List[float], inplace: bool = False) -> Tensor:
+    _assert_image_tensor(tensor)
+
+    if not tensor.is_floating_point():
+        raise TypeError(f"Input tensor should be a float tensor. Got {tensor.dtype}.")
+
+    if tensor.ndim < 3:
+        raise ValueError(
+            f"Expected tensor to be a tensor image of size (..., C, H, W). Got tensor.size() = {tensor.size()}"
+        )
+
+    if not inplace:
+        tensor = tensor.clone()
+
+    dtype = tensor.dtype
+    mean = torch.as_tensor(mean, dtype=dtype, device=tensor.device)
+    std = torch.as_tensor(std, dtype=dtype, device=tensor.device)
+    if (std == 0).any():
+        raise ValueError(f"std evaluated to zero after conversion to {dtype}, leading to division by zero.")
+    if mean.ndim == 1:
+        mean = mean.view(-1, 1, 1)
+    if std.ndim == 1:
+        std = std.view(-1, 1, 1)
+    tensor.sub_(mean).div_(std)
+    return tensor
+
+normalize_image_tensor = normalize
 
 
 def gaussian_blur_image_tensor(

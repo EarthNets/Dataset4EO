@@ -1,9 +1,9 @@
 import pathlib
 from typing import Any, Dict, List, Callable, Type, Optional, Union, TypeVar
 
-from torchvision.prototype.datasets import home
-from torchvision.prototype.datasets.utils import Dataset
-from torchvision.prototype.utils._internal import add_suggestion
+from Dataset4EO.datasets import home
+from Dataset4EO.datasets.utils import Dataset
+from Dataset4EO.utils._internal import add_suggestion
 
 
 T = TypeVar("T")

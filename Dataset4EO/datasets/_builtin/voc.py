@@ -13,8 +13,8 @@ from torchdata.datapipes.iter import (
     LineReader,
 )
 from torchvision.datasets import VOCDetection
-from torchvision.prototype.datasets.utils import OnlineResource, HttpResource, Dataset
-from torchvision.prototype.datasets.utils._internal import (
+from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset
+from Dataset4EO.datasets.utils._internal import (
     path_accessor,
     getitem,
     INFINITE_BUFFER_SIZE,
@@ -23,7 +23,7 @@ from torchvision.prototype.datasets.utils._internal import (
     hint_shuffling,
     read_categories_file,
 )
-from torchvision.prototype.features import BoundingBox, Label, EncodedImage
+from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 

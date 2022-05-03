@@ -4,7 +4,7 @@ from typing import Tuple, List, Optional, Sequence, Union
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
+from Dataset4EO import features
 from torchvision.transforms import functional_tensor as _FT, functional_pil as _FP
 from torchvision.transforms.functional import pil_modes_mapping, _get_inverse_affine_matrix, InterpolationMode
 

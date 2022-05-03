@@ -3,9 +3,9 @@ from typing import Any, Dict, Tuple, Optional, Callable, List, cast, TypeVar, Un
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.transforms import Transform, functional as F
-from torchvision.prototype.utils._internal import query_recursively
+from Dataset4EO import features
+from Dataset4EO.transforms import Transform, functional as F
+from Dataset4EO.utils._internal import query_recursively
 from torchvision.transforms.autoaugment import AutoAugmentPolicy
 from torchvision.transforms.functional import pil_to_tensor, to_pil_image, InterpolationMode
 

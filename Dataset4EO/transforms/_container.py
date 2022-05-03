@@ -1,7 +1,7 @@
 from typing import Any, Optional, List, Dict
 
 import torch
-from torchvision.prototype.transforms import Transform
+from Dataset4EO.transforms import Transform
 
 from ._transform import _RandomApplyTransform
 

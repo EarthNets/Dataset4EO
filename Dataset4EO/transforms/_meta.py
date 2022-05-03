@@ -2,8 +2,8 @@ from typing import Union, Any, Dict, Optional
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.transforms import Transform, functional as F
+from Dataset4EO import features
+from Dataset4EO.transforms import Transform, functional as F
 from torchvision.transforms.functional import convert_image_dtype
 
 from ._utils import is_simple_tensor

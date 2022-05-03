@@ -6,8 +6,8 @@ from typing import Any, Dict, List, Union, Sequence, Tuple, cast
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.transforms import Transform, functional as F
+from Dataset4EO import features
+from Dataset4EO.transforms import Transform, functional as F
 from torchvision.transforms.functional import pil_to_tensor, InterpolationMode
 from torchvision.transforms.transforms import _setup_size, _interpolation_modes_from_int
 from typing_extensions import Literal
@@ -198,11 +198,11 @@ class RandomResizedCrop(Transform):
 
 
 class MultiCropResult(list):
-    """Helper class for :class:`~torchvision.prototype.transforms.BatchMultiCrop`.
+    """Helper class for :class:`~Dataset4EO.transforms.BatchMultiCrop`.
 
-    Outputs of multi crop transforms such as :class:`~torchvision.prototype.transforms.FiveCrop` and
-    `:class:`~torchvision.prototype.transforms.TenCrop` should be wrapped in this in order to be batched correctly by
-    :class:`~torchvision.prototype.transforms.BatchMultiCrop`.
+    Outputs of multi crop transforms such as :class:`~Dataset4EO.transforms.FiveCrop` and
+    `:class:`~Dataset4EO.transforms.TenCrop` should be wrapped in this in order to be batched correctly by
+    :class:`~Dataset4EO.transforms.BatchMultiCrop`.
     """
 
     pass
@@ -257,7 +257,7 @@ class TenCrop(Transform):
 
 class BatchMultiCrop(Transform):
     def forward(self, *inputs: Any) -> Any:
-        # This is basically the functionality of `torchvision.prototype.utils._internal.apply_recursively` with one
+        # This is basically the functionality of `Dataset4EO.utils._internal.apply_recursively` with one
         # significant difference:
         # Since we need multiple images to batch them together, we need to explicitly exclude `MultiCropResult` from
         # the sequence case.

@@ -2,8 +2,8 @@ from typing import Any, Optional, Tuple, Union, Type, Iterator
 
 import PIL.Image
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.utils._internal import query_recursively
+from Dataset4EO import features
+from Dataset4EO.utils._internal import query_recursively
 
 from .functional._meta import get_dimensions_image_tensor, get_dimensions_image_pil
 

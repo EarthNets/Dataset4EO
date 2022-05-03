@@ -3,9 +3,9 @@ from typing import Any, Dict, Optional
 
 import numpy as np
 import PIL.Image
-from torchvision.prototype import features
-from torchvision.prototype.features import ColorSpace
-from torchvision.prototype.transforms import Transform
+from Dataset4EO import features
+from Dataset4EO.features import ColorSpace
+from Dataset4EO.transforms import Transform
 from torchvision.transforms import functional as _F
 from typing_extensions import Literal
 

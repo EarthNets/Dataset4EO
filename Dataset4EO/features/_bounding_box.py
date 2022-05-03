@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Tuple, Union, Optional
 
 import torch
-from torchvision._utils import StrEnum
+from Dataset4EO.utils._utils import StrEnum
 
 from ._feature import _Feature
 

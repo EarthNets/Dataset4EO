@@ -3,8 +3,16 @@ from typing import Tuple
 import torch
 from torchvision.transforms import functional_tensor as _FT
 
+def erase(img: torch.Tensor, i: int, j: int, h: int, w: int, v: torch.Tensor, inplace: bool = False) -> torch.Tensor:
+    _assert_image_tensor(img)
 
-erase_image_tensor = _FT.erase
+    if not inplace:
+        img = img.clone()
+
+    img[..., i : i + h, j : j + w] = v
+    return img
+
+erase_image_tensor = erase
 
 
 def _mixup_tensor(input: torch.Tensor, batch_dim: int, lam: float) -> torch.Tensor:

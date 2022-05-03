@@ -4,8 +4,8 @@ import warnings
 from typing import Any, Dict, Tuple
 
 import torch
-from torchvision.prototype import features
-from torchvision.prototype.transforms import Transform, functional as F
+from Dataset4EO import features
+from Dataset4EO.transforms import Transform, functional as F
 
 from ._transform import _RandomApplyTransform
 from ._utils import query_image, get_image_dimensions, has_all, has_any, is_simple_tensor

@@ -5,8 +5,8 @@ import pathlib
 from typing import BinaryIO, Optional, Collection, Union, Tuple, List, Dict, Any
 
 from torchdata.datapipes.iter import IterDataPipe, FileLister, Mapper, Filter, FileOpener
-from torchvision.prototype.datasets.utils._internal import hint_sharding, hint_shuffling
-from torchvision.prototype.features import Label, EncodedImage, EncodedData
+from Dataset4EO.datasets.utils._internal import hint_sharding, hint_shuffling
+from Dataset4EO.features import Label, EncodedImage, EncodedData
 
 
 __all__ = ["from_data_folder", "from_image_folder"]

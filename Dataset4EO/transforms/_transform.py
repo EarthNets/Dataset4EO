@@ -4,7 +4,7 @@ from typing import Any, Dict
 
 import torch
 from torch import nn
-from torchvision.prototype.utils._internal import apply_recursively
+from Dataset4EO.utils._internal import apply_recursively
 from torchvision.utils import _log_api_usage_once
 
 

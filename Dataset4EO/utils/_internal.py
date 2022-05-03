@@ -18,7 +18,7 @@ from typing import (
 
 import numpy as np
 import torch
-from torchvision._utils import sequence_to_str
+from Dataset4EO.utils._utils import sequence_to_str
 
 
 __all__ = [

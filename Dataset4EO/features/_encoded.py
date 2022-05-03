@@ -6,7 +6,7 @@ from typing import BinaryIO, Tuple, Type, TypeVar, Union, Optional, Any
 
 import PIL.Image
 import torch
-from torchvision.prototype.utils._internal import fromfile, ReadOnlyTensorBuffer
+from Dataset4EO.utils._internal import fromfile, ReadOnlyTensorBuffer
 
 from ._feature import _Feature
 from ._image import Image
@@ -51,7 +51,7 @@ class EncodedImage(EncodedData):
         #  promote this out of the prototype state
 
         # import at runtime to avoid cyclic imports
-        from torchvision.prototype.transforms.functional import decode_image_with_pil
+        from Dataset4EO.transforms.functional import decode_image_with_pil
 
         return Image(decode_image_with_pil(self))
 
