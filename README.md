@@ -1,3 +1,5 @@
 # Dataset4EO
 Re-organize the datasets of remote sensing datasets 
-This is a test.
+
+#Install newest versions of torch and torchdata
+sh install_requirements.sh
