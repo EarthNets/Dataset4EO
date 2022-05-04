@@ -1,2 +1,4 @@
-/checkpoints/
+/Dataset4EO.egg-info/
+/build/
+/dist/
 *.pyc
