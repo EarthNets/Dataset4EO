@@ -3,6 +3,12 @@ import difflib
 import io
 import mmap
 import platform
+import contextlib
+import os
+import numpy as np
+import tempfile
+import h5py
+
 from typing import (
     Any,
     BinaryIO,
@@ -56,6 +62,51 @@ D = TypeVar("D")
 def _read_mutable_buffer_fallback(file: BinaryIO, count: int, item_size: int) -> bytearray:
     # A plain file.read() will give a read-only bytes, so we convert it to bytearray to make it mutable
     return bytearray(file.read(-1 if count == -1 else count * item_size))
+
+
+def parse_h5py(hdf5_data, key):
+    file_access_property_list = h5py.h5p.create(h5py.h5p.FILE_ACCESS)
+    file_access_property_list.set_fapl_core(backing_store=False)
+    file_access_property_list.set_file_image(hdf5_data)
+
+    file_id_args = {
+        'fapl': file_access_property_list,
+        'flags': h5py.h5f.ACC_RDONLY,
+        'name': next(tempfile._get_candidate_names()).encode(),
+    }
+    h5_file_args = {'backing_store': False, 'driver': 'core', 'mode': 'r'}
+    with contextlib.closing(h5py.h5f.open(**file_id_args)) as file_id:
+        with h5py.File(file_id, **h5_file_args) as hf:
+            return hf[key][()]
+
+
+def bytefromfile(
+    file: BinaryIO,
+    *,
+    dtype: torch.dtype,
+    byte_order: str,
+    count: int = -1,
+) -> torch.Tensor:
+    byte_order = "<" if byte_order == "little" else ">"
+    char = "f" if dtype.is_floating_point else ("i" if dtype.is_signed else "u")
+    item_size = (torch.finfo if dtype.is_floating_point else torch.iinfo)(dtype).bits // 8
+    np_dtype = byte_order + char + str(item_size)
+
+    buffer: Union[memoryview, bytearray]
+    if platform.system() != "Windows":
+        try:
+            buffer = memoryview(mmap.mmap(file.fileno(), 0))[file.tell() :]
+            # Reading from the memoryview does not advance the file cursor, so we have to do it manually.
+            file.seek(*(0, io.SEEK_END) if count == -1 else (count * item_size, io.SEEK_CUR))
+        except (AttributeError, PermissionError, io.UnsupportedOperation):
+            buffer = _read_mutable_buffer_fallback(file, count, item_size)
+    else:
+        buffer = _read_mutable_buffer_fallback(file, count, item_size)
+
+    # We cannot use torch.frombuffer() directly, since it only supports the native byte order of the system. Thus, we
+    # read the data with np.frombuffer() with the correct byte order and convert it to the native one with the
+    # successive .astype() call.
+    return buffer
 
 
 def fromfile(
