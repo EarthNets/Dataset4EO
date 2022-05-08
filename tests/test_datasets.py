@@ -10,10 +10,7 @@ import contextlib
 import os
 import numpy as np
 
-#tr = datasets.landcover_sen2.LandCoverSen2('./')
-from Dataset4EO.datasets.utils import Dataset, HttpResource, OnlineResource
 import tempfile
-
 
 tr = datasets.landcover_sen2.LandCoverSen2('./', split='train')
 

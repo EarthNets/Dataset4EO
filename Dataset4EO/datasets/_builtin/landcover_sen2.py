@@ -6,6 +6,8 @@ import torch
 import io
 import os
 import mmap
+import h5py
+import numpy as np
 
 from torchdata.datapipes.iter import IterDataPipe, Mapper, Demultiplexer, Filter, IterKeyZipper
 from Dataset4EO.datasets.utils import Dataset, HttpResource, OnlineResource
@@ -84,12 +86,15 @@ class LandCoverSen2(Dataset):
         buffers, maskbuffers = databuffers
         pathmask, mask = maskbuffers
         pathimg, image = buffers
+        image = h5py.File(pathimg.replace('.tar',''),'r')['img']
+        mask = h5py.File(pathmask.replace('.tar',''),'r')['mask']
         return dict(
             imgpath=pathimg,
             maskpath=pathmask,
-            #img = image,
-            #mask = mask,
+            #img = np.array(image),
+            #mask = np.array(mask),
         )
+
 
     def _key_img(self, data: Tuple[str, Any]) -> str:
         path = pathlib.Path(data[0])
@@ -109,8 +114,6 @@ class LandCoverSen2(Dataset):
             buffer_size=INFINITE_BUFFER_SIZE,
         )
         if self._split == "train":
-            #train_img_dp = H5pyDataPipe(train_img_dp, 'img')
-            #train_mask_dp = H5pyDataPipe(train_mask_dp, 'mask')
             dp = train_img_dp.zip_with_iter(train_mask_dp, key_fn=self._key_img, ref_key_fn=self._key_mask, buffer_size=INFINITE_BUFFER_SIZE, keep_key=True)
             fdp = Mapper(dp, self._prepare_sample)
         elif self._split == 'val':
