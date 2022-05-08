@@ -64,22 +64,6 @@ def _read_mutable_buffer_fallback(file: BinaryIO, count: int, item_size: int) ->
     return bytearray(file.read(-1 if count == -1 else count * item_size))
 
 
-def parse_h5py(hdf5_data, key):
-    file_access_property_list = h5py.h5p.create(h5py.h5p.FILE_ACCESS)
-    file_access_property_list.set_fapl_core(backing_store=False)
-    file_access_property_list.set_file_image(hdf5_data)
-
-    file_id_args = {
-        'fapl': file_access_property_list,
-        'flags': h5py.h5f.ACC_RDONLY,
-        'name': next(tempfile._get_candidate_names()).encode(),
-    }
-    h5_file_args = {'backing_store': False, 'driver': 'core', 'mode': 'r'}
-    with contextlib.closing(h5py.h5f.open(**file_id_args)) as file_id:
-        with h5py.File(file_id, **h5_file_args) as hf:
-            return hf[key][()]
-
-
 def bytefromfile(
     file: BinaryIO,
     *,
@@ -103,11 +87,23 @@ def bytefromfile(
     else:
         buffer = _read_mutable_buffer_fallback(file, count, item_size)
 
-    # We cannot use torch.frombuffer() directly, since it only supports the native byte order of the system. Thus, we
-    # read the data with np.frombuffer() with the correct byte order and convert it to the native one with the
-    # successive .astype() call.
     return buffer
 
+
+def parse_h5py(hdf5_data, key):
+    file_access_property_list = h5py.h5p.create(h5py.h5p.FILE_ACCESS)
+    file_access_property_list.set_fapl_core(backing_store=False)
+    file_access_property_list.set_file_image(hdf5_data)
+
+    file_id_args = {
+        'fapl': file_access_property_list,
+        'flags': h5py.h5f.ACC_RDONLY,
+        'name': next(tempfile._get_candidate_names()).encode(),
+    }
+    h5_file_args = {'backing_store': False, 'driver': 'core', 'mode': 'r'}
+    with contextlib.closing(h5py.h5f.open(**file_id_args)) as file_id:
+        with h5py.File(file_id, **h5_file_args) as hf:
+            return hf[key][()]
 
 def fromfile(
     file: BinaryIO,

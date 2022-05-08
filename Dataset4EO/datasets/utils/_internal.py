@@ -23,7 +23,7 @@ import torch.distributed as dist
 import torch.utils.data
 from torchdata.datapipes.iter import IoPathFileLister, IoPathFileOpener, IterDataPipe, ShardingFilter, Shuffler
 from torchdata.datapipes.utils import StreamWrapper
-from Dataset4EO.utils._internal import fromfile
+from Dataset4EO.utils._internal import fromfile, bytefromfile, parse_h5py
 
 
 __all__ = [
@@ -118,6 +118,17 @@ class PicklerDataPipe(IterDataPipe):
             data = pickle.load(fobj)
             for _, d in enumerate(data):
                 yield d
+
+
+class H5pyDataPipe(IterDataPipe):
+    def __init__(self, source_datapipe: IterDataPipe[Tuple[str, IO[bytes]]], key) -> None:
+        self.source_datapipe = source_datapipe
+        self._key = key
+
+    def __iter__(self) -> Iterator[Any]:
+        for path, fobj in self.source_datapipe:
+            data = parse_h5py(bytefromfile(fobj, dtype=torch.uint8, byte_order='big'), self._key)
+            yield (path, data)
 
 
 class SharderDataPipe(torch.utils.data.datapipes.iter.grouping.ShardingFilterIterDataPipe):

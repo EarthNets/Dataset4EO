@@ -2,7 +2,7 @@ from Dataset4EO import datasets
 import torch
 from typing import Any, Dict, List, Tuple, Union, BinaryIO
 from Dataset4EO.features import EncodedData
-from Dataset4EO.utils._internal import fromfile, ReadOnlyTensorBuffer, parse_h5py, bytefromfile
+from Dataset4EO.utils._internal import fromfile, ReadOnlyTensorBuffer
 import platform
 import io
 import mmap
@@ -19,14 +19,14 @@ tr = datasets.landcover_sen2.LandCoverSen2('./', split='train')
 
 from torch.utils.data import DataLoader2
 datas = DataLoader2(tr, batch_size=4, num_workers=4, shuffle=True)
-ii = 0
+import time
 
-for data in iter(tr):
-    ii+=1
-    print(data['img'][()])
+print('Loading Dataset...')
 
-
-print('---------------------------------')
-print(ii)
-
+for eit in range(20):
+    t = time.time()
+    for dt in datas:
+        pass
+    t2 = time.time()
+    print(t2 - t)
 

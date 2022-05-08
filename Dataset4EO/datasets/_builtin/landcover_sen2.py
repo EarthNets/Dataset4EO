@@ -4,12 +4,12 @@ import enum
 import functools
 import torch
 import io
+import os
 import mmap
 
 from torchdata.datapipes.iter import IterDataPipe, Mapper, Demultiplexer, Filter, IterKeyZipper
 from Dataset4EO.datasets.utils import Dataset, HttpResource, OnlineResource
-from Dataset4EO.datasets.utils._internal import hint_sharding, hint_shuffling, INFINITE_BUFFER_SIZE
-from Dataset4EO.utils._internal import parse_h5py, bytefromfile, _read_mutable_buffer_fallback
+from Dataset4EO.datasets.utils._internal import hint_sharding, hint_shuffling, INFINITE_BUFFER_SIZE, H5pyDataPipe
 
 from Dataset4EO.features import BoundingBox, Label, EncodedImage
 from .._api import register_dataset, register_info
@@ -29,17 +29,7 @@ def _info() -> Dict[str, Any]:
         )
     )
 
-class H5pyDataPipe(IterDataPipe):
-    def __init__(self, source_datapipe: IterDataPipe[Tuple[str, IO[bytes]]], key) -> None:
-        self.source_datapipe = source_datapipe
-        self._key = key
 
-    def __iter__(self) -> Iterator[Any]:
-        for path, fobj in self.source_datapipe:
-            data = parse_h5py(bytefromfile(fobj, dtype=torch.uint8, byte_order='big'), self._key)
-            yield (path, data)
-            #for d in enumerate(data):
-            #    yield d
 
 @register_dataset(NAME)
 class LandCoverSen2(Dataset):
@@ -64,8 +54,7 @@ class LandCoverSen2(Dataset):
     def _is_in_folder(self, data: Tuple[str, Any], *, name: str, depth: int = 1) -> bool:
         path = pathlib.Path(data[0])
         in_folder =  name in str(path.parent)
-        is_file = str(path).endswith('.h5')
-        return is_file & in_folder
+        return in_folder
 
     class _Demux(enum.IntEnum):
         TRAIN_IMG = 0
@@ -84,11 +73,10 @@ class LandCoverSen2(Dataset):
     
 
     def _prepare_img(self, data: Tuple[str, Any]) -> Dict[str, Any]:
-        path, buffer = data
-        h5py_img = parse_h5py(bytefromfile(buffer, dtype=torch.uint8, byte_order='big'), 'img')
+        path, image = data
         return dict(
             path=path,
-            img = h5py_img,
+            img = image,
         )
 
     def _prepare_sample(self, data: Tuple[str, Any]) -> Dict[str, Any]:
@@ -99,8 +87,8 @@ class LandCoverSen2(Dataset):
         return dict(
             imgpath=pathimg,
             maskpath=pathmask,
-            img = image,
-            mask = mask,
+            #img = image,
+            #mask = mask,
         )
 
     def _key_img(self, data: Tuple[str, Any]) -> str:
@@ -121,12 +109,12 @@ class LandCoverSen2(Dataset):
             buffer_size=INFINITE_BUFFER_SIZE,
         )
         if self._split == "train":
-            train_img_dp = H5pyDataPipe(train_img_dp, 'img')
-            train_mask_dp = H5pyDataPipe(train_mask_dp, 'mask')
+            #train_img_dp = H5pyDataPipe(train_img_dp, 'img')
+            #train_mask_dp = H5pyDataPipe(train_mask_dp, 'mask')
             dp = train_img_dp.zip_with_iter(train_mask_dp, key_fn=self._key_img, ref_key_fn=self._key_mask, buffer_size=INFINITE_BUFFER_SIZE, keep_key=True)
             fdp = Mapper(dp, self._prepare_sample)
         elif self._split == 'val':
-            dp = val_dp
+            dp = H5pyDataPipe(val_dp, 'img')
             fdp = Mapper(dp, self._prepare_img)
         fdp = hint_shuffling(fdp)
         return fdp
