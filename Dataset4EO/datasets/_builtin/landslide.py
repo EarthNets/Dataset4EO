@@ -3,8 +3,26 @@ from torchdata.datapipes.map import SequenceWrapper, Mapper
 from torch.utils.data import DataLoader2
 import time
 
+import Compose
 
-dp = SequenceWrapper(range(1,3800))
+A = Compose([RandomResizedCrop(),
+         Pad,
+        ]
+        )
+
+
+A.transform
+
+class LandsLide():
+    pass
+    1. resources() +dowload decompress
+
+    def _datapipe():
+        dp = SequenceWrapper(range(1,3800))
+        ndp = Mapper(dp, _prepare_sample)
+        ndp = ndp.map(A.transform)
+        return ndp
+
 
 def _prepare_sample(data):
     i = data
@@ -13,8 +31,6 @@ def _prepare_sample(data):
     img = h5py.File(iname, 'r')['img'][()]
     mask = h5py.File(mname, 'r')['mask'][()]
     return (iname, mname, img, mask)
-
-ndp = Mapper(dp, _prepare_sample)
 
 datas = DataLoader2(ndp.shuffle(), batch_size=4, num_workers=4, shuffle=True)
 

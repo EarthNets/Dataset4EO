@@ -81,6 +81,8 @@ class LandCoverSen2(Dataset):
             img = image,
         )
 
+
+    # collate_fn
     def _prepare_sample(self, data: Tuple[str, Any]) -> Dict[str, Any]:
         key, databuffers = data
         buffers, maskbuffers = databuffers
@@ -113,6 +115,7 @@ class LandCoverSen2(Dataset):
             drop_none=True,
             buffer_size=INFINITE_BUFFER_SIZE,
         )
+
         if self._split == "train":
             dp = train_img_dp.zip_with_iter(train_mask_dp, key_fn=self._key_img, ref_key_fn=self._key_mask, buffer_size=INFINITE_BUFFER_SIZE, keep_key=True)
             fdp = Mapper(dp, self._prepare_sample)
