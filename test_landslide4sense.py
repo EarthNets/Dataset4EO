@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader2
 import time
 from tqdm import tqdm
 
-datasets_dir = './'
+datasets_dir = '../../Datasets/Dataset4EO'
 
 if __name__ == '__main__':
     dp = landslide4sense.Landslide4Sense(datasets_dir, split='train')

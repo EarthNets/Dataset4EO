@@ -3,7 +3,7 @@ import importlib
 import pathlib
 from typing import Any, Dict, List, Optional, Sequence, Union, Collection, Iterator
 
-from torch.utils.data import IterDataPipe
+from torch.utils.data import IterDataPipe, MapDataPipe
 from torchvision.datasets.utils import verify_str_arg
 
 from ._resource import OnlineResource
@@ -33,10 +33,15 @@ class Dataset(IterDataPipe[Dict[str, Any]], abc.ABC):
                 ) from None
 
         self._root = pathlib.Path(root).expanduser().resolve()
-        resources = [
-            resource.load(self._root, skip_integrity_check=skip_integrity_check) for resource in self._resources()
-        ]
-        self._dp = self._datapipe(resources)
+        _res = self._resources()
+
+        if _res is not None:
+            resources = [
+                resource.load(self._root, skip_integrity_check=skip_integrity_check) for resource in _res
+            ]
+            self._dp = self._datapipe(resources)
+        else:
+            self._dp = self._datapipe(None)
 
     def __iter__(self) -> Iterator[Dict[str, Any]]:
         yield from self._dp
