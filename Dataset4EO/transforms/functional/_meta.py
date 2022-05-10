@@ -5,8 +5,8 @@ import torch
 from Dataset4EO.features import BoundingBoxFormat, ColorSpace
 from torchvision.transforms import functional_tensor as _FT, functional_pil as _FP
 
-# get_dimensions_image_tensor = _FT.get_dimensions
-# get_dimensions_image_pil = _FP.get_dimensions
+get_dimensions_image_tensor = _FT.get_dimensions
+get_dimensions_image_pil = _FP.get_dimensions
 
 
 def _xywh_to_xyxy(xywh: torch.Tensor) -> torch.Tensor:
