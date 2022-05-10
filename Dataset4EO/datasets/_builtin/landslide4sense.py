@@ -68,6 +68,13 @@ class Landslide4Sense(Dataset):
     }
 
     def decompress_integrity_check(self, decom_dir):
+        train_img_dir = os.path.join(decom_dir, 'train', 'img')
+        train_mask_dir = os.path.join(decom_dir, 'train', 'mask')
+        val_img_dir = os.path.join(decom_dir, 'val', 'img')
+
+        if not os.path.exists(train_img_dir) or not os.path.exists(train_mask_dir) or not os.path.exists(val_img_dir):
+            return False
+
         num_train_img = len(os.listdir(os.path.join(decom_dir, 'train', 'img')))
         num_train_mask = len(os.listdir(os.path.join(decom_dir, 'train', 'mask')))
         num_val_img = len(os.listdir(os.path.join(decom_dir, 'val', 'img')))
