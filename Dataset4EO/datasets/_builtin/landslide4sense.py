@@ -109,7 +109,7 @@ class Landslide4Sense(Dataset):
 
         return {'img_name': iname, 'img': img}
 
-    def _datapipe(self, res):
+    def get_datapipe(self, res):
 
         dp = SequenceWrapper(range(1, self.__len__()+1))
         ndp = Mapper(dp, self._prepare_sample)

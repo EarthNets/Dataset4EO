@@ -41,7 +41,7 @@ class Dataset(IterDataPipe[Dict[str, Any]], abc.ABC):
             ]
             self._dp = self._datapipe(resources)
         else:
-            self._dp = self._datapipe(None)
+            self._dp = self.get_datapipe(None)
 
     def __iter__(self) -> Iterator[Dict[str, Any]]:
         yield from self._dp
