@@ -6,27 +6,8 @@ from Dataset4EO.features import BoundingBoxFormat, ColorSpace
 from torchvision.transforms import functional_tensor as _FT, functional_pil as _FP
 
 
-
-def _FT_get_dimensions(img: torch.Tensor) -> List[int]:
-    _assert_image_tensor(img)
-    channels = 1 if img.ndim == 2 else img.shape[-3]
-    height, width = img.shape[-2:]
-    return [channels, height, width]
-
-@torch.jit.unused
-def _FP_get_dimensions(img: Any) -> List[int]:
-    if _is_pil_image(img):
-        if hasattr(img, "getbands"):
-            channels = len(img.getbands())
-        else:
-            channels = img.channels
-        width, height = img.size
-        return [channels, height, width]
-    raise TypeError(f"Unexpected type {type(img)}")
-
-
-get_dimensions_image_tensor = _FT_get_dimensions
-get_dimensions_image_pil = _FP_get_dimensions
+get_dimensions_image_tensor = _FT.get_dimensions
+get_dimensions_image_pil = _FP.get_dimensions
 
 
 def _xywh_to_xyxy(xywh: torch.Tensor) -> torch.Tensor:

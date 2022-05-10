@@ -41,3 +41,7 @@ for epoch in range(20):
         pass
     t2 = time.time()
     print(t2-t1)
+
+dp = landslide4sense.Landslide4Sense(datasets_dir)
+data = next(iter(dp))
+pdb.set_trace()
