@@ -116,8 +116,8 @@ class Landslide4Sense(Dataset):
                                  transforms.RandomVerticalFlip(),
                                  transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
 
-        # ndp = hint_shuffling(ndp)
-        # ndp = hint_sharding(ndp)
+        ndp = hint_shuffling(ndp)
+        ndp = hint_sharding(ndp)
         ndp = ndp.map(tfs)
 
         return ndp
