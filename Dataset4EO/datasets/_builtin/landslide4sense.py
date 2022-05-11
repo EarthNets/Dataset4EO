@@ -75,9 +75,9 @@ class Landslide4Sense(Dataset):
         if not os.path.exists(train_img_dir) or not os.path.exists(train_mask_dir) or not os.path.exists(val_img_dir):
             return False
 
-        num_train_img = len(os.listdir(os.path.join(decom_dir, 'train', 'img')))
-        num_train_mask = len(os.listdir(os.path.join(decom_dir, 'train', 'mask')))
-        num_val_img = len(os.listdir(os.path.join(decom_dir, 'val', 'img')))
+        num_train_img = len(os.listdir(train_img_dir))
+        num_train_mask = len(os.listdir(train_mask_dir))
+        num_val_img = len(os.listdir(val_img_dir))
 
         return (num_train_img == _TRAIN_LEN) and \
                 (num_train_mask == _TRAIN_LEN) and \
@@ -90,6 +90,7 @@ class Landslide4Sense(Dataset):
         archive = HttpResource("https://syncandshare.lrz.de/dl/fiLurHQ9Cy4NwvmPGYQe7RWM/{}".format(file_name), sha256=sha256)
 
         if not self.decompress_integrity_check(decom_dir):
+            print('Decompressing the tar file...')
             with tarfile.open(os.path.join(self.root, file_name), 'r:gz') as tar:
                 tar.extractall(decom_dir)
                 tar.close()
@@ -105,20 +106,39 @@ class Landslide4Sense(Dataset):
             mname = "{}/mask/mask_{}.h5".format(self._split, idx)
             mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
             mask = torch.tensor(mask)
-            return {'img_name': iname, 'mask_name': mname, 'img': img, 'mask': mask}
+            # return (iname, mname, img, mask)
+            return (img, mask)
 
-        return {'img_name': iname, 'img': img}
+        # return (iname, img)
+        return (img)
 
-    def get_datapipe(self, res):
+    def sel_dev(self, x):
+
+        res = []
+        device = 'cuda:2' if torch.cuda.is_available() else 'cpu'
+        for item in x:
+            if type(item) == torch.Tensor:
+                res.append(item.to(device))
+            else:
+                res.append(item)
+
+        return tuple(res)
+
+    def _datapipe(self, res):
+
+        tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
+                                 transforms.RandomVerticalFlip())
+                                 # transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
+        device = 'cuda:2' if torch.cuda.is_available() else 'cpu'
+        # sel_dev = lambda x: x.to(device) if type(x) == torch.Tensor else x
+        # sel_dev = functools.partial(torch.Tensor.to, device)
+        # sel_dev = lambda x: x.to(device)
 
         dp = SequenceWrapper(range(1, self.__len__()+1))
         ndp = Mapper(dp, self._prepare_sample)
-        tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
-                                 transforms.RandomVerticalFlip(),
-                                 transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
-
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
+        ndp = ndp.map(self.sel_dev)
         ndp = ndp.map(tfs)
 
         return ndp

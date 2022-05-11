@@ -33,15 +33,10 @@ class Dataset(IterDataPipe[Dict[str, Any]], abc.ABC):
                 ) from None
 
         self._root = pathlib.Path(root).expanduser().resolve()
-        _res = self._resources()
-
-        if _res is not None:
-            resources = [
-                resource.load(self._root, skip_integrity_check=skip_integrity_check) for resource in _res
-            ]
-            self._dp = self._datapipe(resources)
-        else:
-            self._dp = self.get_datapipe(None)
+        resources = [
+            resource.load(self._root, skip_integrity_check=skip_integrity_check) for resource in self._resources()
+        ]
+        self._dp = self._datapipe(resources)
 
     def __iter__(self) -> Iterator[Dict[str, Any]]:
         yield from self._dp
