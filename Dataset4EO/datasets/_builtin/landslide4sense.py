@@ -100,22 +100,21 @@ class Landslide4Sense(Dataset):
     def _prepare_sample(self, idx):
         iname = "{}/img/image_{}.h5".format(self._split, idx)
         img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
-        img = torch.tensor(img)
+        img = torch.tensor(img).permute(2, 0, 1)
 
         if self._split == 'train':
             mname = "{}/mask/mask_{}.h5".format(self._split, idx)
             mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
             mask = torch.tensor(mask)
-            # return (iname, mname, img, mask)
-            return (img, mask)
+            return (iname, mname, img, mask)
 
-        # return (iname, img)
+        return (iname, img)
         return (img)
 
     def sel_dev(self, x):
 
         res = []
-        device = 'cuda:2' if torch.cuda.is_available() else 'cpu'
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
         for item in x:
             if type(item) == torch.Tensor:
                 res.append(item.to(device))
@@ -127,18 +126,14 @@ class Landslide4Sense(Dataset):
     def _datapipe(self, res):
 
         tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
-                                 transforms.RandomVerticalFlip())
-                                 # transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
-        device = 'cuda:2' if torch.cuda.is_available() else 'cpu'
-        # sel_dev = lambda x: x.to(device) if type(x) == torch.Tensor else x
-        # sel_dev = functools.partial(torch.Tensor.to, device)
-        # sel_dev = lambda x: x.to(device)
+                                 transforms.RandomVerticalFlip(),
+                                 transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
 
         dp = SequenceWrapper(range(1, self.__len__()+1))
         ndp = Mapper(dp, self._prepare_sample)
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
-        ndp = ndp.map(self.sel_dev)
+        # ndp = ndp.map(self.sel_dev)
         ndp = ndp.map(tfs)
 
         return ndp
