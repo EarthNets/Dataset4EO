@@ -39,7 +39,7 @@ class Dataset(IterDataPipe[Dict[str, Any]], abc.ABC):
         self._dp = self._datapipe(resources)
 
     def __iter__(self) -> Iterator[Dict[str, Any]]:
-        yield from self._dp
+            yield from self._dp
 
     @abc.abstractmethod
     def _resources(self) -> List[OnlineResource]:

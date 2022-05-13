@@ -11,11 +11,13 @@ from xml.etree import ElementTree
 from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
 import pdb
+import numpy as np
 
-from torchdata.datapipes.map import (
-    SequenceWrapper,
-    Mapper,
-)
+from torchdata.datapipes.iter import FileLister, FileOpener, StreamReader
+from PIL import Image
+
+from torchdata.datapipes.iter import Mapper
+
 from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset
 from Dataset4EO.datasets.utils._internal import (
     path_accessor,
@@ -30,9 +32,11 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "landslide4sense"
-_TRAIN_LEN = 3799
-_VAL_LEN = 245
+NAME = "rsuss"
+FNAME = "RSUSS"
+_TRAIN_LEN = 5923
+_VAL_LEN = 1000
+_TEST_LEN = 3398
 
 
 @register_info(NAME)
@@ -41,9 +45,9 @@ def _info() -> Dict[str, Any]:
 
 
 @register_dataset(NAME)
-class Landslide4Sense(Dataset):
+class RSUSS(Dataset):
     """
-    - **homepage**: https://www.iarai.ac.at/landslide4sense/
+    - **homepage**: https://www.iarai.ac.at/rsbenchmark4uss/
     """
 
     def __init__(
@@ -53,9 +57,6 @@ class Landslide4Sense(Dataset):
         split: str = "train",
         skip_integrity_check: bool = False,
     ) -> None:
-
-        # There is currently no test split available
-        assert split != 'test'
 
         self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
         self.root = root
@@ -79,6 +80,7 @@ class Landslide4Sense(Dataset):
         num_train_mask = len(os.listdir(train_mask_dir))
         num_val_img = len(os.listdir(val_img_dir))
 
+        return True
         return (num_train_img == _TRAIN_LEN) and \
                 (num_train_mask == _TRAIN_LEN) and \
                 (num_val_img == _VAL_LEN)
@@ -97,50 +99,77 @@ class Landslide4Sense(Dataset):
 
         return [archive]
 
-    def _prepare_sample(self, idx):
-        iname = "{}/img/image_{}.h5".format(self._split, idx)
-        img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
+    def _is_in_folder(self, data: Tuple[str, Any], *, name: str, depth: int = 1) -> bool:
+        path = pathlib.Path(data)
+        in_folder =  name in str(path.parent)
+        return in_folder
+
+    def _prepare_sample(self, data):
+        label_path, label = None, None
+        if self._split != 'train':
+            (image_path, height_path), label_path = data
+        else:
+            image_path, height_path = data
+        img = h5py.File(image_path, 'r')['image'][()]
         img = torch.tensor(img).permute(2, 0, 1)
+        height = h5py.File(height_path, 'r')['image'][()]
+        height = torch.tensor(height)
+        if label_path:
+            label = h5py.File(label_path, 'r')['image'][()]
+            label = torch.tensor(label)
 
         if self._split == 'train':
-            mname = "{}/mask/mask_{}.h5".format(self._split, idx)
-            mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
-            mask = torch.tensor(mask)
-            return (iname, mname, img, mask)
+            return (img, height)
 
-        return (iname, img)
+        return (img, height, label)
 
-    def sel_dev(self, x):
-        res = []
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        for item in x:
-            if type(item) == torch.Tensor:
-                res.append(item.to(device))
-            else:
-                res.append(item)
+    class _Demux(enum.IntEnum):
+        VAL = 0
+        TEST = 1
+        TRAIN = 2
 
-        return tuple(res)
-
+    def _classify_archive(self, data: Tuple[str, Any]) -> Optional[int]:
+        if self._is_in_folder(data, name="train", depth=2):
+            return self._Demux.TRAIN
+        if self._is_in_folder(data, name="val", depth=2):
+            return self._Demux.VAL
+        elif self._is_in_folder(data, name="test", depth=2):
+            return self._Demux.TEST
+        else:
+            return None 
+    
     def _datapipe(self, res):
+        image_dp = FileLister(root=os.path.join(self.root, FNAME, 'images'), recursive=True)
+        val_img_dp, test_img_dp, train_img_dp = image_dp.demux(num_instances=3, classifier_fn=self._classify_archive,\
+                drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 
+        height_dp = FileLister(root=os.path.join(self.root, FNAME, 'heights'), recursive=True)
+        val_height_dp, test_height_dp, train_height_dp = height_dp.demux(num_instances=3, classifier_fn=self._classify_archive,\
+                drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
+
+        label_dp = FileLister(root=os.path.join(self.root, FNAME, 'classes'), recursive=True)
+        val_label_dp, test_label_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
+                drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
+
+        train_dp = train_img_dp.zip(train_height_dp)
+        val_dp = val_img_dp.zip(val_height_dp).zip(val_label_dp)
+        test_dp = test_img_dp.zip(test_height_dp).zip(test_label_dp)
+        
         tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
                                  transforms.RandomVerticalFlip(),
                                  transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
 
-        dp = SequenceWrapper(range(1, self.__len__()+1))
-        ndp = Mapper(dp, self._prepare_sample)
+        ndp = eval(self._split+'_dp')
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
-        # ndp = ndp.map(self.sel_dev)
-        ndp = ndp.map(tfs)
-
+        ndp = Mapper(ndp, self._prepare_sample)
+        #ndp = ndp.map(tfs)
         return ndp
 
     def __len__(self) -> int:
         return {
             'train': _TRAIN_LEN,
-            'val': _VAL_LEN
+            'val': _VAL_LEN,
+            'test': _TEST_LEN
         }[self._split]
 
-if __name__ == '__main__':
-    dp = Landslide4Sense('./')
