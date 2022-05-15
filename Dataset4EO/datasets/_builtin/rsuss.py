@@ -2,7 +2,6 @@ import os
 import tarfile
 import enum
 import functools
-import pathlib
 from tqdm import tqdm
 import h5py
 import torch
@@ -10,6 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
 from xml.etree import ElementTree
 from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
+import pathlib
 import pdb
 import numpy as np
 
@@ -119,9 +119,9 @@ class RSUSS(Dataset):
             label = torch.tensor(label)
 
         if self._split == 'train':
-            return (img, height)
+            return (image_path, img, height)
 
-        return (img, height, label)
+        return (image_path, img, height, label)
 
     class _Demux(enum.IntEnum):
         VAL = 0
@@ -163,7 +163,7 @@ class RSUSS(Dataset):
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
         ndp = Mapper(ndp, self._prepare_sample)
-        #ndp = ndp.map(tfs)
+        ndp = ndp.map(tfs)
         return ndp
 
     def __len__(self) -> int:

@@ -9,11 +9,11 @@ from tqdm import tqdm
 datasets_dir = './'
 
 if __name__ == '__main__':
-    dp = RSUSS(datasets_dir, split='test')
+    dp = RSUSS(datasets_dir, split='val')
 
     data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True,
                               drop_last=True)
-    for epoch in range(1):
+    for epoch in range(5):
         t1 = time.time()
         for it in tqdm(data_loader):
             # print(it['img_name'])

@@ -1,7 +1,7 @@
 import abc
 import importlib
 import pathlib
-from typing import Any, Dict, List, Optional, Sequence, Union, Collection, Iterator
+from typing import Any, Dict, List, Optional, Sequence, Union, Collection, Iterator, TypeVar
 
 from torch.utils.data import IterDataPipe, MapDataPipe
 from torchvision.datasets.utils import verify_str_arg
@@ -55,3 +55,5 @@ class Dataset(IterDataPipe[Dict[str, Any]], abc.ABC):
 
     def _generate_categories(self) -> Sequence[Union[str, Sequence[str]]]:
         raise NotImplementedError
+
+
