@@ -155,9 +155,10 @@ class RSUSS(Dataset):
         val_dp = val_img_dp.zip(val_height_dp).zip(val_label_dp)
         test_dp = test_img_dp.zip(test_height_dp).zip(test_label_dp)
         
-        tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
+        tfs = transforms.Compose(transforms.Resize((256,256)),
+                                 transforms.RandomHorizontalFlip(),
                                  transforms.RandomVerticalFlip(),
-                                 transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
+                                 transforms.RandomResizedCrop((224, 224), scale=[0.5, 1]))
 
         ndp = eval(self._split+'_dp')
         ndp = hint_shuffling(ndp)
