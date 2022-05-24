@@ -110,17 +110,6 @@ class Landslide4Sense(Dataset):
 
         return (iname, img)
 
-    def sel_dev(self, x):
-        res = []
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        for item in x:
-            if type(item) == torch.Tensor:
-                res.append(item.to(device))
-            else:
-                res.append(item)
-
-        return tuple(res)
-
     def _datapipe(self, res):
 
         tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
@@ -131,7 +120,6 @@ class Landslide4Sense(Dataset):
         ndp = Mapper(dp, self._prepare_sample)
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
-        # ndp = ndp.map(self.sel_dev)
         ndp = ndp.map(tfs)
 
         return ndp

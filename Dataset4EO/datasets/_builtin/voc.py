@@ -1,4 +1,5 @@
 import enum
+import pdb
 import functools
 import pathlib
 from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
@@ -29,6 +30,16 @@ from .._api import register_dataset, register_info
 
 NAME = "voc"
 
+CLASSES = ('background', 'aeroplane', 'bicycle', 'bird', 'boat', 'bottle',
+               'bus', 'car', 'cat', 'chair', 'cow', 'diningtable', 'dog',
+               'horse', 'motorbike', 'person', 'pottedplant', 'sheep', 'sofa',
+               'train', 'tvmonitor')
+
+PALETTE = [[0, 0, 0], [128, 0, 0], [0, 128, 0], [128, 128, 0], [0, 0, 128],
+               [128, 0, 128], [0, 128, 128], [128, 128, 128], [64, 0, 0],
+               [192, 0, 0], [64, 128, 0], [192, 128, 0], [64, 0, 128],
+               [192, 0, 128], [64, 128, 128], [192, 128, 128], [0, 64, 0],
+               [128, 64, 0], [0, 192, 0], [128, 192, 0], [0, 64, 128]]
 
 @register_info(NAME)
 def _info() -> Dict[str, Any]:
@@ -47,7 +58,7 @@ class VOC(Dataset):
         *,
         split: str = "train",
         year: str = "2012",
-        task: str = "detection",
+        task: str = "segmentation",
         skip_integrity_check: bool = False,
     ) -> None:
         self._year = self._verify_str_arg(year, "year", ("2007", "2008", "2009", "2010", "2011", "2012"))
@@ -61,6 +72,8 @@ class VOC(Dataset):
         self._split_folder = "Main" if task == "detection" else "Segmentation"
 
         self._categories = _info()["categories"]
+        self.CLASSES = CLASSES
+        self.PALETTE = PALETTE
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
@@ -131,6 +144,11 @@ class VOC(Dataset):
         _, image_data = split_and_image_data
         image_path, image_buffer = image_data
         ann_path, ann_buffer = ann_data
+        image_path = pathlib.PosixPath(image_path).name
+        ann_path = pathlib.PosixPath(ann_path).name
+        #{'img_info': {'filename': '2009_000801.jpg', 'ann': {'seg_map': '2009_000801.png'}}, 'ann_info': {'seg_map': '2009_000801.png'}}
+        img_info = dict({'filename':image_path, 'ann':dict({'seg_map':ann_path})})
+        return img_info
 
         return dict(
             (self._prepare_detection_ann if self._task == "detection" else self._prepare_segmentation_ann)(ann_buffer),

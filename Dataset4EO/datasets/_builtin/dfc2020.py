@@ -32,11 +32,11 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "rsuss"
-FNAME = "RSUSS"
-_TRAIN_LEN = 5923
-_VAL_LEN = 1000
-_TEST_LEN = 3398
+NAME = "dfc2020"
+FNAME = "DFC2020"
+_TRAIN_LEN = 5128
+_VAL_LEN = 0
+_TEST_LEN = 986
 
 
 @register_info(NAME)
@@ -45,7 +45,7 @@ def _info() -> Dict[str, Any]:
 
 
 @register_dataset(NAME)
-class RSUSS(Dataset):
+class DFC2020(Dataset):
     """
     - **homepage**: https://www.iarai.ac.at/rsbenchmark4uss/
     """
@@ -58,7 +58,7 @@ class RSUSS(Dataset):
         skip_integrity_check: bool = False,
     ) -> None:
 
-        self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
+        self._split = self._verify_str_arg(split, "split", ("train", "test"))
         self.root = root
         self._categories = _info()["categories"]
 
@@ -106,27 +106,21 @@ class RSUSS(Dataset):
     
     def _prepare_sample(self, data):
         label_path, label = None, None
-        if self._split != 'train':
-            (image_path, height_path), label_path = data
-        else:
-            image_path, height_path = data
+        image_path, label_path = data
+        '''
         img = h5py.File(image_path, 'r')['image'][()]
-        img = torch.tensor(img).permute(2, 0, 1)
-        height = h5py.File(height_path, 'r')['image'][()]
-        height = torch.tensor(height)
-        if label_path:
-            label = h5py.File(label_path, 'r')['image'][()]
-            label = torch.tensor(label)
+        img = torch.tensor(img.astype(np.uint8)).permute(2, 0, 1)
+        label = h5py.File(label_path, 'r')['image'][()]
+        label = torch.tensor(label.astype(np.uint8))
+        '''
+        img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
+        return img_info
 
-        if self._split == 'train':
-            return (image_path, img, height)
-
-        return (image_path, img, height, label)
 
     class _Demux(enum.IntEnum):
-        VAL = 0
+        TRAIN = 0
         TEST = 1
-        TRAIN = 2
+        VAL = 2
 
     def _classify_archive(self, data: Tuple[str, Any]) -> Optional[int]:
         if self._is_in_folder(data, name="train", depth=2):
@@ -140,20 +134,15 @@ class RSUSS(Dataset):
     
     def _datapipe(self, res):
         image_dp = FileLister(root=os.path.join(self.root, FNAME, 'images'), recursive=True)
-        val_img_dp, test_img_dp, train_img_dp = image_dp.demux(num_instances=3, classifier_fn=self._classify_archive,\
-                drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
-
-        height_dp = FileLister(root=os.path.join(self.root, FNAME, 'heights'), recursive=True)
-        val_height_dp, test_height_dp, train_height_dp = height_dp.demux(num_instances=3, classifier_fn=self._classify_archive,\
+        train_img_dp, test_img_dp = image_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 
         label_dp = FileLister(root=os.path.join(self.root, FNAME, 'classes'), recursive=True)
-        val_label_dp, test_label_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
+        train_label_dp, test_label_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 
-        train_dp = train_img_dp.zip(train_height_dp)
-        val_dp = val_img_dp.zip(val_height_dp).zip(val_label_dp)
-        test_dp = test_img_dp.zip(test_height_dp).zip(test_label_dp)
+        train_dp = train_img_dp.zip(train_label_dp)
+        test_dp = test_img_dp.zip(test_label_dp)
         
         '''tfs = transforms.Compose(transforms.Resize((256,256)),
                                  transforms.RandomHorizontalFlip(),
