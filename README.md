@@ -1,5 +1,5 @@
 # Dataset4EO
-# RSI-Segmentation
+
 <div  align="center">    
  <img src="resources/datasets4eo.png" width = "400" height = "140" alt="segmentation" align=center />
 </div>
