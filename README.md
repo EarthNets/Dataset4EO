@@ -1,4 +1,8 @@
 # Dataset4EO
+# RSI-Segmentation
+<div  align="center">    
+ <img src="resources/ai.png" width = "400" height = "150" alt="segmentation" align=center />
+</div>
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
 Todo List
