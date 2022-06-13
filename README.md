@@ -17,9 +17,10 @@ Todo List
 Re-organize the datasets of remote sensing datasets 
 
 #Install newest versions of torch and torchdata
-$$
+
+```shell
 sh install_requirements.sh
 python setup.py install
 from Dataset4EO import datasets
 vocdp = datasets.voc.VOC('./')
-$$
+```
