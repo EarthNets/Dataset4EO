@@ -27,6 +27,11 @@ sh install_requirements.sh
 python -m pip install -e .
 ```
 
+### Install Dataset4EO
+```shell
+python -m pip install -e .
+```
+
 ### Then it can be used by
 ```python
 from Dataset4EO import datasets
