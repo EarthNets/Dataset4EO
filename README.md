@@ -18,6 +18,17 @@ Todo List
 - [ ] supporting dataloaders in a easy-to-use way for custom projects;
 - [ ] benchmarking all the cutting-edge backbones and task-specific models;
 
+# Supported datasets:
+
+- [x] [RSUSS](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#cityscapes)
+- [x] [LandSlide4Sense](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-voc)
+- [x] [Eurosat](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#ade20k)
+- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+
 
 ## How to use
 
