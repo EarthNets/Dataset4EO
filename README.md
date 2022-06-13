@@ -1,6 +1,8 @@
+![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
 Todo List
 
-- [x] :white_check_mark: Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
+- [x] Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
 - [x] Assign specific datasets to each of the member;
 - [x] preprocess the datasets in a AI-ready style;
 - [x] re-distribute processed datasets and add citations;
@@ -15,9 +17,9 @@ Todo List
 Re-organize the datasets of remote sensing datasets 
 
 #Install newest versions of torch and torchdata
-'''
+$$
 sh install_requirements.sh
 python setup.py install
 from Dataset4EO import datasets
 vocdp = datasets.voc.VOC('./')
-'''
+$$
