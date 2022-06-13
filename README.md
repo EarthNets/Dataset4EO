@@ -1,3 +1,4 @@
+# Dataset4EO
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
 Todo List
@@ -13,7 +14,7 @@ Todo List
 - [ ] benchmarking all the cutting-edge backbones and task-specific models;
 
 
-# Dataset4EO
+#How to use
 Re-organize the datasets of remote sensing datasets 
 
 #Install newest versions of torch and torchdata
