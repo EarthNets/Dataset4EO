@@ -34,6 +34,32 @@ python -m pip install -e .
 
 ### Then it can be used by
 ```python
-from Dataset4EO import datasets
-vocdp = datasets.voc.VOC('./')
+from Dataset4EO.datasets import list_datasets, load, landslide4sense
+from torch.utils.data import DataLoader2
+from tqdm import tqdm
+
+#list all the supported datasets
+print(list_datasets())
+
+#create new dataset object by calling:
+datasets_dir = './'
+dp = landslide4sense.Landslide4Sense(datasets_dir, split='train')
+
+#create a dataloader by calling:
+data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True, drop_last=True)
+
+#Now, iterating the dataloader for training
+for it in tqdm(data_loader):
+    print(it)
+```
+
+# Add Transformations
+```
+from Dataset4EO import transforms
+
+tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
+                                 transforms.RandomVerticalFlip(),
+                                 transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
+                                 
+ndp = ndp.map(tfs)
 ```
