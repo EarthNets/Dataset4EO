@@ -12,10 +12,17 @@ from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
 import pdb
 
-from torchdata.datapipes.map import (
-    SequenceWrapper,
+from torchdata.datapipes.iter import (
+    IterDataPipe,
     Mapper,
+    Filter,
+    Demultiplexer,
+    IterKeyZipper,
+    LineReader,
 )
+
+from torchdata.datapipes.map import SequenceWrapper
+
 from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset
 from Dataset4EO.datasets.utils._internal import (
     path_accessor,
@@ -59,6 +66,7 @@ class Landslide4Sense(Dataset):
 
         self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
         self.root = root
+        self.decom_dir = os.path.join(self.root, 'landslide4sense')
         self._categories = _info()["categories"]
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
@@ -83,40 +91,52 @@ class Landslide4Sense(Dataset):
                 (num_train_mask == _TRAIN_LEN) and \
                 (num_val_img == _VAL_LEN)
 
-    def _resources(self) -> List[OnlineResource]:
+    def _decompress_dir(self):
         file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
-        decom_dir = os.path.join(self.root, 'landslide4sense')
-        self.decom_dir = decom_dir
-        archive = HttpResource("https://syncandshare.lrz.de/dl/fiLurHQ9Cy4NwvmPGYQe7RWM/{}".format(file_name), sha256=sha256)
-
-        if not self.decompress_integrity_check(decom_dir):
+        if not self.decompress_integrity_check(self.decom_dir):
             print('Decompressing the tar file...')
             with tarfile.open(os.path.join(self.root, file_name), 'r:gz') as tar:
-                tar.extractall(decom_dir)
+                tar.extractall(self.decom_dir)
                 tar.close()
-
+    
+    def _resources(self) -> List[OnlineResource]:
+        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
+        archive = HttpResource("https://syncandshare.lrz.de/need_update/{}".format(file_name), sha256=sha256)
         return [archive]
 
-    def _prepare_sample(self, idx):
+    def _prepare_sample_dp(self, idx):
         iname = "{}/img/image_{}.h5".format(self._split, idx)
         image_path = os.path.join(self.decom_dir, iname)
-        #img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
-        #img = torch.tensor(img).permute(2, 0, 1)
         label_path = None
 
         if self._split == 'train':
             mname = "{}/mask/mask_{}.h5".format(self._split, idx)
             label_path = os.path.join(self.decom_dir, mname)
-            #mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
-            #mask = torch.tensor(mask)
-            #return (iname, mname, img, mask)
 
         img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
         return img_info
-        #return (iname, img)
+    
+    
+    def _prepare_sample(self, idx):
+        iname = "{}/img/image_{}.h5".format(self._split, idx)
+        image_path = os.path.join(self.decom_dir, iname)
+        img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
+        img = torch.tensor(img).permute(2, 0, 1)
+        label_path = None
+        img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
 
-    def _datapipe(self, res):
+        if self._split == 'train':
+            mname = "{}/mask/mask_{}.h5".format(self._split, idx)
+            label_path = os.path.join(self.decom_dir, mname)
+            mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
+            mask = torch.tensor(mask)
+            img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
+            return (img_info, img, mask)
 
+        return (img_info, img)
+
+    def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
+        self._decompress_dir()
         tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
                                  transforms.RandomVerticalFlip(),
                                  transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
