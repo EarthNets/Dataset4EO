@@ -13,6 +13,7 @@ import numpy as np
 import tempfile
 
 tr = datasets.landcover_sen2.LandCoverSen2('./', split='train')
+tr = tr.to_map_datapipe()
 
 from torch.utils.data import DataLoader2
 datas = DataLoader2(tr, batch_size=4, num_workers=4, shuffle=True)
