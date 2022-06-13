@@ -40,6 +40,7 @@ python -m pip install -e .
 
 ### Install Dataset4EO
 ```shell
+git clone git@github.com:DeepAI4EO/Dataset4EO.git
 python -m pip install -e .
 ```
 
