@@ -2,7 +2,6 @@ import os
 import tarfile
 import enum
 import functools
-from tqdm import tqdm
 import h5py
 import torch
 from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
@@ -61,6 +60,9 @@ class DFC2020(Dataset):
         self._split = self._verify_str_arg(split, "split", ("train", "test"))
         self.root = root
         self._categories = _info()["categories"]
+        self.CLASSES = ('Forest', 'Shrubland', 'Grassland', 'Wetland', 'Cropland', 'Urban/Built-up', 'Barren', 'Water')
+        self.PALETTE = [[128, 0, 0], [0, 128, 0], [128, 128, 0], [0, 0, 128], [128, 0, 128], [0, 128, 128], [128, 128, 128], [64, 0, 0]]
+
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 

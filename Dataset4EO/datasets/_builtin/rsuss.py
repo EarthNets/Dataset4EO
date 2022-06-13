@@ -34,9 +34,9 @@ from .._api import register_dataset, register_info
 
 NAME = "rsuss"
 FNAME = "RSUSS"
-_TRAIN_LEN = 5923
-_VAL_LEN = 1000
-_TEST_LEN = 3398
+_TRAIN_LEN = 5137
+_VAL_LEN = 1059
+_TEST_LEN = 3144
 
 
 @register_info(NAME)
@@ -55,12 +55,14 @@ class RSUSS(Dataset):
         root: Union[str, pathlib.Path],
         *,
         split: str = "train",
+        mode: str = "unsupervised",
         skip_integrity_check: bool = False,
     ) -> None:
 
         self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
         self.root = root
         self._categories = _info()["categories"]
+        self.mode = mode
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
@@ -106,22 +108,22 @@ class RSUSS(Dataset):
     
     def _prepare_sample(self, data):
         label_path, label = None, None
-        if self._split != 'train':
-            (image_path, height_path), label_path = data
-        else:
+        if self.mode=='unsupervised' and self._split=='train':
             image_path, height_path = data
-        img = h5py.File(image_path, 'r')['image'][()]
-        img = torch.tensor(img).permute(2, 0, 1)
-        height = h5py.File(height_path, 'r')['image'][()]
-        height = torch.tensor(height)
-        if label_path:
-            label = h5py.File(label_path, 'r')['image'][()]
-            label = torch.tensor(label)
+        else:
+            (image_path, height_path), label_path = data
+        #img = h5py.File(image_path, 'r')['image'][()]
+        #img = torch.tensor(img).permute(2, 0, 1)
+        #height = h5py.File(height_path, 'r')['image'][()]
+        #height = torch.tensor(height)
+        #if label_path:
+        #    label = h5py.File(label_path, 'r')['image'][()]
+        #    label = torch.tensor(label)
 
-        if self._split == 'train':
-            return (image_path, img, height)
+        if self._split == 'train' and self.mode == 'unsupervised':
+            return (image_path, height_path, None)
 
-        return (image_path, img, height, label)
+        return (image_path, height_path, label_path)
 
     class _Demux(enum.IntEnum):
         VAL = 0
@@ -148,10 +150,10 @@ class RSUSS(Dataset):
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 
         label_dp = FileLister(root=os.path.join(self.root, FNAME, 'classes'), recursive=True)
-        val_label_dp, test_label_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
+        val_label_dp, test_label_dp, train_label_dp = label_dp.demux(num_instances=3, classifier_fn=self._classify_archive,\
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 
-        train_dp = train_img_dp.zip(train_height_dp)
+        train_dp = train_img_dp.zip(train_height_dp).zip(train_label_dp)
         val_dp = val_img_dp.zip(val_height_dp).zip(val_label_dp)
         test_dp = test_img_dp.zip(test_height_dp).zip(test_label_dp)
         

@@ -99,16 +99,21 @@ class Landslide4Sense(Dataset):
 
     def _prepare_sample(self, idx):
         iname = "{}/img/image_{}.h5".format(self._split, idx)
-        img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
-        img = torch.tensor(img).permute(2, 0, 1)
+        image_path = os.path.join(self.decom_dir, iname)
+        #img = h5py.File(os.path.join(self.decom_dir, iname), 'r')['img'][()]
+        #img = torch.tensor(img).permute(2, 0, 1)
+        label_path = None
 
         if self._split == 'train':
             mname = "{}/mask/mask_{}.h5".format(self._split, idx)
-            mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
-            mask = torch.tensor(mask)
-            return (iname, mname, img, mask)
+            label_path = os.path.join(self.decom_dir, mname)
+            #mask = h5py.File(os.path.join(self.decom_dir, mname), 'r')['mask'][()]
+            #mask = torch.tensor(mask)
+            #return (iname, mname, img, mask)
 
-        return (iname, img)
+        img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
+        return img_info
+        #return (iname, img)
 
     def _datapipe(self, res):
 

@@ -13,7 +13,7 @@ from torchdata.dataloader2 import MultiProcessingReadingService
 
 
 if __name__ == '__main__':
-    dp = DFC2020(datasets_dir, split='train')
+    dp = DFC2020(datasets_dir, split='test')
     data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True,
                               drop_last=True)
     for epoch in range(5):
