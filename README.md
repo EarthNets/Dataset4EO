@@ -54,7 +54,7 @@ for it in tqdm(data_loader):
 ```
 
 # Add Transformations
-```
+```python
 from Dataset4EO import transforms
 
 tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
