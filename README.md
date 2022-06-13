@@ -35,7 +35,6 @@ Todo List
 ### Install newest versions of torch and torchdata
 ```shell
 sh install_requirements.sh
-python -m pip install -e .
 ```
 
 ### Install Dataset4EO
