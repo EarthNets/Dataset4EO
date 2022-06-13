@@ -10,12 +10,12 @@ Todo List
 
 - [x] Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
 - [x] Assign specific datasets to each of the member;
-- [ ] preprocess the datasets in a AI-ready style;
-- [ ] re-distribute processed datasets and add citations;
-- [ ] implementing dataset classes for downloading;
+- [X] preprocess the datasets in a AI-ready style;
+- [X] re-distribute processed datasets and add citations;
+- [X] implementing dataset classes for downloading;
 - [ ] implementing the random sampler for geo-spatial datasets;
-- [ ] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
-- [ ] supporting dataloaders in a easy-to-use way for custom projects;
+- [X] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
+- [X] supporting dataloaders in a easy-to-use way for custom projects;
 - [ ] benchmarking all the cutting-edge backbones and task-specific models;
 
 # Supported datasets:
