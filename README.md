@@ -1,7 +1,7 @@
 # Dataset4EO
-# RSI-Segmentation
+
 <div  align="center">    
- <img src="resources/datasets4eo.png" width = "400" height = "140" alt="segmentation" align=center />
+ <img src="resources/datasets4eo.png" width = "400" height = "130" alt="segmentation" align=center />
 </div>
 
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
@@ -10,12 +10,12 @@ Todo List
 
 - [x] Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
 - [x] Assign specific datasets to each of the member;
-- [ ] preprocess the datasets in a AI-ready style;
-- [ ] re-distribute processed datasets and add citations;
-- [ ] implementing dataset classes for downloading;
+- [X] preprocess the datasets in a AI-ready style;
+- [X] re-distribute processed datasets and add citations;
+- [X] implementing dataset classes for downloading;
 - [ ] implementing the random sampler for geo-spatial datasets;
-- [ ] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
-- [ ] supporting dataloaders in a easy-to-use way for custom projects;
+- [X] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
+- [X] supporting dataloaders in a easy-to-use way for custom projects;
 - [ ] benchmarking all the cutting-edge backbones and task-specific models;
 
 # Supported datasets:
@@ -35,11 +35,11 @@ Todo List
 ### Install newest versions of torch and torchdata
 ```shell
 sh install_requirements.sh
-python -m pip install -e .
 ```
 
 ### Install Dataset4EO
 ```shell
+git clone git@github.com:DeepAI4EO/Dataset4EO.git
 python -m pip install -e .
 ```
 
