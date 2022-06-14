@@ -58,6 +58,7 @@ class Landslide4Sense(Dataset):
         root: Union[str, pathlib.Path],
         *,
         split: str = "train",
+        data_info: bool = True,
         skip_integrity_check: bool = False,
     ) -> None:
 
@@ -68,6 +69,9 @@ class Landslide4Sense(Dataset):
         self.root = root
         self.decom_dir = os.path.join(self.root, 'landslide4sense')
         self._categories = _info()["categories"]
+        self.CLASSES = ('background', 'landslide')
+        self.PALETTE = [[128, 0, 0], [0, 128, 0]]
+        self.data_info = True
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
@@ -101,7 +105,7 @@ class Landslide4Sense(Dataset):
     
     def _resources(self) -> List[OnlineResource]:
         file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
-        archive = HttpResource("https://syncandshare.lrz.de/need_update/{}".format(file_name), sha256=sha256)
+        archive = HttpResource("https://syncandshare.lrz.de/getlink/fiLurHQ9Cy4NwvmPGYQe7RWM/{}".format(file_name), sha256=sha256)
         return [archive]
 
     def _prepare_sample_dp(self, idx):
@@ -137,15 +141,19 @@ class Landslide4Sense(Dataset):
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
         self._decompress_dir()
-        tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
+        dp = SequenceWrapper(range(1, self.__len__()+1))
+        if not self.data_info:
+            ndp = Mapper(dp, self._prepare_sample)
+            ndp = hint_shuffling(ndp)
+            ndp = hint_sharding(ndp)
+            tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
                                  transforms.RandomVerticalFlip(),
                                  transforms.RandomResizedCrop((128, 128), scale=[0.5, 1]))
-
-        dp = SequenceWrapper(range(1, self.__len__()+1))
-        ndp = Mapper(dp, self._prepare_sample)
-        ndp = hint_shuffling(ndp)
-        ndp = hint_sharding(ndp)
-        ndp = ndp.map(tfs)
+            ndp = ndp.map(tfs)
+        else:
+            ndp = Mapper(dp, self._prepare_sample_dp)
+            ndp = hint_shuffling(ndp)
+            ndp = hint_sharding(ndp)
 
         return ndp
 
