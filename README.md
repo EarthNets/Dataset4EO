@@ -56,6 +56,8 @@ print(list_datasets())
 datasets_dir = './'
 dp = landslide4sense.Landslide4Sense(datasets_dir, split='train')
 
+#Then the corresponding dataset will be downloaded and decompressed automatically
+
 #create a dataloader by calling:
 data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True, drop_last=True)
 
