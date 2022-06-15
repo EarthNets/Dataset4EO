@@ -11,6 +11,7 @@ from xml.etree import ElementTree
 from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
 import pdb
+import numpy as np
 
 from torchdata.datapipes.iter import (
     IterDataPipe,
@@ -71,7 +72,7 @@ class Landslide4Sense(Dataset):
         self._categories = _info()["categories"]
         self.CLASSES = ('background', 'landslide')
         self.PALETTE = [[128, 0, 0], [0, 128, 0]]
-        self.data_info = True
+        self.data_info = data_info
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
