@@ -4,6 +4,15 @@
  <img src="resources/datasets4eo.png" width = "400" height = "130" alt="segmentation" align=center />
 </div>
 
+# Parse Semantics from Geometry: A Remote Sensing Benchmark for Multi-modal Semantic Segmentation
+
+```bash
+The proposed benchmark dataset RSMSS can be donwloaded from the following link:
+https://syncandshare.lrz.de/getlink/fi34FyY7Y7JCLoJKELryCeZq/
+```
+
+
+
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
 Todo List
