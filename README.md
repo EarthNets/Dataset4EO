@@ -9,7 +9,7 @@
 The proposed benchmark dataset RSMSS can be donwloaded from the following [link](https://syncandshare.lrz.de/getlink/fi8rRALX7JwWtMaSH1jpxiVA/RSUSS.zip):
 https://syncandshare.lrz.de/getlink/fi8rRALX7JwWtMaSH1jpxiVA/RSUSS.zip
 <div  align="center">    
- <img src="resources/RSMSS.png" width = "1200" height = "300" alt="RSMSS" align=center />
+ <img src="resources/RSMSS.png" width = "1100" height = "200" alt="RSMSS" align=center />
 </div>
 
 
