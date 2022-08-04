@@ -57,6 +57,8 @@ class OnlineResource(abc.ABC):
 
     @staticmethod
     def _decompress(file: pathlib.Path) -> pathlib.Path:
+        import pdb
+        pdb.set_trace()
         return pathlib.Path(_decompress(str(file), remove_finished=True))
 
     def _loader(self, path: pathlib.Path) -> IterDataPipe[Tuple[str, IO]]:

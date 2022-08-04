@@ -5,4 +5,4 @@ from .landslide4sense import Landslide4Sense
 from .rsuss import RSUSS
 from .dfc2020 import DFC2020
 from .aid import AID
-
+from .inria import Inria

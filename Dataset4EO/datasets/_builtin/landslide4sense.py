@@ -103,7 +103,7 @@ class Landslide4Sense(Dataset):
             with tarfile.open(os.path.join(self.root, file_name), 'r:gz') as tar:
                 tar.extractall(self.decom_dir)
                 tar.close()
-    
+
     def _resources(self) -> List[OnlineResource]:
         file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
         archive = HttpResource("https://syncandshare.lrz.de/getlink/fiLurHQ9Cy4NwvmPGYQe7RWM/{}".format(file_name), sha256=sha256)
@@ -120,8 +120,7 @@ class Landslide4Sense(Dataset):
 
         img_info = dict({'filename':image_path, 'ann':dict({'seg_map':label_path})})
         return img_info
-    
-    
+
     def _prepare_sample(self, idx):
         iname = "{}/img/image_{}.h5".format(self._split, idx)
         image_path = os.path.join(self.decom_dir, iname)

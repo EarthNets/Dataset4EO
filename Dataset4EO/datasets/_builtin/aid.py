@@ -67,7 +67,7 @@ class AID(Dataset):
         # There is currently no test split available
         assert split != 'test'
 
-        self._split = self._verify_str_arg(split, "split", ("train", "val"))
+        self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
         self.root = root
         self.decom_dir = os.path.join(self.root, 'AID')
         self._categories = _info()["categories"]
@@ -78,7 +78,7 @@ class AID(Dataset):
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
     _TRAIN_VAL_ARCHIVES = {
-        "trainval": ("AID.tar", "8b69a4231c82e4605158268f01a0cd32a2eda8e99569b7b2ccb2a2b4dc50c68c"),
+        "all": ("AID.tar", "8b69a4231c82e4605158268f01a0cd32a2eda8e99569b7b2ccb2a2b4dc50c68c"),
     }
 
     def decompress_integrity_check(self, decom_dir):
@@ -94,7 +94,7 @@ class AID(Dataset):
         return num_imgs == _NUM_IMAGES and num_files == _NUM_FILES
 
     def _decompress_dir(self):
-        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
+        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['all']
         if not self.decompress_integrity_check(self.decom_dir):
             print('Decompressing the tar file...')
             with tarfile.open(os.path.join(self.root, file_name), 'r') as tar:
@@ -102,7 +102,7 @@ class AID(Dataset):
                 tar.close()
 
     def _resources(self) -> List[OnlineResource]:
-        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
+        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['all']
         archive = HttpResource("https://syncandshare.lrz.de/dl/fiQzLLinL4N77kzcgJUhK4Cu/AID.tar", sha256=sha256)
         return [archive]
 
