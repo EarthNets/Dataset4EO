@@ -57,17 +57,17 @@ class OnlineResource(abc.ABC):
 
     @staticmethod
     def _decompress(file: pathlib.Path) -> pathlib.Path:
-        import pdb
-        pdb.set_trace()
         return pathlib.Path(_decompress(str(file), remove_finished=True))
 
     def _loader(self, path: pathlib.Path) -> IterDataPipe[Tuple[str, IO]]:
+
         if path.is_dir():
             return FileOpener(FileLister(str(path), recursive=True), mode="rb")
 
         dp = FileOpener(IterableWrapper((str(path),)), mode="rb")
 
         archive_loader = self._guess_archive_loader(path)
+
         if archive_loader:
             dp = archive_loader(dp)
 
@@ -85,12 +85,15 @@ class OnlineResource(abc.ABC):
         try:
             _, archive_type, _ = _detect_file_type(path.name)
         except RuntimeError:
+            if path.name.endswith('.rar'):
+                return self._ARCHIVE_LOADERS.get('.rar')
             return None
         return self._ARCHIVE_LOADERS.get(archive_type)  # type: ignore[arg-type]
 
     def load(
         self, root: Union[str, pathlib.Path], *, skip_integrity_check: bool = False
     ) -> IterDataPipe[Tuple[str, IO]]:
+
         root = pathlib.Path(root)
         path = root / self.file_name
         # Instead of the raw file, there might also be files with fewer suffixes after decompression or directories

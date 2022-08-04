@@ -104,6 +104,7 @@ class AID(Dataset):
     def _resources(self) -> List[OnlineResource]:
         file_name, sha256 = self._TRAIN_VAL_ARCHIVES['all']
         archive = HttpResource("https://syncandshare.lrz.de/dl/fiQzLLinL4N77kzcgJUhK4Cu/AID.tar", sha256=sha256)
+
         return [archive]
 
     def _prepare_sample(self, idx):
