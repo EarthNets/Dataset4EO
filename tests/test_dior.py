@@ -11,7 +11,7 @@ datasets_dir = '../../Datasets/Dataset4EO'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = dior.DIOR(datasets_dir, split='trainval')
+    dp = dior.DIOR(datasets_dir, split='train')
     data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True,
                               drop_last=True)
     for epoch in range(5):

@@ -40,8 +40,9 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 from .._api import register_dataset, register_info
 
 NAME = "dior"
-_TRAVAL_LEN = 11725
-_VAL_LEN = 11725
+_TRAIN_LEN = 5862
+_VAL_LEN = 5863
+_TEST_LEN = 11738
 
 
 @register_info(NAME)
@@ -59,12 +60,12 @@ class DIOR(Dataset):
         self,
         root: Union[str, pathlib.Path],
         *,
-        split: str = "trainval",
+        split: str = "train",
         data_info: bool = True,
         skip_integrity_check: bool = False,
     ) -> None:
 
-        assert split == 'trainval' or split == 'test'
+        assert split == 'train' or split == 'val' or split == 'test'
         self._split = split
         self.root = root
         self._categories = _info()["categories"]
@@ -74,8 +75,11 @@ class DIOR(Dataset):
 
     _CHECKSUMS = {
         "all": ("https://syncandshare.lrz.de/dl/firng4uPNLx9FLPxdBFmP5X/DIOR.zip",
-                "b0609d80ca827a5ec854c3b0c3e63dce467e9ebbaec32e2420b71ea8e821c1a6"),
+                "7a674c72a23ccca91eaf46c7cebdaa2bb9dbd6056af4ecf5c213f32f3d42ad92"),
     }
+
+    def get_classes(self):
+        return self._categories
 
     def _resources(self) -> List[OnlineResource]:
         resource = HttpResource(
@@ -88,14 +92,13 @@ class DIOR(Dataset):
 
     def _prepare_sample(self, data):
 
-        image_data, ann_data_h, ann_data_o = data
+        image_data, ann_data = data[1]
         image_path, image_buffer = image_data
-        ann_path_h, ann_buffer = ann_data_h
-        ann_path_o, ann_buffer = ann_data_o
+        ann_path, ann_buffer = ann_data
 
         img_info = {'filename':image_path,
-                    'ann':{'ann_path_horizontal': ann_path_h,
-                           'ann_path_oriented': ann_path_o}}
+                    'img_id': image_path.split('/')[-1].split('.')[0],
+                    'ann':{'ann_path': ann_path}}
 
         return img_info
 
@@ -105,18 +108,19 @@ class DIOR(Dataset):
 
     def _classify_archive(self, data):
         path = pathlib.Path(data[0])
-        if path.name.endswith('jpg'):
+        if path.name.endswith(f'{self._split}.txt'):
             return 0
-        elif path.name.endswith('xml') and path.parent.name == 'Horizontal Bounding Boxes':
+        elif path.name.endswith('jpg'):
             return 1
-        elif path.name.endswith('xml') and path.parent.name == 'Oriented Bounding Boxes':
+        elif path.name.endswith('xml') and path.parent.name == 'Horizontal Bounding Boxes':
             return 2
+        elif path.name.endswith('xml') and path.parent.name == 'Oriented Bounding Boxes':
+            return 3
         else:
             return None
 
-    def _images_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
-        path = pathlib.Path(data[0])
-        return path.name.split('.')[0]
+    def _split_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
+        return data[1].decode('UTF-8')
 
     def _anns_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
         path = pathlib.Path(data[0])
@@ -126,22 +130,36 @@ class DIOR(Dataset):
         path = pathlib.Path(data[0])
         return path.name.split('.')[0]
 
+    def _dp_key_fn(self, data):
+        path = pathlib.Path(data[0][0])
+        return path.name.split('.')[0]
+
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        img_dp, ann_dp_h, ann_dp_o = Demultiplexer(
-            resource_dps[0], 3, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
+        split_dp, img_dp, ann_dp_h, ann_dp_o = Demultiplexer(
+            resource_dps[0], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
         )
-        img_dp = Filter(img_dp, self._select_split)
+        # img_dp = Filter(img_dp, self._select_split)
+        # dp = Zipper(img_dp, ann_dp_h, ann_dp_o)
+        dp = IterKeyZipper(
+            img_dp, ann_dp_h,
+            key_fn=self._images_key_fn,
+            ref_key_fn=self._anns_key_fn,
+            buffer_size=INFINITE_BUFFER_SIZE,
+            keep_key=False
+        )
 
-        # dp = IterKeyZipper(
-        #     img_dp, ann_dp_h,
-        #     key_fn=self._images_key_fn,
-        #     ref_key_fn=self._anns_key_fn,
-        #     buffer_size=INFINITE_BUFFER_SIZE,
-        #     keep_key=True
-        # )
-        dp = Zipper(img_dp, ann_dp_h, ann_dp_o)
+        split_dp = LineReader(split_dp)
+        dp = IterKeyZipper(
+            split_dp, dp,
+            key_fn=self._split_key_fn,
+            ref_key_fn=self._dp_key_fn,
+            buffer_size=INFINITE_BUFFER_SIZE,
+            keep_key=False
+        )
+
+        # dp = Zipper(img_dp, ann_dp)
 
         ndp = Mapper(dp, self._prepare_sample)
         ndp = hint_shuffling(ndp)
@@ -151,8 +169,9 @@ class DIOR(Dataset):
 
     def __len__(self) -> int:
         return {
-            'trainval': _TRAVAL_LEN,
-            'val': _VAL_LEN
+            'train': _TRAIN_LEN,
+            'val': _VAL_LEN,
+            'test': _TEST_LEN
         }[self._split]
 
 if __name__ == '__main__':
