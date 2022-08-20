@@ -1,20 +1,20 @@
 import sys
 import os
 import pdb
-from Dataset4EO.datasets import dior
+from Dataset4EO.datasets import LoveDA
 from torch.utils.data import DataLoader2
 #from torchdata.dataloader2 import DataLoader2 as DataLoader
 import time
 from tqdm import tqdm
 
-datasets_dir = '../../Datasets/Dataset4EO'
+datasets_dir = '../../Datasets/Dataset4EO/LoveDA'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = dior.DIOR(datasets_dir, split='trainval')
+    dp = LoveDA(datasets_dir, split=['train_rural'])
     data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True,
                               drop_last=True)
-    for epoch in range(5):
+    for epoch in range(1):
         t1 = time.time()
         for it in tqdm(data_loader):
             pass

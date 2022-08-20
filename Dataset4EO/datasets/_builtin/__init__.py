@@ -8,3 +8,4 @@ from .aid import AID
 from .inria import Inria
 from .nwpu_vhr10 import NWPU_VHR10
 from .dior import DIOR
+from .love_da import LoveDA

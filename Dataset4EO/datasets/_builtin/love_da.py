@@ -20,7 +20,8 @@ from torchdata.datapipes.iter import (
     Demultiplexer,
     IterKeyZipper,
     LineReader,
-    Zipper
+    Zipper,
+    Concater
 )
 
 from torchdata.datapipes.map import SequenceWrapper
@@ -39,35 +40,54 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "dior"
-_TRAIN_LEN = 5862
-_VAL_LEN = 5863
-_TRAIN_VAL_LEN = 5862 + 5863
-_TEST_LEN = 11738
+NAME = "love_da"
+_TRAIN_RURAL = 1366
+_TRAIN_URBAN = 1156
+
+_VAL_RURAL = 992
+_VAL_URBAN = 677
+
+_TEST_RURAL = 976
+_TEST_URBAN = 820
 
 
 @register_info(NAME)
 def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
+class LoveDAResource(ManualDownloadResource):
+    def __init__(self, **kwargs: Any) -> None:
+        """
+        # Download Train.zip
+        wget https://zenodo.org/record/5706578/files/Train.zip
+        # Download Val.zip
+        wget https://zenodo.org/record/5706578/files/Val.zip
+        # Download Test.zip
+        wget https://zenodo.org/record/5706578/files/Test.zip
+        """
+        super().__init__('Download the data into the root directory according to the download command in https://github.com/Junjue-Wang/LoveDA',
+                         **kwargs)
 
 @register_dataset(NAME)
-class DIOR(Dataset):
+class LoveDA(Dataset):
     """
-    - **paper link**: https://arxiv.org/abs/1909.00133?context=cs.LG.html
+    - **github link**: https://github.com/Junjue-Wang/LoveDA
     """
 
     def __init__(
         self,
         root: Union[str, pathlib.Path],
         *,
-        split: str = "train",
+        split = "train_rural",
         data_info: bool = True,
         skip_integrity_check: bool = False,
     ) -> None:
 
-        assert split == 'train' or split == 'val' or split == 'test' or split == 'trainval'
+        # assert split in ['train_rural', 'train_urban', 'val_rural', 'val_urban', 'test_rural', 'test_urban']
         self._split = split
+        if type(self._split) == str:
+            self._split = [self._split]
+
         self.root = root
         self._categories = _info()["categories"]
         self.data_info = data_info
@@ -75,25 +95,38 @@ class DIOR(Dataset):
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
     _CHECKSUMS = {
-        "all": ("https://syncandshare.lrz.de/dl/firng4uPNLx9FLPxdBFmP5X/DIOR.zip",
-                "7a674c72a23ccca91eaf46c7cebdaa2bb9dbd6056af4ecf5c213f32f3d42ad92"),
+        'Train.zip': '62e1672dfd24f4811cf6ecc1fd1c476eb140f2a351eec3d22de25cc4de83f4e9',
+        'Val.zip': '91632a1e10d0014dda2b7805886a6bbfcbb9dac97c7da3db60a9abe4a5cab299',
+        'Test.zip': '890e2f86800af626cae64eb8a03160c29a341aaa837cc81af74bb808013cd52e'
     }
 
     def get_classes(self):
         return self._categories
 
     def _resources(self) -> List[OnlineResource]:
-        resource = HttpResource(
-            url = self._CHECKSUMS['all'][0],
+        train_resource = LoveDAResource(
+            file_name = 'Train.zip',
             preprocess = 'extract',
-            sha256 = self._CHECKSUMS['all'][1]
+            sha256 = self._CHECKSUMS['Train.zip']
         )
 
-        return [resource]
+        val_resource = LoveDAResource(
+            file_name = 'Val.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['Val.zip']
+        )
+
+        test_resource = LoveDAResource(
+            file_name = 'Test.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['Test.zip']
+        )
+
+        return [train_resource, val_resource, test_resource]
 
     def _prepare_sample(self, data):
 
-        image_data, ann_data = data[1]
+        image_data, ann_data = data
         image_path, image_buffer = image_data
         ann_path, ann_buffer = ann_data
 
@@ -114,14 +147,16 @@ class DIOR(Dataset):
 
     def _classify_archive(self, data):
         path = pathlib.Path(data[0])
-        if path.name.endswith('.txt'):
-            return 0
-        elif path.name.endswith('jpg'):
-            return 1
-        elif path.name.endswith('xml') and path.parent.name == 'Horizontal Bounding Boxes':
-            return 2
-        elif path.name.endswith('xml') and path.parent.name == 'Oriented Bounding Boxes':
-            return 3
+        if path.parent.name == 'images_png':
+            if path.parents[1].name == 'Rural':
+                return 0
+            else:
+                return 1
+        elif path.parent.name == 'masks_png':
+            if path.parents[1].name == 'Rural':
+                return 2
+            else:
+                return 3
         else:
             return None
 
@@ -143,36 +178,30 @@ class DIOR(Dataset):
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        split_dp, img_dp, ann_dp_h, ann_dp_o = Demultiplexer(
+        train_rural_img, train_urban_img, train_rural_ann, train_urb_ann = Demultiplexer(
             resource_dps[0], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
         )
-        train_split, val_split, test_split = Demultiplexer(split_dp, 3, self._classify_split)
-        # img_dp = Filter(img_dp, self._select_split)
-        # dp = Zipper(img_dp, ann_dp_h, ann_dp_o)
-        dp = IterKeyZipper(
-            img_dp, ann_dp_h,
-            key_fn=self._images_key_fn,
-            ref_key_fn=self._anns_key_fn,
-            buffer_size=INFINITE_BUFFER_SIZE,
-            keep_key=False
+
+        val_rural_img, val_urban_img, val_rural_ann, val_urban_ann = Demultiplexer(
+            resource_dps[1], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
         )
 
-        train_split = LineReader(train_split)
-        val_split = LineReader(val_split)
-        test_split = LineReader(test_split)
-
-        if self._split == 'trainval':
-            split_dp = train_split.concat(val_split)
-        else:
-            split_dp = eval(f'{self._split}_split')
-
-        dp = IterKeyZipper(
-            split_dp, dp,
-            key_fn=self._split_key_fn,
-            ref_key_fn=self._dp_key_fn,
-            buffer_size=INFINITE_BUFFER_SIZE,
-            keep_key=False
+        test_rural_img, test_urban_img, test_rural_ann, test_urban_ann = Demultiplexer(
+            resource_dps[2], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
         )
+
+
+        try:
+            dps = []
+            for cur_split in self._split:
+                cur_dp = Zipper(eval(f'{cur_split}_img'), eval(f'{cur_split}_ann'))
+                dps.append(cur_dp)
+
+            dp = Concater(*dps)
+
+        except NameError:
+            raise NameError('One of the the split names is invalid! It should be one of the following: \
+                             train_rural | train_urban | val_rural | val_urban | test_rural | test_urban ')
 
         # dp = Zipper(img_dp, ann_dp)
 
@@ -183,12 +212,11 @@ class DIOR(Dataset):
         return ndp
 
     def __len__(self) -> int:
-        return {
-            'train': _TRAIN_LEN,
-            'val': _VAL_LEN,
-            'test': _TEST_LEN,
-            'trainval': _TRAIN_VAL_LEN
-        }[self._split]
+        length = 0
+        for cur_split in self._split:
+            length += eval(f'_{cur_split.upper()}')
+
+        return length
 
 if __name__ == '__main__':
     dp = Landslide4Sense('./')

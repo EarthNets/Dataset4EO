@@ -105,7 +105,7 @@ class DFC2020(Dataset):
         path = pathlib.Path(data)
         in_folder =  name in str(path.parent)
         return in_folder
-    
+
     def _prepare_sample(self, data):
         label_path, label = None, None
         image_path, label_path = data
