@@ -2,16 +2,6 @@
  <img src="resources/datasets4eo.png" width = "400" height = "130" alt="segmentation" align=center />
 </div>
 
-# Parse Semantics from Geometry: A Remote Sensing Benchmark for Multi-modal Semantic Segmentation
-
-The proposed benchmark dataset RSMSS can be donwloaded from the following [link](https://syncandshare.lrz.de/getlink/fi8rRALX7JwWtMaSH1jpxiVA/RSUSS.zip):
-1. https://syncandshare.lrz.de/getlink/fi8rRALX7JwWtMaSH1jpxiVA/RSUSS.zip
-2. https://mediatum.ub.tum.de/1661568
-<div  align="center">    
- <img src="resources/RSMSS.png" width = "1000" height = "270" alt="RSMSS" align=center />
-</div>
-
-
 
 # Contribution Guidelines
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
