@@ -21,6 +21,7 @@ from torchdata.datapipes.iter import (
     IterKeyZipper,
     LineReader,
     Zipper,
+    ZipperLongest,
     Concater
 )
 
@@ -90,6 +91,8 @@ class LoveDA(Dataset):
 
         self.root = root
         self._categories = _info()["categories"]
+        self.CLASSES = self._categories
+        self.PALETTE = [[128, 0, 0], [0, 128, 0], [128, 128, 0], [0, 0, 128], [128, 0, 128], [0, 128, 128], [128, 128, 128]]
         self.data_info = data_info
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
@@ -126,13 +129,19 @@ class LoveDA(Dataset):
 
     def _prepare_sample(self, data):
 
-        image_data, ann_data = data
-        image_path, image_buffer = image_data
-        ann_path, ann_buffer = ann_data
+        if self._split[0].startswith('test'):
+            image_data = data
+            image_path, image_buffer = image_data
+            img_info = {'filename':image_path,
+                        'img_id': image_path.split('/')[-1].split('.')[0]}
+        else:
+            image_data, ann_data = data
+            image_path, image_buffer = image_data
+            ann_path, ann_buffer = ann_data
 
-        img_info = {'filename':image_path,
-                    'img_id': image_path.split('/')[-1].split('.')[0],
-                    'ann':{'ann_path': ann_path}}
+            img_info = {'filename':image_path,
+                        'img_id': image_path.split('/')[-1].split('.')[0],
+                        'ann':{'seg_map': ann_path}}
 
         return img_info
 
@@ -193,8 +202,14 @@ class LoveDA(Dataset):
 
         try:
             dps = []
+            is_test_split = False
             for cur_split in self._split:
-                cur_dp = Zipper(eval(f'{cur_split}_img'), eval(f'{cur_split}_ann'))
+                if cur_split.startswith('test'):
+                    is_test_split = True
+                    cur_dp = eval(f'{cur_split}_img')
+                else:
+                    assert not is_test_split
+                    cur_dp = Zipper(eval(f'{cur_split}_img'), eval(f'{cur_split}_ann'))
                 dps.append(cur_dp)
 
             dp = Concater(*dps)

@@ -11,7 +11,7 @@ datasets_dir = '../../Datasets/Dataset4EO/LoveDA'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = LoveDA(datasets_dir, split=['train_rural'])
+    dp = LoveDA(datasets_dir, split=['test_rural'])
     data_loader = DataLoader2(dp.shuffle(), batch_size=4, num_workers=4, shuffle=True,
                               drop_last=True)
     for epoch in range(1):
