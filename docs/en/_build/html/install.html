@@ -1,0 +1,645 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Prerequisites &mdash; Dataset4EO 0.0.1 documentation</title>
+  
+
+  <link rel="shortcut icon" href="_static/images/favicon.ico" />
+  
+  
+
+  
+
+  
+  
+  
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!-- <link rel="stylesheet" href="_static/pygments.css" type="text/css" /> -->
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/readthedocs.css" type="text/css" />
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Prepare Datasets" href="prepare_data.html" />
+  <link rel="prev" title="Welcome to Dataset4EO’s documentation!" href="index.html" />
+  <!-- Google Analytics -->
+  <script type="text/javascript">
+    var collapsedSections = [];
+  </script>
+  
+  <!-- End Google Analytics -->
+  
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+  <script>
+    MathJax = {
+        chtml: {
+            scale: 1,
+            minScale: 1,
+        },
+        svg: {
+            scale: 1,
+            minScale: 1,
+        }
+    }
+</script>
+
+  <!-- Preload the theme fonts -->
+
+<link rel="preload" href="_static/fonts/FreightSans/freight-sans-book.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="_static/fonts/FreightSans/freight-sans-medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="_static/fonts/IBMPlexMono/IBMPlexMono-Medium.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="_static/fonts/FreightSans/freight-sans-bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="_static/fonts/FreightSans/freight-sans-medium-italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="_static/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+
+<!-- Preload the katex fonts -->
+
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Main-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size1-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Size3-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/fonts/KaTeX_Caligraphic-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"
+    integrity="sha384-vSIIfh2YWi9wW0r9iZe7RJPrKwp6bG+s9QZMoITbCckVJqGCCRhc+ccxNcdpHuYu" crossorigin="anonymous">
+</head>
+
+<div class="container-fluid header-holder tutorials-header" id="header-holder">
+  <div class="container">
+    <div class="header-container">
+      <a class="header-logo" href="https://dataset4eo.readthedocs.io/en/latest/"
+        aria-label="OpenMMLab"></a>
+
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://github.com/EarthNets/Dataset4EO/blob/main/demo/dataset4eo_tutorial.ipynb" target="_blank">Tutorial</a>
+          </li>
+          <li>
+            <a href="https://github.com/EarthNets/Dataset4EO" target="_blank">GitHub</a>
+          </li>
+          <li >
+            <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
+              <a
+                class="resource-option with-down-arrow">
+                About
+              </a>
+              <div class="resources-dropdown-menu">
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/open-mmlab/mmcv" target="_blank">
+                  <span class="dropdown-title">MMCV </span>
+                  <p>Foundational library for computer vision</p>
+                </a>
+              </div>
+          </li>
+          <li >
+            <div id="resourcesDropdownButton" data-toggle="resources-dropdown" class="resources-dropdown">
+              <a
+                class="resource-option with-down-arrow">
+                EarthNets
+              </a>
+              <div class="resources-dropdown-menu">
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/Dataset4EO" target="_blank">
+                  <span class="dropdown-title">Dataset4EO </span>
+                  <p>Re-organize remote sensing datasets.</p>
+                </a>
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/RSI-Classification" target="_blank">
+                  <span class="dropdown-title">RSI-Classification </span>
+                  <p>Image/scene classification for RS images.</p>
+                </a>
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/RSI-Segmentation" target="_blank">
+                  <span class="dropdown-title">RSI-Segmentation </span>
+                  <p>Pixel-wise semantic segmentation for RS images.</p>
+                </a>
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/RSI-Detection" target="_blank">
+                  <span class="dropdown-title">RSI-Detection </span>
+                  <p>Object detection for RS images.</p>
+                </a>
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/RSI-ChangeDetection" target="_blank">
+                  <span class="dropdown-title">RSI-ChangeDetection </span>
+                  <p>Change detection for RS images.</p>
+                </a>
+                <a class="doc-dropdown-option nav-dropdown-item"
+                  href="https://github.com/EarthNets/RSI-SelfSupervised" target="_blank">
+                  <span class="dropdown-title">RSI-SelfSupervised </span>
+                  <p>Self-supervised learning for RS images.</p>
+                </a>
+              </div>
+          </li>
+        </ul>
+      </div>
+
+      <a class="main-menu-open-button" href="#" data-behavior="open-mobile-menu"></a>
+    </div>
+  </div>
+</div>
+
+<body class="pytorch-body">
+
+   
+
+  
+
+  <div class="table-of-contents-link-wrapper">
+    <span>Table of Contents</span>
+    <a href="#" class="toggle-table-of-contents" data-behavior="toggle-table-of-contents"></a>
+  </div>
+
+  <nav data-toggle="wy-nav-shift" class="pytorch-left-menu" id="pytorch-left-menu">
+    <div class="pytorch-side-scroll">
+      <div class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <div class="pytorch-left-menu-search">
+          
+
+          
+          
+          
+          
+
+          
+
+
+
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search Docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        
+        
+        
+        
+        
+        <p class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Prerequisites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#using-multiple-mmselfsup-versions">Using multiple MMSelfSup versions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">Prepare Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started.html">Getting Started</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Dataset Preparation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dataset_prepare.html">Prepare datasets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/0_config.html">Tutorial 0: Learn about Configs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/1_new_dataset.html">Tutorial 1: Adding New Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/2_data_pipeline.html">Tutorial 2: Customize Data Pipelines</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/3_new_module.html">Tutorial 3: Adding New Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/4_schedule.html">Tutorial 4: Customize Schedule</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/5_runtime.html">Tutorial 5: Customize Runtime Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/6_benchmarks.html">Tutorial 6: Run Benchmarks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Useful Tools and Scripts</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="useful_tools.html">Useful tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#miscellaneous">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#model-serving">Model Serving</a></li>
+<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#confusion-matrix">Confusion Matrix</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+</ul>
+
+        
+        
+      </div>
+    </div>
+  </nav>
+
+  <div class="pytorch-container">
+    <div class="pytorch-page-level-bar" id="pytorch-page-level-bar">
+      <div class="pytorch-breadcrumbs-wrapper">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="pytorch-breadcrumbs">
+    
+      <li>
+        <a href="index.html">
+            Docs
+        </a> &gt;
+      </li>
+
+        
+      <li>Prerequisites</li>
+    
+    
+      <li class="pytorch-breadcrumbs-aside">
+        
+            
+            <a href="_sources/install.md.txt" rel="nofollow"><img src="_static/images/view-page-source-icon.svg"></a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+</div>
+      </div>
+
+      <div class="pytorch-shortcuts-wrapper" id="pytorch-shortcuts-wrapper">
+        Shortcuts
+      </div>
+    </div>
+
+    <section data-toggle="wy-nav-shift" id="pytorch-content-wrap" class="pytorch-content-wrap">
+      <div class="pytorch-content-left">
+        
+          <div class="rst-content">
+            
+            <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
+              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
+                
+  <section id="prerequisites">
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h1>
+<p>In this section we demonstrate how to prepare an environment with PyTorch.</p>
+<p>MMselfSup works on Linux (Windows and macOS are not officially supported). It requires Python 3.6+, CUDA 9.2+ and PyTorch 1.5+.</p>
+<p>If you are experienced with PyTorch and have already installed it, just skip this part and jump to the <a class="reference internal" href="#installation"><span class="std std-doc">next section</span></a>. Otherwise, you can follow these steps for the preparation.</p>
+<p><strong>Step 0.</strong> Download and install Miniconda from the <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">official website</a>.</p>
+<p><strong>Step 1.</strong> Create a conda environment and activate it.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda create --name openmmlab <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8 -y
+conda activate openmmlab
+</pre></div>
+</div>
+<p><strong>Step 2.</strong> Install PyTorch following <a class="reference external" href="https://pytorch.org/get-started/locally/">official instructions</a>, e.g.</p>
+<p>On GPU platforms:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda install pytorch torchvision -c pytorch
+</pre></div>
+</div>
+<p>On CPU platforms:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>conda install pytorch torchvision cpuonly -c pytorch
+</pre></div>
+</div>
+</section>
+<section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
+<p>We recommend that users follow our best practices to install MMSelfSup. However, the whole process is highly customizable. See <a class="reference internal" href="#customized-installation"><span class="std std-doc">Customize Installation</span></a> section for more information.</p>
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this heading">¶</a></h2>
+<p><strong>Step 0.</strong> Install <a class="reference external" href="https://github.com/open-mmlab/mmcv">MMCV</a> using <a class="reference external" href="https://github.com/open-mmlab/mim">MIM</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install -U openmim
+mim install mmcv-full
+</pre></div>
+</div>
+<p><strong>Step 1.</strong> Install MMSelfSup.</p>
+<p>Case a: If you develop and run mmselfsup directly, install it from source:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/open-mmlab/mmselfsup.git
+<span class="nb">cd</span> mmselfsup
+pip install -v -e .
+<span class="c1"># &quot;-v&quot; means verbose, or more output</span>
+<span class="c1"># &quot;-e&quot; means installing a project in editable mode,</span>
+<span class="c1"># thus any local modifications made to the code will take effect without reinstallation.</span>
+</pre></div>
+</div>
+<p>Case b: If you use mmselfsup as a dependency or third-party package, install it with pip:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install mmselfsup
+</pre></div>
+</div>
+</section>
+<section id="verify-the-installation">
+<h2>Verify the installation<a class="headerlink" href="#verify-the-installation" title="Permalink to this heading">¶</a></h2>
+<p>To verify whether MMSelfSup is installed correctly, we can run the following sample code to initialize a model and inference a demo image.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">mmselfsup.models</span> <span class="kn">import</span> <span class="n">build_algorithm</span>
+
+<span class="n">model_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;Classification&#39;</span><span class="p">,</span>
+    <span class="n">backbone</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ResNet&#39;</span><span class="p">,</span>
+        <span class="n">depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+        <span class="n">num_stages</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">strides</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="n">dilations</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">out_indices</span><span class="o">=</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>  <span class="c1"># 0: conv-1, x: stage-x</span>
+        <span class="n">norm_cfg</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;BN&#39;</span><span class="p">),</span>
+        <span class="n">frozen_stages</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span>
+    <span class="n">head</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ClsHead&#39;</span><span class="p">,</span> <span class="n">with_avg_pool</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">in_channels</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">build_algorithm</span><span class="p">(</span><span class="n">model_config</span><span class="p">)</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="n">image</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">))</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+<span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">cuda</span><span class="p">()</span>
+
+<span class="n">loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">forward_train</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The above code is supposed to run successfully upon you finish the installation.</p>
+</section>
+<section id="customized-installation">
+<h2>Customized installation<a class="headerlink" href="#customized-installation" title="Permalink to this heading">¶</a></h2>
+<section id="benchmark">
+<h3>Benchmark<a class="headerlink" href="#benchmark" title="Permalink to this heading">¶</a></h3>
+<p>The <a class="reference internal" href="#best-practices"><span class="std std-doc">Best Practices</span></a> is for basic usage, if you need to evaluate your pre-training model with some downstream tasks such as detection or segmentation, please also install <a class="reference external" href="https://github.com/open-mmlab/mmdetection">MMDetection</a> and <a class="reference external" href="https://github.com/open-mmlab/mmsegmentation">MMSegmentation</a>.</p>
+<p>If you don’t run MMDetection and MMSegmentation benchmark, it is unnecessary to install them.</p>
+<p>You can simply install MMDetection and MMSegmentation with the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install mmdet mmsegmentation
+</pre></div>
+</div>
+<p>For more details, you can check the installation page of <a class="reference external" href="https://github.com/open-mmlab/mmdetection/blob/master/docs/en/get_started.md">MMDetection</a> and <a class="reference external" href="https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/get_started.md">MMSegmentation</a>.</p>
+</section>
+<section id="cuda-versions">
+<h3>CUDA versions<a class="headerlink" href="#cuda-versions" title="Permalink to this heading">¶</a></h3>
+<p>When installing PyTorch, you need to specify the version of CUDA. If you are not clear on which to choose, follow our recommendations:</p>
+<ul class="simple">
+<li><p>For Ampere-based NVIDIA GPUs, such as GeForce 30 series and NVIDIA A100, CUDA 11 is a must.</p></li>
+<li><p>For older NVIDIA GPUs, CUDA 11 is backward compatible, but CUDA 10.2 offers better compatibility and is more lightweight.</p></li>
+</ul>
+<p>Please make sure the GPU driver satisfies the minimum version requirements. See <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#cuda-major-component-versions__table-cuda-toolkit-driver-versions">this table</a> for more information.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Installing CUDA runtime libraries is enough if you follow our best practices, because no CUDA code will be compiled locally. However if you hope to compile MMCV from source or develop other CUDA operators, you need to install the complete CUDA toolkit from NVIDIA’s <a class="reference external" href="https://developer.nvidia.com/cuda-downloads">website</a>, and its version should match the CUDA version of PyTorch. i.e., the specified version of cudatoolkit in <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span></code> command.</p>
+</div>
+</section>
+<section id="install-mmcv-without-mim">
+<h3>Install MMCV without MIM<a class="headerlink" href="#install-mmcv-without-mim" title="Permalink to this heading">¶</a></h3>
+<p>MMCV contains C++ and CUDA extensions, thus depending on PyTorch in a complex way. MIM solves such dependencies automatically and makes the installation easier. However, it is not a must.</p>
+<p>To install MMCV with pip instead of MIM, please follow <a class="reference external" href="https://mmcv.readthedocs.io/en/latest/get_started/installation.html">MMCV installation guides</a>. This requires manually specifying a find-url based on PyTorch version and its CUDA version.</p>
+<p>For example, the following command install mmcv-full built for PyTorch 1.10.x and CUDA 11.3.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip install mmcv-full -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10/index.html
+</pre></div>
+</div>
+</section>
+<section id="another-option-docker-image">
+<h3>Another option: Docker Image<a class="headerlink" href="#another-option-docker-image" title="Permalink to this heading">¶</a></h3>
+<p>We provide a <span class="xref myst">Dockerfile</span> to build an image.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># build an image with PyTorch 1.6.0, CUDA 10.1, CUDNN 7.</span>
+docker build -f ./docker/Dockerfile --rm -t mmselfsup:torch1.10.0-cuda11.3-cudnn8 .
+</pre></div>
+</div>
+<p><strong>Important:</strong> Make sure you’ve installed the <a class="reference external" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker">nvidia-container-toolkit</a>.</p>
+<p>Run the following cmd:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>docker run --gpus all --shm-size<span class="o">=</span>8g -it -v <span class="o">{</span>DATA_DIR<span class="o">}</span>:/workspace/mmselfsup/data mmselfsup:torch1.10.0-cuda11.3-cudnn8 /bin/bash
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">{DATA_DIR}</span></code> is your local folder containing all these datasets.</p>
+</section>
+<section id="install-on-google-colab">
+<h3>Install on Google Colab<a class="headerlink" href="#install-on-google-colab" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference external" href="https://research.google.com/">Google Colab</a> usually has PyTorch installed,
+thus we only need to install MMCV and MMSeflSup with the following commands.</p>
+<p><strong>Step 0.</strong> Install <a class="reference external" href="https://github.com/open-mmlab/mmcv">MMCV</a> using <a class="reference external" href="https://github.com/open-mmlab/mim">MIM</a>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>!pip3 install openmim
+!mim install mmcv-full
+</pre></div>
+</div>
+<p><strong>Step 1.</strong> Install MMSelfSup from the source.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>!git clone https://github.com/open-mmlab/mmselfsup.git
+%cd mmselfsup
+!pip install -e .
+</pre></div>
+</div>
+<p><strong>Step 2.</strong> Verification.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mmselfsup</span>
+<span class="k">print</span><span class="p">(</span><span class="n">mmselfsup</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="c1"># Example output: 0.9.0</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Within Jupyter, the exclamation mark <code class="docutils literal notranslate"><span class="pre">!</span></code> is used to call external executables and <code class="docutils literal notranslate"><span class="pre">%cd</span></code> is a <a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-cd">magic command</a> to change the current working directory of Python.</p>
+</div>
+</section>
+</section>
+<section id="trouble-shooting">
+<h2>Trouble shooting<a class="headerlink" href="#trouble-shooting" title="Permalink to this heading">¶</a></h2>
+<p>If you have some issues during the installation, please first view the <a class="reference internal" href="faq.html"><span class="doc std std-doc">FAQ</span></a> page.
+You may <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/issues/new/choose">open an issue</a> on GitHub if no solution is found.</p>
+</section>
+</section>
+<section id="using-multiple-mmselfsup-versions">
+<h1>Using multiple MMSelfSup versions<a class="headerlink" href="#using-multiple-mmselfsup-versions" title="Permalink to this heading">¶</a></h1>
+<p>If there are more than one mmselfsup on your machine, and you want to use them alternatively, the recommended way is to create multiple conda environments and use different environments for different versions.</p>
+<p>Another way is to insert the following code to the main scripts (<code class="docutils literal notranslate"><span class="pre">train.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test.py</span></code> or any other scripts you run)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="kn">as</span> <span class="nn">osp</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">osp</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s1">&#39;../&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Or run the following command in the terminal of corresponding root folder to temporally use the current one.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">PYTHONPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>:<span class="nv">$PYTHONPATH</span>
+</pre></div>
+</div>
+</section>
+
+
+              </article>
+              
+            </div>
+            <footer>
+  
+  <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+    
+    <a href="prepare_data.html" class="btn btn-neutral float-right" title="Prepare Datasets" accesskey="n"
+      rel="next">Next <img src="_static/images/chevron-right-blue.svg"
+        class="next-page"></a>
+    
+    
+    <a href="index.html" class="btn btn-neutral" title="Welcome to Dataset4EO’s documentation!" accesskey="p"
+      rel="prev"><img src="_static/images/chevron-right-blue.svg" class="previous-page"> Previous</a>
+    
+  </div>
+  
+
+  <hr>
+
+  <div role="contentinfo">
+    <p>
+      &copy; Copyright 2022, EarthNets.
+
+    </p>
+  </div>
+  
+  <div>
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a
+      href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the
+      Docs</a>.
+  </div>
+   
+
+</footer>
+          </div>
+        </div>
+
+        <div class="pytorch-content-right" id="pytorch-content-right">
+          <div class="pytorch-right-menu" id="pytorch-right-menu">
+            <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
+              <ul>
+<li><a class="reference internal" href="#">Prerequisites</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#best-practices">Best Practices</a></li>
+<li><a class="reference internal" href="#verify-the-installation">Verify the installation</a></li>
+<li><a class="reference internal" href="#customized-installation">Customized installation</a><ul>
+<li><a class="reference internal" href="#benchmark">Benchmark</a></li>
+<li><a class="reference internal" href="#cuda-versions">CUDA versions</a></li>
+<li><a class="reference internal" href="#install-mmcv-without-mim">Install MMCV without MIM</a></li>
+<li><a class="reference internal" href="#another-option-docker-image">Another option: Docker Image</a></li>
+<li><a class="reference internal" href="#install-on-google-colab">Install on Google Colab</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#trouble-shooting">Trouble shooting</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-multiple-mmselfsup-versions">Using multiple MMSelfSup versions</a></li>
+</ul>
+
+            </div>
+          </div>
+        </div>
+    </section>
+  </div>
+
+  
+
+
+  
+
+  
+  <script type="text/javascript" id="documentation_options" data-url_root="./"
+    src="_static/documentation_options.js"></script>
+  <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+  <script src="_static/jquery.js"></script>
+  <script src="_static/underscore.js"></script>
+  <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+  <script src="_static/doctools.js"></script>
+  <script src="_static/clipboard.min.js"></script>
+  <script src="_static/copybutton.js"></script>
+  
+
+  
+
+  <script type="text/javascript" src="_static/js/vendor/popper.min.js"></script>
+  <script type="text/javascript" src="_static/js/vendor/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+    jQuery(function () {
+      SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+  <!-- Begin Footer -->
+
+  <div class="container-fluid docs-tutorials-resources" id="docs-tutorials-resources">
+  </div>
+
+  <!-- End Footer -->
+
+  <!-- Begin Mobile Menu -->
+
+  <div class="mobile-main-menu">
+    <div class="container-fluid">
+      <div class="container">
+        <div class="mobile-main-menu-header-container">
+          <a class="header-logo" href="https://dataset4eo.readthedocs.io/en/latest/" aria-label="OpenMMLab"></a>
+          <a class="main-menu-close-button" href="#" data-behavior="close-mobile-menu"></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-main-menu-links-container">
+      <div class="main-menu">
+        <ul>
+          <li>
+            <a href="https://github.com/EarthNets/Dataset4EO/blob/main/demo/dataset4eo_tutorial.ipynb" target="_blank">Tutorial</a>
+          </li>
+          <li>
+            <a href="https://github.com/EarthNets/Dataset4EO" target="_blank">GitHub</a>
+          </li>
+          <li class="resources-mobile-menu-title" >
+            About
+          </li>
+          <ul class="resources-mobile-menu-items">
+            <li>
+              <a href="https://github.com/open-mmlab/mmcv" target="_blank">MMCV</a>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- End Mobile Menu -->
+
+  <script type="text/javascript" src="_static/js/vendor/anchor.min.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      mobileMenu.bind();
+      mobileTOC.bind();
+      pytorchAnchors.bind();
+      sideMenus.bind();
+      scrollToAnchor.bind();
+      highlightNavigation.bind();
+      mainMenuDropdown.bind();
+      filterTags.bind();
+
+      // Add class to links that have code blocks, since we cannot create links in code blocks
+      $("article.pytorch-article a span.pre").each(function (e) {
+        $(this).closest("a").addClass("has-code");
+      });
+    })
+  </script>
+</body>
+
+</html>
