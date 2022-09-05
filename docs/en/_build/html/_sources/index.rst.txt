@@ -11,13 +11,11 @@ Welcome to Dataset4EO's documentation!
    :caption: Get Started
 
    install.md
-   prepare_data.md
-   get_started.md
 
 
 .. toctree::
    :maxdepth: 1
-   :caption: Dataset Preparation
+   :caption: Customize datasets
 
    dataset_prepare.md
 
@@ -32,13 +30,7 @@ Welcome to Dataset4EO's documentation!
    :maxdepth: 1
    :caption: Tutorials
 
-   tutorials/0_config.md
-   tutorials/1_new_dataset.md
-   tutorials/2_data_pipeline.md
-   tutorials/3_new_module.md
-   tutorials/4_schedule.md
-   tutorials/5_runtime.md
-   tutorials/6_benchmarks.md
+   tutorials/1_new_datapipe.md
 
 
 .. toctree::

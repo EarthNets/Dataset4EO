@@ -206,13 +206,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html#using-multiple-mmselfsup-versions">Using multiple MMSelfSup versions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">Prepare Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="get_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Dataset Preparation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customize datasets</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="dataset_prepare.html">Prepare datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dataset_prepare.html">Customize datasets</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Datasets</span></p>
 <ul>
@@ -220,20 +217,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/0_config.html">Tutorial 0: Learn about Configs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/1_new_dataset.html">Tutorial 1: Adding New Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/2_data_pipeline.html">Tutorial 2: Customize Data Pipelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/3_new_module.html">Tutorial 3: Adding New Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/4_schedule.html">Tutorial 4: Customize Schedule</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/5_runtime.html">Tutorial 5: Customize Runtime Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/6_benchmarks.html">Tutorial 6: Run Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/1_new_datapipe.html">Tutorial 1: Adding New Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Tools and Scripts</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="useful_tools.html">Useful tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#miscellaneous">Miscellaneous</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#model-serving">Model Serving</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#confusion-matrix">Confusion Matrix</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Notes</span></p>
 <ul class="current">
@@ -309,360 +297,24 @@
                 
   <section id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this heading">¶</a></h1>
-<section id="mmselfsup">
-<h2>MMSelfSup<a class="headerlink" href="#mmselfsup" title="Permalink to this heading">¶</a></h2>
-<section id="v0-9-2-28-07-2022">
-<h3>v0.9.2 (28/07/2022)<a class="headerlink" href="#v0-9-2-28-07-2022" title="Permalink to this heading">¶</a></h3>
+<section id="dataset4eo">
+<h2>Dataset4EO<a class="headerlink" href="#dataset4eo" title="Permalink to this heading">¶</a></h2>
+<section id="v0-0-1-28-07-2022">
+<h3>v0.0.1 (28/07/2022)<a class="headerlink" href="#v0-0-1-28-07-2022" title="Permalink to this heading">¶</a></h3>
+<section id="highlight">
+<h4>Highlight<a class="headerlink" href="#highlight" title="Permalink to this heading">¶</a></h4>
+</section>
 <section id="new-features">
 <h4>New Features<a class="headerlink" href="#new-features" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support MAE Reconstructed Image Visualization (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/376">#376</a>)</p></li>
-</ul>
 </section>
 <section id="bug-fixes">
 <h4>Bug Fixes<a class="headerlink" href="#bug-fixes" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix args/cfg bug in extract.py, use cfg.work_dir to save files (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/357">#357</a>)</p></li>
-<li><p>Fix SimMIM mask generator config bug (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/360">#360</a>)</p></li>
-</ul>
 </section>
 <section id="improvements">
 <h4>Improvements<a class="headerlink" href="#improvements" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Update mdformat settings (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/323">#323</a>)</p></li>
-<li><p>Add circleci (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/374">#374</a>)</p></li>
-</ul>
 </section>
 <section id="docs">
 <h4>Docs<a class="headerlink" href="#docs" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix the link of switch language (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/327">#327</a>)</p></li>
-<li><p>Update lr_updater.py links in tutorials/4_schedule.md (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/354">#354</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-9-1-31-05-2022">
-<h3>v0.9.1 (31/05/2022)<a class="headerlink" href="#v0-9-1-31-05-2022" title="Permalink to this heading">¶</a></h3>
-<section id="highlight">
-<h4>Highlight<a class="headerlink" href="#highlight" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Update <strong>BYOL</strong> model and results (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/319">#319</a>)</p></li>
-<li><p>Refine some documentation</p></li>
-</ul>
-</section>
-<section id="id1">
-<h4>New Features<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Update <strong>BYOL</strong> models and results (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/319">#319</a>)</p></li>
-</ul>
-</section>
-<section id="id2">
-<h4>Bug Fixes<a class="headerlink" href="#id2" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Set qkv bias to False for cae and True for mae (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/303">#303</a>)</p></li>
-<li><p>Fix spelling errors in MAE config (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/307">#307</a>)</p></li>
-</ul>
-</section>
-<section id="id3">
-<h4>Improvements<a class="headerlink" href="#id3" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Change the file name of cosine annealing hook (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/304">#304</a>)</p></li>
-<li><p>Replace markdownlint with mdformat (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/311">#311</a>)</p></li>
-</ul>
-</section>
-<section id="id4">
-<h4>Docs<a class="headerlink" href="#id4" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix typo in tutotial (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/308">#308</a>)</p></li>
-<li><p>Configure Myst-parser to parse anchor tag (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/309">#309</a>)</p></li>
-<li><p>Update readthedocs algorithm README (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/310">#310</a>)</p></li>
-<li><p>Rewrite install.md (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/317">#317</a>)</p></li>
-<li><p>refine README.md file (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/318">#318</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-9-0-29-04-2022">
-<h3>v0.9.0 (29/04/2022)<a class="headerlink" href="#v0-9-0-29-04-2022" title="Permalink to this heading">¶</a></h3>
-<section id="id5">
-<h4>Highlight<a class="headerlink" href="#id5" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support <strong>CAE</strong> (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/284">#284</a>)</p></li>
-<li><p>Support <strong>Barlow Twins</strong> (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/207">#207</a>)</p></li>
-</ul>
-</section>
-<section id="id6">
-<h4>New Features<a class="headerlink" href="#id6" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support CAE (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/284">#284</a>)</p></li>
-<li><p>Support Barlow twins (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/207">#207</a>)</p></li>
-<li><p>Add SimMIM 192 pretrain and 224 fine-tuning results (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/280">#280</a>)</p></li>
-<li><p>Add MAE pretrain with fp16 (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/271">#271</a>)</p></li>
-</ul>
-</section>
-<section id="id7">
-<h4>Bug Fixes<a class="headerlink" href="#id7" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix args error (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/290">#290</a>)</p></li>
-<li><p>Change imgs_per_gpu to samples_per_gpu in MAE config (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/278">#278</a>)</p></li>
-<li><p>Avoid GPU memory leak with prefetch dataloader (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/277">#277</a>)</p></li>
-<li><p>Fix key error bug when registering custom hooks (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/273">#273</a>)</p></li>
-</ul>
-</section>
-<section id="id8">
-<h4>Improvements<a class="headerlink" href="#id8" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Update SimCLR models and results (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/295">#295</a>)</p></li>
-<li><p>Reduce memory usage while running unit test (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/291">#291</a>)</p></li>
-<li><p>Remove pytorch1.5 test (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/288">#288</a>)</p></li>
-<li><p>Rename linear probing config file names (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/281">#281</a>)</p></li>
-<li><p>add unit test for apis (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/276">#276</a>)</p></li>
-</ul>
-</section>
-<section id="id9">
-<h4>Docs<a class="headerlink" href="#id9" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix SimMIM config link, and add SimMIM to model_zoo (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/272">#272</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-8-0-31-03-2022">
-<h3>v0.8.0 (31/03/2022)<a class="headerlink" href="#v0-8-0-31-03-2022" title="Permalink to this heading">¶</a></h3>
-<section id="id10">
-<h4>Highlight<a class="headerlink" href="#id10" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support <strong>SimMIM</strong> (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/239">#239</a>)</p></li>
-<li><p>Add <strong>KNN</strong> benchmark, support KNN test with checkpoint and extracted backbone weights (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/243">#243</a>)</p></li>
-<li><p>Support ImageNet-21k dataset (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/225">#225</a>)</p></li>
-</ul>
-</section>
-<section id="id11">
-<h4>New Features<a class="headerlink" href="#id11" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support SimMIM (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/239">#239</a>)</p></li>
-<li><p>Add KNN benchmark, support KNN test with checkpoint and extracted backbone weights (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/243">#243</a>)</p></li>
-<li><p>Support ImageNet-21k dataset (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/225">#225</a>)</p></li>
-<li><p>Resume latest checkpoint automatically (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/245">#245</a>)</p></li>
-</ul>
-</section>
-<section id="id12">
-<h4>Bug Fixes<a class="headerlink" href="#id12" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Add seed to distributed sampler (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/250">#250</a>)</p></li>
-<li><p>Fix positional parameter error in dist_test_svm_epoch.sh (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/260">#260</a>)</p></li>
-<li><p>Fix ‘mkdir’ error in prepare_voc07_cls.sh (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/261">#261</a>)</p></li>
-</ul>
-</section>
-<section id="id13">
-<h4>Improvements<a class="headerlink" href="#id13" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Update args format from command line (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/253">#253</a>)</p></li>
-</ul>
-</section>
-<section id="id14">
-<h4>Docs<a class="headerlink" href="#id14" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix command errors in 6_benchmarks.md (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/263">#263</a>)</p></li>
-<li><p>Translate 6_benchmarks.md to Chinese (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/262">#262</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-7-0-03-03-2022">
-<h3>v0.7.0 (03/03/2022)<a class="headerlink" href="#v0-7-0-03-03-2022" title="Permalink to this heading">¶</a></h3>
-<section id="id15">
-<h4>Highlight<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support MAE (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/221">#221</a>)</p></li>
-<li><p>Add Places205 benchmarks (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/210">#210</a>)</p></li>
-<li><p>Add test Windows in workflows (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/215">#215</a>)</p></li>
-</ul>
-</section>
-<section id="id16">
-<h4>New Features<a class="headerlink" href="#id16" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support MAE (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/221">#221</a>)</p></li>
-<li><p>Add Places205 benchmarks (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/210">#210</a>)</p></li>
-</ul>
-</section>
-<section id="id17">
-<h4>Bug Fixes<a class="headerlink" href="#id17" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix config typos for rotation prediction and deepcluster (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/200">#200</a>)</p></li>
-<li><p>Fix image channel bgr/rgb bug and update benchmarks (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/210">#210</a>)</p></li>
-<li><p>Fix the bug when using prefetch under multi-view methods (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/218">#218</a>)</p></li>
-<li><p>Fix tsne ‘no init_cfg’ error (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/222">#222</a>)</p></li>
-</ul>
-</section>
-<section id="id18">
-<h4>Improvements<a class="headerlink" href="#id18" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Deprecate <code class="docutils literal notranslate"><span class="pre">imgs_per_gpu</span></code> and use <code class="docutils literal notranslate"><span class="pre">samples_per_gpu</span></code> (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/204">#204</a>)</p></li>
-<li><p>Update the installation of MMCV (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/208">#208</a>)</p></li>
-<li><p>Add pre-commit hook for algo-readme and copyright (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/213">#213</a>)</p></li>
-<li><p>Add test Windows in workflows (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/215">#215</a>)</p></li>
-</ul>
-</section>
-<section id="id19">
-<h4>Docs<a class="headerlink" href="#id19" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Translate 0_config.md into Chinese (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/216">#216</a>)</p></li>
-<li><p>Reorganizing OpenMMLab projects and update algorithms in readme (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/219">#219</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-6-0-02-02-2022">
-<h3>v0.6.0 (02/02/2022)<a class="headerlink" href="#v0-6-0-02-02-2022" title="Permalink to this heading">¶</a></h3>
-<section id="id20">
-<h4>Highlight<a class="headerlink" href="#id20" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support vision transformer based MoCo v3 (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/194">#194</a>)</p></li>
-<li><p>Speed up training and start time (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/181">#181</a>)</p></li>
-<li><p>Support cpu training (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/188">#188</a>)</p></li>
-</ul>
-</section>
-<section id="id21">
-<h4>New Features<a class="headerlink" href="#id21" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support vision transformer based MoCo v3 (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/194">#194</a>)</p></li>
-<li><p>Support cpu training (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/188">#188</a>)</p></li>
-</ul>
-</section>
-<section id="id22">
-<h4>Bug Fixes<a class="headerlink" href="#id22" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix issue (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/issues/159">#159</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/issues/160">#160</a>) related bugs (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/161">#161</a>)</p></li>
-<li><p>Fix missing prob assignment in <code class="docutils literal notranslate"><span class="pre">RandomAppliedTrans</span></code> (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/173">#173</a>)</p></li>
-<li><p>Fix bug of showing k-means losses (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/182">#182</a>)</p></li>
-<li><p>Fix bug in non-distributed multi-gpu training/testing (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/189">#189</a>)</p></li>
-<li><p>Fix bug when loading cifar dataset (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/191">#191</a>)</p></li>
-<li><p>Fix <code class="docutils literal notranslate"><span class="pre">dataset.evaluate</span></code> args bug (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/192">#192</a>)</p></li>
-</ul>
-</section>
-<section id="id23">
-<h4>Improvements<a class="headerlink" href="#id23" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Cancel previous runs that are not completed in CI (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/145">#145</a>)</p></li>
-<li><p>Enhance MIM function (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/152">#152</a>)</p></li>
-<li><p>Skip CI when some specific files were changed (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/154">#154</a>)</p></li>
-<li><p>Add <code class="docutils literal notranslate"><span class="pre">drop_last</span></code> when building eval optimizer (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/158">#158</a>)</p></li>
-<li><p>Deprecate the support for “python setup.py test” (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/174">#174</a>)</p></li>
-<li><p>Speed up training and start time (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/181">#181</a>)</p></li>
-<li><p>Upgrade <code class="docutils literal notranslate"><span class="pre">isort</span></code> to 5.10.1 (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/184">#184</a>)</p></li>
-</ul>
-</section>
-<section id="id24">
-<h4>Docs<a class="headerlink" href="#id24" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Refactor the directory structure of docs (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/146">#146</a>)</p></li>
-<li><p>Fix readthedocs (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/148">#148</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/149">#149</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/153">#153</a>)</p></li>
-<li><p>Fix typos and dead links in some docs (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/155">#155</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/180">#180</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/195">#195</a>)</p></li>
-<li><p>Update training logs and benchmark results in model zoo (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/157">#157</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/165">#165</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/195">#195</a>)</p></li>
-<li><p>Update and translate some docs into Chinese (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/163">#163</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/164">#164</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/165">#165</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/166">#166</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/167">#167</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/168">#168</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/169">#169</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/172">#172</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/176">#176</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/178">#178</a>, <a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/179">#179</a>)</p></li>
-<li><p>Update algorithm README with the new format (<a class="reference external" href="https://github.com/open-mmlab/mmselfsup/pull/177">#177</a>)</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-5-0-16-12-2021">
-<h3>v0.5.0 (16/12/2021)<a class="headerlink" href="#v0-5-0-16-12-2021" title="Permalink to this heading">¶</a></h3>
-<section id="id25">
-<h4>Highlight<a class="headerlink" href="#id25" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Released with code refactor.</p></li>
-<li><p>Add 3 new self-supervised learning algorithms.</p></li>
-<li><p>Support benchmarks with MMDet and MMSeg.</p></li>
-<li><p>Add comprehensive documents.</p></li>
-</ul>
-</section>
-<section id="refactor">
-<h4>Refactor<a class="headerlink" href="#refactor" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Merge redundant dataset files.</p></li>
-<li><p>Adapt to new version of MMCV and remove old version related codes.</p></li>
-<li><p>Inherit MMCV BaseModule.</p></li>
-<li><p>Optimize directory.</p></li>
-<li><p>Rename all config files.</p></li>
-</ul>
-</section>
-<section id="id26">
-<h4>New Features<a class="headerlink" href="#id26" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Add SwAV, SimSiam, DenseCL algorithms.</p></li>
-<li><p>Add t-SNE visualization tools.</p></li>
-<li><p>Support MMCV version fp16.</p></li>
-</ul>
-</section>
-<section id="benchmarks">
-<h4>Benchmarks<a class="headerlink" href="#benchmarks" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>More benchmarking results, including classification, detection and segmentation.</p></li>
-<li><p>Support some new datasets in downstream tasks.</p></li>
-<li><p>Launch MMDet and MMSeg training with MIM.</p></li>
-</ul>
-</section>
-<section id="id27">
-<h4>Docs<a class="headerlink" href="#id27" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Refactor README, getting_started, install, model_zoo files.</p></li>
-<li><p>Add data_prepare file.</p></li>
-<li><p>Add comprehensive tutorials.</p></li>
-</ul>
-</section>
-</section>
-</section>
-<section id="openselfsup-history">
-<h2>OpenSelfSup (History)<a class="headerlink" href="#openselfsup-history" title="Permalink to this heading">¶</a></h2>
-<section id="v0-3-0-14-10-2020">
-<h3>v0.3.0 (14/10/2020)<a class="headerlink" href="#v0-3-0-14-10-2020" title="Permalink to this heading">¶</a></h3>
-<section id="id28">
-<h4>Highlight<a class="headerlink" href="#id28" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support Mixed Precision Training</p></li>
-<li><p>Improvement of GaussianBlur doubles the training speed</p></li>
-<li><p>More benchmarking results</p></li>
-</ul>
-</section>
-<section id="id29">
-<h4>Bug Fixes<a class="headerlink" href="#id29" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix bugs in moco v2, now the results are reproducible.</p></li>
-<li><p>Fix bugs in byol.</p></li>
-</ul>
-</section>
-<section id="id30">
-<h4>New Features<a class="headerlink" href="#id30" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Mixed Precision Training</p></li>
-<li><p>Improvement of GaussianBlur doubles the training speed of MoCo V2, SimCLR, BYOL</p></li>
-<li><p>More benchmarking results, including Places, VOC, COCO</p></li>
-</ul>
-</section>
-</section>
-<section id="v0-2-0-26-6-2020">
-<h3>v0.2.0 (26/6/2020)<a class="headerlink" href="#v0-2-0-26-6-2020" title="Permalink to this heading">¶</a></h3>
-<section id="highlights">
-<h4>Highlights<a class="headerlink" href="#highlights" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support BYOL</p></li>
-<li><p>Support semi-supervised benchmarks</p></li>
-</ul>
-</section>
-<section id="id31">
-<h4>Bug Fixes<a class="headerlink" href="#id31" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Fix hash id in publish_model.py</p></li>
-</ul>
-</section>
-<section id="id32">
-<h4>New Features<a class="headerlink" href="#id32" title="Permalink to this heading">¶</a></h4>
-<ul class="simple">
-<li><p>Support BYOL.</p></li>
-<li><p>Separate train and test scripts in linear/semi evaluation.</p></li>
-<li><p>Support semi-supevised benchmarks: benchmarks/dist_train_semi.sh.</p></li>
-<li><p>Move benchmarks related configs into configs/benchmarks/.</p></li>
-<li><p>Provide benchmarking results and model download links.</p></li>
-<li><p>Support updating network every several iterations.</p></li>
-<li><p>Support LARS optimizer with nesterov.</p></li>
-<li><p>Support excluding specific parameters from LARS adaptation and weight decay required in SimCLR and BYOL.</p></li>
-</ul>
 </section>
 </section>
 </section>
@@ -712,75 +364,13 @@
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#mmselfsup">MMSelfSup</a><ul>
-<li><a class="reference internal" href="#v0-9-2-28-07-2022">v0.9.2 (28/07/2022)</a><ul>
+<li><a class="reference internal" href="#dataset4eo">Dataset4EO</a><ul>
+<li><a class="reference internal" href="#v0-0-1-28-07-2022">v0.0.1 (28/07/2022)</a><ul>
+<li><a class="reference internal" href="#highlight">Highlight</a></li>
 <li><a class="reference internal" href="#new-features">New Features</a></li>
 <li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
 <li><a class="reference internal" href="#improvements">Improvements</a></li>
 <li><a class="reference internal" href="#docs">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-9-1-31-05-2022">v0.9.1 (31/05/2022)</a><ul>
-<li><a class="reference internal" href="#highlight">Highlight</a></li>
-<li><a class="reference internal" href="#id1">New Features</a></li>
-<li><a class="reference internal" href="#id2">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id3">Improvements</a></li>
-<li><a class="reference internal" href="#id4">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-9-0-29-04-2022">v0.9.0 (29/04/2022)</a><ul>
-<li><a class="reference internal" href="#id5">Highlight</a></li>
-<li><a class="reference internal" href="#id6">New Features</a></li>
-<li><a class="reference internal" href="#id7">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id8">Improvements</a></li>
-<li><a class="reference internal" href="#id9">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-8-0-31-03-2022">v0.8.0 (31/03/2022)</a><ul>
-<li><a class="reference internal" href="#id10">Highlight</a></li>
-<li><a class="reference internal" href="#id11">New Features</a></li>
-<li><a class="reference internal" href="#id12">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id13">Improvements</a></li>
-<li><a class="reference internal" href="#id14">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-7-0-03-03-2022">v0.7.0 (03/03/2022)</a><ul>
-<li><a class="reference internal" href="#id15">Highlight</a></li>
-<li><a class="reference internal" href="#id16">New Features</a></li>
-<li><a class="reference internal" href="#id17">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id18">Improvements</a></li>
-<li><a class="reference internal" href="#id19">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-6-0-02-02-2022">v0.6.0 (02/02/2022)</a><ul>
-<li><a class="reference internal" href="#id20">Highlight</a></li>
-<li><a class="reference internal" href="#id21">New Features</a></li>
-<li><a class="reference internal" href="#id22">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id23">Improvements</a></li>
-<li><a class="reference internal" href="#id24">Docs</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-5-0-16-12-2021">v0.5.0 (16/12/2021)</a><ul>
-<li><a class="reference internal" href="#id25">Highlight</a></li>
-<li><a class="reference internal" href="#refactor">Refactor</a></li>
-<li><a class="reference internal" href="#id26">New Features</a></li>
-<li><a class="reference internal" href="#benchmarks">Benchmarks</a></li>
-<li><a class="reference internal" href="#id27">Docs</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#openselfsup-history">OpenSelfSup (History)</a><ul>
-<li><a class="reference internal" href="#v0-3-0-14-10-2020">v0.3.0 (14/10/2020)</a><ul>
-<li><a class="reference internal" href="#id28">Highlight</a></li>
-<li><a class="reference internal" href="#id29">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id30">New Features</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#v0-2-0-26-6-2020">v0.2.0 (26/6/2020)</a><ul>
-<li><a class="reference internal" href="#highlights">Highlights</a></li>
-<li><a class="reference internal" href="#id31">Bug Fixes</a></li>
-<li><a class="reference internal" href="#id32">New Features</a></li>
 </ul>
 </li>
 </ul>

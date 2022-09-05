@@ -13,7 +13,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Prepare datasets &mdash; Dataset4EO 0.0.1 documentation</title>
+  <title>Customize datasets &mdash; Dataset4EO 0.0.1 documentation</title>
   
 
   <link rel="shortcut icon" href="_static/images/favicon.ico" />
@@ -37,7 +37,7 @@
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
   <link rel="next" title="Datasets" href="datasets.html" />
-  <link rel="prev" title="Getting Started" href="get_started.html" />
+  <link rel="prev" title="Prerequisites" href="install.html" />
   <!-- Google Analytics -->
   <script type="text/javascript">
     var collapsedSections = [];
@@ -206,13 +206,10 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Prerequisites</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html#installation">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html#using-multiple-mmselfsup-versions">Using multiple MMSelfSup versions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="prepare_data.html">Prepare Datasets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="get_started.html">Getting Started</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">Dataset Preparation</span></p>
+<p class="caption" role="heading"><span class="caption-text">Customize datasets</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Prepare datasets</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Customize datasets</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Datasets</span></p>
 <ul>
@@ -220,20 +217,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/0_config.html">Tutorial 0: Learn about Configs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/1_new_dataset.html">Tutorial 1: Adding New Dataset</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/2_data_pipeline.html">Tutorial 2: Customize Data Pipelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/3_new_module.html">Tutorial 3: Adding New Modules</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/4_schedule.html">Tutorial 4: Customize Schedule</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/5_runtime.html">Tutorial 5: Customize Runtime Settings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/6_benchmarks.html">Tutorial 6: Run Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/1_new_datapipe.html">Tutorial 1: Adding New Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Useful Tools and Scripts</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="useful_tools.html">Useful tools</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#miscellaneous">Miscellaneous</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#model-serving">Model Serving</a></li>
-<li class="toctree-l1"><a class="reference internal" href="useful_tools.html#confusion-matrix">Confusion Matrix</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Notes</span></p>
 <ul>
@@ -277,7 +265,7 @@
       </li>
 
         
-      <li>Prepare datasets</li>
+      <li>Customize datasets</li>
     
     
       <li class="pytorch-breadcrumbs-aside">
@@ -307,337 +295,14 @@
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
               <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
                 
-  <section id="prepare-datasets">
-<h1>Prepare datasets<a class="headerlink" href="#prepare-datasets" title="Permalink to this heading">¶</a></h1>
-<p>It is recommended to symlink the dataset root to <code class="docutils literal notranslate"><span class="pre">$MMSEGMENTATION/data</span></code>.
-If your folder structure is different, you may need to change the corresponding paths in config files.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mmsegmentation
-├── mmseg
-├── tools
-├── configs
-├── data
-│   ├── cityscapes
-│   │   ├── leftImg8bit
-│   │   │   ├── train
-│   │   │   ├── val
-│   │   ├── gtFine
-│   │   │   ├── train
-│   │   │   ├── val
-│   ├── VOCdevkit
-│   │   ├── VOC2012
-│   │   │   ├── JPEGImages
-│   │   │   ├── SegmentationClass
-│   │   │   ├── ImageSets
-│   │   │   │   ├── Segmentation
-│   │   ├── VOC2010
-│   │   │   ├── JPEGImages
-│   │   │   ├── SegmentationClassContext
-│   │   │   ├── ImageSets
-│   │   │   │   ├── SegmentationContext
-│   │   │   │   │   ├── train.txt
-│   │   │   │   │   ├── val.txt
-│   │   │   ├── trainval_merged.json
-│   │   ├── VOCaug
-│   │   │   ├── dataset
-│   │   │   │   ├── cls
-│   ├── ade
-│   │   ├── ADEChallengeData2016
-│   │   │   ├── annotations
-│   │   │   │   ├── training
-│   │   │   │   ├── validation
-│   │   │   ├── images
-│   │   │   │   ├── training
-│   │   │   │   ├── validation
-│   ├── coco_stuff10k
-│   │   ├── images
-│   │   │   ├── train2014
-│   │   │   ├── test2014
-│   │   ├── annotations
-│   │   │   ├── train2014
-│   │   │   ├── test2014
-│   │   ├── imagesLists
-│   │   │   ├── train.txt
-│   │   │   ├── test.txt
-│   │   │   ├── all.txt
-│   ├── coco_stuff164k
-│   │   ├── images
-│   │   │   ├── train2017
-│   │   │   ├── val2017
-│   │   ├── annotations
-│   │   │   ├── train2017
-│   │   │   ├── val2017
-│   ├── CHASE_DB1
-│   │   ├── images
-│   │   │   ├── training
-│   │   │   ├── validation
-│   │   ├── annotations
-│   │   │   ├── training
-│   │   │   ├── validation
-│   ├── DRIVE
-│   │   ├── images
-│   │   │   ├── training
-│   │   │   ├── validation
-│   │   ├── annotations
-│   │   │   ├── training
-│   │   │   ├── validation
-│   ├── HRF
-│   │   ├── images
-│   │   │   ├── training
-│   │   │   ├── validation
-│   │   ├── annotations
-│   │   │   ├── training
-│   │   │   ├── validation
-│   ├── STARE
-│   │   ├── images
-│   │   │   ├── training
-│   │   │   ├── validation
-│   │   ├── annotations
-│   │   │   ├── training
-│   │   │   ├── validation
-|   ├── dark_zurich
-|   │   ├── gps
-|   │   │   ├── val
-|   │   │   └── val_ref
-|   │   ├── gt
-|   │   │   └── val
-|   │   ├── LICENSE.txt
-|   │   ├── lists_file_names
-|   │   │   ├── val_filenames.txt
-|   │   │   └── val_ref_filenames.txt
-|   │   ├── README.md
-|   │   └── rgb_anon
-|   │   |   ├── val
-|   │   |   └── val_ref
-|   ├── NighttimeDrivingTest
-|   |   ├── gtCoarse_daytime_trainvaltest
-|   |   │   └── test
-|   |   │       └── night
-|   |   └── leftImg8bit
-|   |   |   └── test
-|   |   |       └── night
-│   ├── loveDA
-│   │   ├── img_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   │   │   ├── test
-│   │   ├── ann_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   ├── potsdam
-│   │   ├── img_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   │   ├── ann_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   ├── vaihingen
-│   │   ├── img_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   │   ├── ann_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   ├── iSAID
-│   │   ├── img_dir
-│   │   │   ├── train
-│   │   │   ├── val
-│   │   │   ├── test
-│   │   ├── ann_dir
-│   │   │   ├── train
-│   │   │   ├── val
-</pre></div>
-</div>
-<section id="cityscapes">
-<h2>Cityscapes<a class="headerlink" href="#cityscapes" title="Permalink to this heading">¶</a></h2>
-<p>The data could be found <a class="reference external" href="https://www.cityscapes-dataset.com/downloads/">here</a> after registration.</p>
-<p>By convention, <code class="docutils literal notranslate"><span class="pre">**labelTrainIds.png</span></code> are used for cityscapes training.
-We provided a <a class="reference external" href="https://github.com/open-mmlab/mmsegmentation/blob/master/tools/convert_datasets/cityscapes.py">scripts</a> based on <a class="reference external" href="https://github.com/mcordts/cityscapesScripts">cityscapesscripts</a>
-to generate <code class="docutils literal notranslate"><span class="pre">**labelTrainIds.png</span></code>.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># --nproc means 8 process for conversion, which could be omitted as well.</span>
-python tools/convert_datasets/cityscapes.py data/cityscapes --nproc <span class="m">8</span>
-</pre></div>
-</div>
-</section>
-<section id="pascal-voc">
-<h2>Pascal VOC<a class="headerlink" href="#pascal-voc" title="Permalink to this heading">¶</a></h2>
-<p>Pascal VOC 2012 could be downloaded from <a class="reference external" href="http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar">here</a>.
-Beside, most recent works on Pascal VOC dataset usually exploit extra augmentation data, which could be found <a class="reference external" href="http://www.eecs.berkeley.edu/Research/Projects/CS/vision/grouping/semantic_contours/benchmark.tgz">here</a>.</p>
-<p>If you would like to use augmented VOC dataset, please run following command to convert augmentation annotations into proper format.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># --nproc means 8 process for conversion, which could be omitted as well.</span>
-python tools/convert_datasets/voc_aug.py data/VOCdevkit data/VOCdevkit/VOCaug --nproc <span class="m">8</span>
-</pre></div>
-</div>
-<p>Please refer to <a class="reference external" href="https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/tutorials/customize_datasets.md#concatenate-dataset">concat dataset</a> for details about how to concatenate them and train them together.</p>
-</section>
-<section id="ade20k">
-<h2>ADE20K<a class="headerlink" href="#ade20k" title="Permalink to this heading">¶</a></h2>
-<p>The training and validation set of ADE20K could be download from this <a class="reference external" href="http://data.csail.mit.edu/places/ADEchallenge/ADEChallengeData2016.zip">link</a>.
-We may also download test set from <a class="reference external" href="http://data.csail.mit.edu/places/ADEchallenge/release_test.zip">here</a>.</p>
-</section>
-<section id="pascal-context">
-<h2>Pascal Context<a class="headerlink" href="#pascal-context" title="Permalink to this heading">¶</a></h2>
-<p>The training and validation set of Pascal Context could be download from <a class="reference external" href="http://host.robots.ox.ac.uk/pascal/VOC/voc2010/VOCtrainval_03-May-2010.tar">here</a>. You may also download test set from <a class="reference external" href="http://host.robots.ox.ac.uk:8080/eval/downloads/VOC2010test.tar">here</a> after registration.</p>
-<p>To split the training and validation set from original dataset, you may download trainval_merged.json from <a class="reference external" href="https://codalabuser.blob.core.windows.net/public/trainval_merged.json">here</a>.</p>
-<p>If you would like to use Pascal Context dataset, please install <a class="reference external" href="https://github.com/zhanghang1989/detail-api">Detail</a> and then run the following command to convert annotations into proper format.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/pascal_context.py data/VOCdevkit data/VOCdevkit/VOC2010/trainval_merged.json
-</pre></div>
-</div>
-</section>
-<section id="coco-stuff-10k">
-<h2>COCO Stuff 10k<a class="headerlink" href="#coco-stuff-10k" title="Permalink to this heading">¶</a></h2>
-<p>The data could be downloaded <a class="reference external" href="http://calvin.inf.ed.ac.uk/wp-content/uploads/data/cocostuffdataset/cocostuff-10k-v1.1.zip">here</a> by wget.</p>
-<p>For COCO Stuff 10k dataset, please run the following commands to download and convert the dataset.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># download</span>
-mkdir coco_stuff10k <span class="o">&amp;&amp;</span> <span class="nb">cd</span> coco_stuff10k
-wget http://calvin.inf.ed.ac.uk/wp-content/uploads/data/cocostuffdataset/cocostuff-10k-v1.1.zip
-
-<span class="c1"># unzip</span>
-unzip cocostuff-10k-v1.1.zip
-
-<span class="c1"># --nproc means 8 process for conversion, which could be omitted as well.</span>
-python tools/convert_datasets/coco_stuff10k.py /path/to/coco_stuff10k --nproc <span class="m">8</span>
-</pre></div>
-</div>
-<p>By convention, mask labels in <code class="docutils literal notranslate"><span class="pre">/path/to/coco_stuff164k/annotations/*2014/*_labelTrainIds.png</span></code> are used for COCO Stuff 10k training and testing.</p>
-</section>
-<section id="coco-stuff-164k">
-<h2>COCO Stuff 164k<a class="headerlink" href="#coco-stuff-164k" title="Permalink to this heading">¶</a></h2>
-<p>For COCO Stuff 164k dataset, please run the following commands to download and convert the augmented dataset.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># download</span>
-mkdir coco_stuff164k <span class="o">&amp;&amp;</span> <span class="nb">cd</span> coco_stuff164k
-wget http://images.cocodataset.org/zips/train2017.zip
-wget http://images.cocodataset.org/zips/val2017.zip
-wget http://calvin.inf.ed.ac.uk/wp-content/uploads/data/cocostuffdataset/stuffthingmaps_trainval2017.zip
-
-<span class="c1"># unzip</span>
-unzip train2017.zip -d images/
-unzip val2017.zip -d images/
-unzip stuffthingmaps_trainval2017.zip -d annotations/
-
-<span class="c1"># --nproc means 8 process for conversion, which could be omitted as well.</span>
-python tools/convert_datasets/coco_stuff164k.py /path/to/coco_stuff164k --nproc <span class="m">8</span>
-</pre></div>
-</div>
-<p>By convention, mask labels in <code class="docutils literal notranslate"><span class="pre">/path/to/coco_stuff164k/annotations/*2017/*_labelTrainIds.png</span></code> are used for COCO Stuff 164k training and testing.</p>
-<p>The details of this dataset could be found at <a class="reference external" href="https://github.com/nightrome/cocostuff#downloads">here</a>.</p>
-</section>
-<section id="chase-db1">
-<h2>CHASE DB1<a class="headerlink" href="#chase-db1" title="Permalink to this heading">¶</a></h2>
-<p>The training and validation set of CHASE DB1 could be download from <a class="reference external" href="https://staffnet.kingston.ac.uk/~ku15565/CHASE_DB1/assets/CHASEDB1.zip">here</a>.</p>
-<p>To convert CHASE DB1 dataset to MMSegmentation format, you should run the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/chase_db1.py /path/to/CHASEDB1.zip
-</pre></div>
-</div>
-<p>The script will make directory structure automatically.</p>
-</section>
-<section id="drive">
-<h2>DRIVE<a class="headerlink" href="#drive" title="Permalink to this heading">¶</a></h2>
-<p>The training and validation set of DRIVE could be download from <a class="reference external" href="https://drive.grand-challenge.org/">here</a>. Before that, you should register an account. Currently ‘1st_manual’ is not provided officially.</p>
-<p>To convert DRIVE dataset to MMSegmentation format, you should run the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/drive.py /path/to/training.zip /path/to/test.zip
-</pre></div>
-</div>
-<p>The script will make directory structure automatically.</p>
-</section>
-<section id="hrf">
-<h2>HRF<a class="headerlink" href="#hrf" title="Permalink to this heading">¶</a></h2>
-<p>First, download <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/healthy.zip">healthy.zip</a>, <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/glaucoma.zip">glaucoma.zip</a>, <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/diabetic_retinopathy.zip">diabetic_retinopathy.zip</a>, <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/healthy_manualsegm.zip">healthy_manualsegm.zip</a>, <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/glaucoma_manualsegm.zip">glaucoma_manualsegm.zip</a> and <a class="reference external" href="https://www5.cs.fau.de/fileadmin/research/datasets/fundus-images/diabetic_retinopathy_manualsegm.zip">diabetic_retinopathy_manualsegm.zip</a>.</p>
-<p>To convert HRF dataset to MMSegmentation format, you should run the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/hrf.py /path/to/healthy.zip /path/to/healthy_manualsegm.zip /path/to/glaucoma.zip /path/to/glaucoma_manualsegm.zip /path/to/diabetic_retinopathy.zip /path/to/diabetic_retinopathy_manualsegm.zip
-</pre></div>
-</div>
-<p>The script will make directory structure automatically.</p>
-</section>
-<section id="stare">
-<h2>STARE<a class="headerlink" href="#stare" title="Permalink to this heading">¶</a></h2>
-<p>First, download <a class="reference external" href="http://cecas.clemson.edu/~ahoover/stare/probing/stare-images.tar">stare-images.tar</a>, <a class="reference external" href="http://cecas.clemson.edu/~ahoover/stare/probing/labels-ah.tar">labels-ah.tar</a> and <a class="reference external" href="http://cecas.clemson.edu/~ahoover/stare/probing/labels-vk.tar">labels-vk.tar</a>.</p>
-<p>To convert STARE dataset to MMSegmentation format, you should run the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/stare.py /path/to/stare-images.tar /path/to/labels-ah.tar /path/to/labels-vk.tar
-</pre></div>
-</div>
-<p>The script will make directory structure automatically.</p>
-</section>
-<section id="dark-zurich">
-<h2>Dark Zurich<a class="headerlink" href="#dark-zurich" title="Permalink to this heading">¶</a></h2>
-<p>Since we only support test models on this dataset, you may only download <a class="reference external" href="https://data.vision.ee.ethz.ch/csakarid/shared/GCMA_UIoU/Dark_Zurich_val_anon.zip">the validation set</a>.</p>
-</section>
-<section id="nighttime-driving">
-<h2>Nighttime Driving<a class="headerlink" href="#nighttime-driving" title="Permalink to this heading">¶</a></h2>
-<p>Since we only support test models on this dataset, you may only download <a class="reference external" href="http://data.vision.ee.ethz.ch/daid/NighttimeDriving/NighttimeDrivingTest.zip">the test set</a>.</p>
-</section>
-<section id="loveda">
-<h2>LoveDA<a class="headerlink" href="#loveda" title="Permalink to this heading">¶</a></h2>
-<p>The data could be downloaded from Google Drive <a class="reference external" href="https://drive.google.com/drive/folders/1ibYV0qwn4yuuh068Rnc-w4tPi0U0c-ti?usp=sharing">here</a>.</p>
-<p>Or it can be downloaded from <a class="reference external" href="https://zenodo.org/record/5706578#.YZvN7SYRXdF">zenodo</a>, you should run the following command:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download Train.zip</span>
-wget https://zenodo.org/record/5706578/files/Train.zip
-<span class="c1"># Download Val.zip</span>
-wget https://zenodo.org/record/5706578/files/Val.zip
-<span class="c1"># Download Test.zip</span>
-wget https://zenodo.org/record/5706578/files/Test.zip
-</pre></div>
-</div>
-<p>For LoveDA dataset, please run the following command to download and re-organize the dataset.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/loveda.py /path/to/loveDA
-</pre></div>
-</div>
-<p>Using trained model to predict test set of LoveDA and submit it to server can be found <a class="reference external" href="https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/inference.md">here</a>.</p>
-<p>More details about LoveDA can be found <a class="reference external" href="https://github.com/Junjue-Wang/LoveDA">here</a>.</p>
-</section>
-<section id="isprs-potsdam">
-<h2>ISPRS Potsdam<a class="headerlink" href="#isprs-potsdam" title="Permalink to this heading">¶</a></h2>
-<p>The <a class="reference external" href="https://www2.isprs.org/commissions/comm2/wg4/benchmark/2d-sem-label-potsdam/">Potsdam</a>
-dataset is for urban semantic segmentation used in the 2D Semantic Labeling Contest - Potsdam.</p>
-<p>The dataset can be requested at the challenge <a class="reference external" href="https://www2.isprs.org/commissions/comm2/wg4/benchmark/data-request-form/">homepage</a>.
-The ‘2_Ortho_RGB.zip’ and ‘5_Labels_all_noBoundary.zip’ are required.</p>
-<p>For Potsdam dataset, please run the following command to download and re-organize the dataset.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/potsdam.py /path/to/potsdam
-</pre></div>
-</div>
-<p>In our default setting, it will generate 3456 images for training and 2016 images for validation.</p>
-</section>
-<section id="isprs-vaihingen">
-<h2>ISPRS Vaihingen<a class="headerlink" href="#isprs-vaihingen" title="Permalink to this heading">¶</a></h2>
-<p>The <a class="reference external" href="https://www2.isprs.org/commissions/comm2/wg4/benchmark/2d-sem-label-vaihingen/">Vaihingen</a>
-dataset is for urban semantic segmentation used in the 2D Semantic Labeling Contest - Vaihingen.</p>
-<p>The dataset can be requested at the challenge <a class="reference external" href="https://www2.isprs.org/commissions/comm2/wg4/benchmark/data-request-form/">homepage</a>.
-The ‘ISPRS_semantic_labeling_Vaihingen.zip’ and ‘ISPRS_semantic_labeling_Vaihingen_ground_truth_eroded_COMPLETE.zip’ are required.</p>
-<p>For Vaihingen dataset, please run the following command to download and re-organize the dataset.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/vaihingen.py /path/to/vaihingen
-</pre></div>
-</div>
-<p>In our default setting (<code class="docutils literal notranslate"><span class="pre">clip_size</span></code> =512, <code class="docutils literal notranslate"><span class="pre">stride_size</span></code>=256), it will generate 344 images for training and 398 images for validation.</p>
-</section>
-<section id="isaid">
-<h2>iSAID<a class="headerlink" href="#isaid" title="Permalink to this heading">¶</a></h2>
-<p>The data images could be download from <a class="reference external" href="https://captain-whu.github.io/DOTA/dataset.html">DOTA-v1.0</a> (train/val/test)</p>
-<p>The data annotations could be download from <a class="reference external" href="https://captain-whu.github.io/iSAID/dataset.html">iSAID</a> (train/val)</p>
-<p>The dataset is a Large-scale Dataset for Instance Segmentation (also have segmantic segmentation) in Aerial Images.</p>
-<p>You may need to follow the following structure for dataset preparation after downloading iSAID dataset.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>│   ├── iSAID
-│   │   ├── train
-│   │   │   ├── images
-│   │   │   │   ├── part1.zip
-│   │   │   │   ├── part2.zip
-│   │   │   │   ├── part3.zip
-│   │   │   ├── Semantic_masks
-│   │   │   │   ├── images.zip
-│   │   ├── val
-│   │   │   ├── images
-│   │   │   │   ├── part1.zip
-│   │   │   ├── Semantic_masks
-│   │   │   │   ├── images.zip
-│   │   ├── test
-│   │   │   ├── images
-│   │   │   │   ├── part1.zip
-│   │   │   │   ├── part2.zip
-</pre></div>
-</div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python tools/convert_datasets/isaid.py /path/to/iSAID
-</pre></div>
-</div>
-<p>In our default setting (<code class="docutils literal notranslate"><span class="pre">patch_width</span></code>=896, <code class="docutils literal notranslate"><span class="pre">patch_height</span></code>=896,　<code class="docutils literal notranslate"><span class="pre">overlap_area</span></code>=384), it will generate 33978 images for training and 11644 images for validation.</p>
-</section>
+  <section id="customize-datasets">
+<h1>Customize datasets<a class="headerlink" href="#customize-datasets" title="Permalink to this heading">¶</a></h1>
+<p>In this section we briefly describe the procedures to customize a new dataset.</p>
+<p><strong>Step 1.</strong> Create the main datapipe class <code class="docutils literal notranslate"><span class="pre">YOUR_DATASET.py</span></code> in <code class="docutils literal notranslate"><span class="pre">Dataset4EO/datasets/_builtin/</span></code>. If it is a supervised dataset, add class information in <code class="docutils literal notranslate"><span class="pre">Dataset4EO/datasets/_builtin/YOUR_DATASET.categories</span></code>.</p>
+<p>The dataset can be either automatically or manually downloaded and organized, depending on your preference.</p>
+<p><strong>Step 2.</strong> Add <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">.vaihingen</span> <span class="pre">import</span> <span class="pre">Vaihingen</span></code> to <code class="docutils literal notranslate"><span class="pre">_builtin/__init__.py</span></code>.</p>
+<p><strong>Step 3.</strong> Create <code class="docutils literal notranslate"><span class="pre">Dataset4EO/tests/test_YOUR_DATASET.py</span></code> to check the datapipe.</p>
+<p>For a detailed example see <code class="docutils literal notranslate"><span class="pre">Tutorials</span></code>.</p>
 </section>
 
 
@@ -653,7 +318,7 @@ The ‘ISPRS_semantic_labeling_Vaihingen.zip’ and ‘ISPRS_semantic_labeling_V
         class="next-page"></a>
     
     
-    <a href="get_started.html" class="btn btn-neutral" title="Getting Started" accesskey="p"
+    <a href="install.html" class="btn btn-neutral" title="Prerequisites" accesskey="p"
       rel="prev"><img src="_static/images/chevron-right-blue.svg" class="previous-page"> Previous</a>
     
   </div>
@@ -683,25 +348,7 @@ The ‘ISPRS_semantic_labeling_Vaihingen.zip’ and ‘ISPRS_semantic_labeling_V
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">Prepare datasets</a><ul>
-<li><a class="reference internal" href="#cityscapes">Cityscapes</a></li>
-<li><a class="reference internal" href="#pascal-voc">Pascal VOC</a></li>
-<li><a class="reference internal" href="#ade20k">ADE20K</a></li>
-<li><a class="reference internal" href="#pascal-context">Pascal Context</a></li>
-<li><a class="reference internal" href="#coco-stuff-10k">COCO Stuff 10k</a></li>
-<li><a class="reference internal" href="#coco-stuff-164k">COCO Stuff 164k</a></li>
-<li><a class="reference internal" href="#chase-db1">CHASE DB1</a></li>
-<li><a class="reference internal" href="#drive">DRIVE</a></li>
-<li><a class="reference internal" href="#hrf">HRF</a></li>
-<li><a class="reference internal" href="#stare">STARE</a></li>
-<li><a class="reference internal" href="#dark-zurich">Dark Zurich</a></li>
-<li><a class="reference internal" href="#nighttime-driving">Nighttime Driving</a></li>
-<li><a class="reference internal" href="#loveda">LoveDA</a></li>
-<li><a class="reference internal" href="#isprs-potsdam">ISPRS Potsdam</a></li>
-<li><a class="reference internal" href="#isprs-vaihingen">ISPRS Vaihingen</a></li>
-<li><a class="reference internal" href="#isaid">iSAID</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Customize datasets</a></li>
 </ul>
 
             </div>
