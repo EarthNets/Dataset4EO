@@ -10,3 +10,4 @@ from .nwpu_vhr10 import NWPU_VHR10
 from .dior import DIOR
 from .love_da import LoveDA
 from .ssl4eo_s12 import SSL4EO_S12
+from .vaihingen import Vaihingen
