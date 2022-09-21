@@ -41,7 +41,7 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "love_da"
+NAME = "season_net"
 _TRAIN_RURAL = 1366
 _TRAIN_URBAN = 1156
 
@@ -56,17 +56,19 @@ _TEST_URBAN = 820
 def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
-class LoveDAResource(ManualDownloadResource):
+class SeasonNetResource(ManualDownloadResource):
     def __init__(self, **kwargs: Any) -> None:
         """
-        # Download Train.zip
-        wget https://zenodo.org/record/5706578/files/Train.zip
-        # Download Val.zip
-        wget https://zenodo.org/record/5706578/files/Val.zip
-        # Download Test.zip
-        wget https://zenodo.org/record/5706578/files/Test.zip
+        # Download SeasonNet data:
+        wget https://zenodo.org/record/6979994/files/fall.zip
+        wget https://zenodo.org/record/6979994/files/meta.csv
+        wget https://zenodo.org/record/6979994/files/snow.zip
+        wget https://zenodo.org/record/6979994/files/splits.zip
+        wget https://zenodo.org/record/6979994/files/spring.zip
+        wget https://zenodo.org/record/6979994/files/summer.zip
+        wget https://zenodo.org/record/6979994/files/winter.zip
         """
-        super().__init__('Download the data into the root directory according to the download command in https://github.com/Junjue-Wang/LoveDA',
+        super().__init__('For data download, please refer to https://zenodo.org/record/6979994',
                          **kwargs)
 
 @register_dataset(NAME)

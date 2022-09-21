@@ -38,7 +38,7 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "inria"
+NAME = "nwpu_vhr10"
 _TRAIN_LEN = 3799
 _VAL_LEN = 245
 
