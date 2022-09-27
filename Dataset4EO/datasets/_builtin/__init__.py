@@ -12,3 +12,4 @@ from .dior import DIOR
 from .love_da import LoveDA
 from .ssl4eo_s12 import SSL4EO_S12
 from .vaihingen import Vaihingen
+from .season_net import SeasonNet

@@ -22,7 +22,8 @@ from torchdata.datapipes.iter import (
     LineReader,
     Zipper,
     ZipperLongest,
-    Concater
+    Concater,
+    FileOpener
 )
 
 from torchdata.datapipes.map import SequenceWrapper
@@ -42,14 +43,24 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 from .._api import register_dataset, register_info
 
 NAME = "season_net"
-_TRAIN_RURAL = 1366
-_TRAIN_URBAN = 1156
-
-_VAL_RURAL = 992
-_VAL_URBAN = 677
-
-_TEST_RURAL = 976
-_TEST_URBAN = 820
+_TRAIN = 1232007
+_VAL = 176117
+_TEST = 351706
+_TRAIN_SPRING = 322066
+_TRAIN_SUMMER = 337015
+_TRAIN_FALL = 350073
+_TRAIN_WINTER = 153218
+_TRAIN_SNOW = 69635
+_VAL_SPRING = 46027
+_VAL_SUMMER = 48203
+_VAL_FALL = 50023
+_VAL_WINTER = 21918
+_VAL_SNOW = 9946
+_TEST_SPRING = 92011
+_TEST_SUMMER = 96238
+_TEST_FALL = 100053
+_TEST_WINTER = 43527
+_TEST_SNOW = 19877
 
 
 @register_info(NAME)
@@ -59,7 +70,7 @@ def _info() -> Dict[str, Any]:
 class SeasonNetResource(ManualDownloadResource):
     def __init__(self, **kwargs: Any) -> None:
         """
-        # Download SeasonNet data:
+        # Download SeasonNet data manually:
         wget https://zenodo.org/record/6979994/files/fall.zip
         wget https://zenodo.org/record/6979994/files/meta.csv
         wget https://zenodo.org/record/6979994/files/snow.zip
@@ -72,9 +83,9 @@ class SeasonNetResource(ManualDownloadResource):
                          **kwargs)
 
 @register_dataset(NAME)
-class LoveDA(Dataset):
+class SeasonNet(Dataset):
     """
-    - **github link**: https://github.com/Junjue-Wang/LoveDA
+    - **dataset link**: https://zenodo.org/record/6979994
     """
 
     def __init__(
@@ -82,14 +93,17 @@ class LoveDA(Dataset):
         root: Union[str, pathlib.Path],
         *,
         split = "train_rural",
+        season = "all",
         data_info: bool = True,
         skip_integrity_check: bool = False,
     ) -> None:
 
         # assert split in ['train_rural', 'train_urban', 'val_rural', 'val_urban', 'test_rural', 'test_urban']
+        assert split in ['train', 'val', 'test']
+        assert season in ['spring', 'summer', 'fall', 'winter', 'snow', 'all']
+
         self._split = split
-        if type(self._split) == str:
-            self._split = [self._split]
+        self.season = season
 
         self.root = root
         self._categories = _info()["categories"]
@@ -100,140 +114,191 @@ class LoveDA(Dataset):
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
     _CHECKSUMS = {
-        'Train.zip': '62e1672dfd24f4811cf6ecc1fd1c476eb140f2a351eec3d22de25cc4de83f4e9',
-        'Val.zip': '91632a1e10d0014dda2b7805886a6bbfcbb9dac97c7da3db60a9abe4a5cab299',
-        'Test.zip': '890e2f86800af626cae64eb8a03160c29a341aaa837cc81af74bb808013cd52e'
+        'spring.zip': '28361db226817eadbea6fff378899d606d010ab796fa25b53c89923873b54b8e',
+        'summer.zip': 'ecf1cd4b53d4627eee4b7a2548a01836bb7b64f3f881e24041fa310e378d43c0',
+        'fall.zip': '86fb7c96521c9d1e2ef28fb9b2d32f80f10e6da922b80458478960025ff5073e',
+        'winter.zip': '8c7f059f1583b2ce748c154743f7896bfe16e7f02f47a910131b75ccc31beb65',
+        'snow.zip': '766d7f6d526008e1f2badd96d70ec81801fae473483e96dba24fc25015c01239',
+        'meta.csv': '905f344353769fc5722930413a803e885b8928b2a9af220963a5aa0e30457d8c',
+        'splits.zip': 'b938bd599569c21281af34485fbd66cf08536265c74ff41e745c4698a61738bb',
     }
 
     def get_classes(self):
         return self._categories
 
     def _resources(self) -> List[OnlineResource]:
-        train_resource = LoveDAResource(
-            file_name = 'Train.zip',
+        spring_resource = SeasonNetResource(
+            file_name = 'spring.zip',
             preprocess = 'extract',
-            sha256 = self._CHECKSUMS['Train.zip']
+            sha256 = self._CHECKSUMS['spring.zip']
         )
 
-        val_resource = LoveDAResource(
-            file_name = 'Val.zip',
+        summer_resource = SeasonNetResource(
+            file_name = 'summer.zip',
             preprocess = 'extract',
-            sha256 = self._CHECKSUMS['Val.zip']
+            sha256 = self._CHECKSUMS['summer.zip']
         )
 
-        test_resource = LoveDAResource(
-            file_name = 'Test.zip',
+        fall_resource = SeasonNetResource(
+            file_name = 'fall.zip',
             preprocess = 'extract',
-            sha256 = self._CHECKSUMS['Test.zip']
+            sha256 = self._CHECKSUMS['fall.zip']
         )
 
-        return [train_resource, val_resource, test_resource]
+        winter_resource = SeasonNetResource(
+            file_name = 'winter.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['winter.zip']
+        )
 
-    def _prepare_sample(self, data):
+        snow_resource = SeasonNetResource(
+            file_name = 'snow.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['snow.zip']
+        )
 
-        if self._split[0].startswith('test'):
-            image_data = data
-            image_path, image_buffer = image_data
-            img_info = {'filename':image_path,
-                        'img_id': image_path.split('/')[-1].split('.')[0]}
-        else:
-            image_data, ann_data = data
-            image_path, image_buffer = image_data
-            ann_path, ann_buffer = ann_data
+        meta_resource = SeasonNetResource(
+            file_name = 'meta.csv',
+            preprocess = None,
+            sha256 = self._CHECKSUMS['meta.csv']
+        )
 
-            img_info = {'filename':image_path,
-                        'img_id': image_path.split('/')[-1].split('.')[0],
-                        'ann':{'seg_map': ann_path}}
+        splits_resource = SeasonNetResource(
+            file_name = 'splits.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['splits.zip']
+        )
+
+        return [spring_resource, summer_resource, fall_resource,
+                winter_resource, snow_resource, meta_resource,
+                splits_resource]
+
+    def _idx2meta(self, data):
+        return self.meta_list[int(data[0])+1]
+
+    def _get_img_ann(self, data):
+        folder_path = data[-1]
+        season_name = folder_path.split('/')[0]
+        file_name = folder_path.split('/')[-1]
+
+        img_path = os.path.join(self.root, season_name, folder_path, f'{file_name}_10m_RGB.tif')
+        ann_path = os.path.join(self.root, season_name, folder_path, f'{file_name}_labels.tif')
+
+        img_info = dict(
+            filename = img_path,
+            img_id = file_name,
+            ann = {'seg_map': ann_path}
+        )
 
         return img_info
 
-    def _classify_split(self, data):
+    def _filter_split(self, data):
+        meta = eval(f'self.{self._split}_meta')
         path = pathlib.Path(data[0])
-        if path.name.endswith('train.txt'):
-            return 0
-        elif path.name.endswith('val.txt'):
-            return 1
-        elif path.name.endswith('test.txt'):
-            return 2
+        folder_name = path.parent.name
+
+        return folder_name in meta
+
+    def _filter_season(self, data):
+        season = data[1].lower()
+
+        return season == self.season or self.season == 'all'
 
     def _classify_archive(self, data):
         path = pathlib.Path(data[0])
-        if path.parent.name == 'images_png':
-            if path.parents[1].name == 'Rural':
-                return 0
-            else:
-                return 1
-        elif path.parent.name == 'masks_png':
-            if path.parents[1].name == 'Rural':
-                return 2
-            else:
-                return 3
-        else:
-            return None
+        file_type = path.name.split('_')[-1].split('.tif')[0]
+        if file_type == 'RGB':
+            return 0
+        elif file_type == 'labels':
+            return 1
 
-    def _split_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
-        return data[1].decode('UTF-8')
+    def _prepare_sample(self, data):
+        image_data, ann_data = data
+        image_path, image_buffer = image_data
+        ann_path, ann_buffer = ann_data
 
-    def _anns_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
-        path = pathlib.Path(data[0])
-        return path.name.split('.')[0]
+        img_info = dict({'filename': image_path, 'ann': dict({'seg_map': ann_path})})
 
-    def _images_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
-        path = pathlib.Path(data[0])
-        return path.name.split('.')[0]
+        return img_info
 
-    def _dp_key_fn(self, data):
-        path = pathlib.Path(data[0][0])
-        return path.name.split('.')[0]
 
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        train_rural_img, train_urban_img, train_rural_ann, train_urban_ann = Demultiplexer(
-            resource_dps[0], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        )
+        spring_dp, summer_dp, fall_dp, winter_dp, snow_dp, meta_dp, split_dp = resource_dps
 
-        val_rural_img, val_urban_img, val_rural_ann, val_urban_ann = Demultiplexer(
-            resource_dps[1], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        )
+        meta_path = iter(meta_dp).__next__()[0]
+        meta_dp = FileOpener([meta_path], mode='r')
+        meta_dp = meta_dp.parse_csv(delimiter=',')
+        meta_list = list(iter(meta_dp))
 
-        test_rural_img, test_urban_img, test_rural_ann, test_urban_ann = Demultiplexer(
-            resource_dps[2], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        )
+        self.meta_list = meta_list
 
 
-        try:
-            dps = []
-            is_test_split = False
-            for cur_split in self._split:
-                if cur_split.startswith('test'):
-                    is_test_split = True
-                    cur_dp = eval(f'{cur_split}_img')
-                else:
-                    assert not is_test_split
-                    cur_dp = Zipper(eval(f'{cur_split}_img'), eval(f'{cur_split}_ann'))
-                dps.append(cur_dp)
+        test_dp, train_dp, val_dp = split_dp
+        train_dp = FileOpener([iter(train_dp).__next__()], mode='r').parse_csv()
+        val_dp = FileOpener([iter(val_dp).__next__()], mode='r').parse_csv()
+        test_dp = FileOpener([iter(test_dp).__next__()], mode='r').parse_csv()
 
-            dp = Concater(*dps)
+        # train_list = list(iter(train_dp))
+        # val_list = list(iter(val_dp))
+        # test_list = list(iter(test_dp))
 
-        except NameError:
-            raise NameError('One of the the split names is invalid! It should be one of the following: \
-                             train_rural | train_urban | val_rural | val_urban | test_rural | test_urban ')
+        # train_meta = {}
+        # for idx in train_list:
+        #     meta = self.meta_list[int(idx[0]) + 1]
+        #     img_name = meta[-1].split('/')[-1]
+        #     train_meta[img_name] = meta
+
+        # val_meta = {}
+        # for idx in val_list:
+        #     meta = self.meta_list[int(idx[0]) + 1]
+        #     img_name = meta[-1].split('/')[-1]
+        #     val_meta[img_name] = meta
+
+        # test_meta = {}
+        # for idx in test_list:
+        #     meta = self.meta_list[int(idx[0]) + 1]
+        #     img_name = meta[-1].split('/')[-1]
+        #     test_meta[img_name] = meta
+
+        # self.train_meta = train_meta
+        # self.val_meta = val_meta
+        # self.test_meta = test_meta
+
+        train_dp = Mapper(train_dp, self._idx2meta)
+        val_dp = Mapper(val_dp, self._idx2meta)
+        test_dp = Mapper(test_dp, self._idx2meta)
+
+        dp = eval(f'{self._split}_dp')
+        dp = Filter(dp, self._filter_season)
+        temp = iter(dp)
+        temp2 = temp.__next__()
+
+        # if self.season == 'all':
+        #     season_dp = Concater(spring_dp, summer_dp, fall_dp, winter_dp, snow_dp)
+        # else:
+        #     season_dp = eval(f'{self.season}_dp')
+
+        # dp = Filter(season_dp, self._filter_split)
+
+        # img_dp, ann_dp = Demultiplexer(
+        #     dp, 2, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
+        # )
 
         # dp = Zipper(img_dp, ann_dp)
 
-        ndp = Mapper(dp, self._prepare_sample)
-        ndp = hint_shuffling(ndp)
-        ndp = hint_sharding(ndp)
+        dp = Mapper(dp, self._get_img_ann)
+        # dp = Mapper(dp, self._prepare_sample)
+        dp = hint_shuffling(dp)
+        dp = hint_sharding(dp)
 
-        return ndp
+        return dp
 
     def __len__(self) -> int:
-        length = 0
-        for cur_split in self._split:
-            length += eval(f'_{cur_split.upper()}')
+        if self.season == 'all':
+            length = eval(f'_{self._split.upper()}')
+        else:
+            length = eval(f'_{self._split.upper()}_{self.season.upper()}')
 
         return length
-
-if __name__ == '__main__':
-    dp = Landslide4Sense('./')
