@@ -234,7 +234,6 @@ class SeasonNet(Dataset):
 
         self.meta_list = meta_list
 
-
         test_dp, train_dp, val_dp = split_dp
         train_dp = FileOpener([iter(train_dp).__next__()], mode='r').parse_csv()
         val_dp = FileOpener([iter(val_dp).__next__()], mode='r').parse_csv()
@@ -272,8 +271,8 @@ class SeasonNet(Dataset):
 
         dp = eval(f'{self._split}_dp')
         dp = Filter(dp, self._filter_season)
-        temp = iter(dp)
-        temp2 = temp.__next__()
+        # temp = iter(dp)
+        # temp2 = temp.__next__()
 
         # if self.season == 'all':
         #     season_dp = Concater(spring_dp, summer_dp, fall_dp, winter_dp, snow_dp)
