@@ -2,6 +2,7 @@ import os
 import tarfile
 import enum
 import functools
+import itertools
 import pathlib
 from tqdm import tqdm
 import h5py
@@ -61,6 +62,25 @@ _TEST_SUMMER = 96238
 _TEST_FALL = 100053
 _TEST_WINTER = 43527
 _TEST_SNOW = 19877
+_VAL_10K = 10000
+_VAL_10K_SPRING = 2607
+_VAL_10K_SUMMER = 2733
+_VAL_10K_FALL = 2822
+_VAL_10K_WINTER = 1276
+_VAL_10K_SNOW = 562
+
+img_norm_cfg = dict(
+    spring = dict(mean = [628.76989558,665.58249172,432.48175105],
+                  std = [469.38120352,347.25020058,277.22467985]),
+    summer = dict(mean = [723.02244681,701.49017081,460.54387678],
+                  std = [634.10804948,410.2871006,326.41267942]),
+    fall = dict(mean = [632.08351241,622.3822736,408.29144577],
+                std = [527.15262347,376.52314269,304.78200641]),
+    winter = dict(mean = [575.55581851,586.34141433,469.04770589],
+                  std = [371.748926,335.62056998,317.45246766]),
+    snow = dict(mean = [3760.00794085,3724.8550875,3737.42429049],
+                std = [3325.95050852,3291.39298109,3387.20868398]),
+)
 
 
 @register_info(NAME)
@@ -99,7 +119,7 @@ class SeasonNet(Dataset):
     ) -> None:
 
         # assert split in ['train_rural', 'train_urban', 'val_rural', 'val_urban', 'test_rural', 'test_urban']
-        assert split in ['train', 'val', 'test']
+        assert split in ['train', 'val', 'test', 'val_10k']
         assert season in ['spring', 'summer', 'fall', 'winter', 'snow', 'all']
 
         self._split = split
@@ -187,7 +207,8 @@ class SeasonNet(Dataset):
         img_info = dict(
             filename = img_path,
             img_id = file_name,
-            ann = {'seg_map': ann_path}
+            ann = {'seg_map': ann_path,
+                   'season': season_name}
         )
 
         return img_info
@@ -268,6 +289,7 @@ class SeasonNet(Dataset):
         train_dp = Mapper(train_dp, self._idx2meta)
         val_dp = Mapper(val_dp, self._idx2meta)
         test_dp = Mapper(test_dp, self._idx2meta)
+        val_10k_dp = itertools.islice(val_dp, 10000)
 
         dp = eval(f'{self._split}_dp')
         dp = Filter(dp, self._filter_season)
