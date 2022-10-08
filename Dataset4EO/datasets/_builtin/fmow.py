@@ -22,8 +22,8 @@ from torchdata.datapipes.iter import (
     Zipper,
     IterKeyZipper,
     LineReader,
+    JsonParser
 )
-
 from torchdata.datapipes.map import SequenceWrapper
 
 from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset, ManualDownloadResource
@@ -91,21 +91,33 @@ class FMoW(Dataset):
     def _resources(self) -> List[OnlineResource]:
         train_resource = FMoWResource(
             file_name='train',
-            preprocess='extract',
+            preprocess=None,
             sha256=None
         )
         val_resource = FMoWResource(
             file_name='val',
-            preprocess='extract',
             sha256=None
         )
         test_resource = FMoWResource(
             file_name='test',
-            preprocess='extract',
+            preprocess=None,
             sha256=None
         )
 
-        return [train_resource, val_resource, test_resource]
+        test_mapping_resource = FMoWResource(
+            file_name='test_gt_mapping.json',
+            preprocess=None,
+            sha256=None
+        )
+
+        test_json_resource = FMoWResource(
+            file_name='test_gt',
+            preprocess=None,
+            sha256=None
+        )
+
+        return [train_resource, val_resource, test_resource,
+                test_mapping_resource, test_json_resource]
 
     def _prepare_sample(self, data):
 
@@ -152,17 +164,36 @@ class FMoW(Dataset):
         elif path_name.endswith(postfix_msjson):
             return 3
 
+    def _test_key_fn(data):
+        path, buffer = data
+        path = pathlib.Path(path)
+
+        return path.parent.name
+
+    def _mapping_key_fn(mapping):
+        path = pathlib.Path(mapping['output']).name
+
+        return path
+
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        train_dp, val_dp, test_dp = resource_dps
-        dp = eval(f'{self._split}_dp')
-        rgb_dp, msrgb_dp, json_dp, msjson_dp = Demultiplexer(
-            dp, 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        )
-        img_dp = rgb_dp if not self.use_ms else msrgb_dp
-        ann_dp = json_dp if not self.use_ms else msjson_dp
-        dp = Zipper(img_dp, ann_dp) if not self._split == 'test' else img_dp
+        train_dp, val_dp, test_dp, test_mapping_dp, test_gt_dp = resource_dps
+
+        if self._split != 'test':
+            dp = eval(f'{self._split}_dp')
+            rgb_dp, msrgb_dp, json_dp, msjson_dp = Demultiplexer(
+                dp, 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
+            )
+            img_dp = rgb_dp if not self.use_ms else msrgb_dp
+            ann_dp = json_dp if not self.use_ms else msjson_dp
+            dp = Zipper(img_dp, ann_dp) if not self._split == 'test' else img_dp
+        else:
+            test_mapping_dp = JsonParser(test_mapping_dp)
+            mapping = iter(test_mapping_dp).__next__()[1]
+            pdb.set_trace()
+            test_dp = IterKeyZipper(test_dp, mapping, self._test_key_fn, self._mapping_key_fn,
+                                    buffer_size=INFINITE_BUFFER_SIZE)
 
         ndp = Mapper(dp, self._prepare_sample)
         ndp = hint_shuffling(ndp)
