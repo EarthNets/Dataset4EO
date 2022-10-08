@@ -22,7 +22,8 @@ from torchdata.datapipes.iter import (
     Zipper,
     IterKeyZipper,
     LineReader,
-    JsonParser
+    JsonParser,
+    IterableWrapper
 )
 from torchdata.datapipes.map import SequenceWrapper
 
@@ -134,8 +135,12 @@ class FMoW(Dataset):
                             ann=dict(ann_path=ann_path))
 
         else:
-            img_path, img_buffer = data
-            img_info = dict(filename=img_path)
+            (img_path, img_buffer), (mapping) = data
+            class_name = pathlib.Path(mapping['input']).parent.name
+            cls_idx = self.cat2idx[class_name]
+            img_info = dict(filename=img_path,
+                            cls_idx=cls_idx,
+                            ann=None)
 
         return img_info
 
@@ -164,13 +169,13 @@ class FMoW(Dataset):
         elif path_name.endswith(postfix_msjson):
             return 3
 
-    def _test_key_fn(data):
+    def _test_key_fn(self, data):
         path, buffer = data
         path = pathlib.Path(path)
 
         return path.parent.name
 
-    def _mapping_key_fn(mapping):
+    def _mapping_key_fn(self, mapping):
         path = pathlib.Path(mapping['output']).name
 
         return path
@@ -191,8 +196,8 @@ class FMoW(Dataset):
         else:
             test_mapping_dp = JsonParser(test_mapping_dp)
             mapping = iter(test_mapping_dp).__next__()[1]
-            pdb.set_trace()
-            test_dp = IterKeyZipper(test_dp, mapping, self._test_key_fn, self._mapping_key_fn,
+            mapping_dp = IterableWrapper(mapping)
+            dp = IterKeyZipper(test_dp, mapping_dp, self._test_key_fn, self._mapping_key_fn,
                                     buffer_size=INFINITE_BUFFER_SIZE)
 
         ndp = Mapper(dp, self._prepare_sample)
