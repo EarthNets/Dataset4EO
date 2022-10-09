@@ -78,6 +78,7 @@ class InriaClipped(Dataset):
         root: Union[str, pathlib.Path],
         *,
         split: str = "train",
+        city_names=None, # None -> use all cities
         data_info: bool = True,
         skip_integrity_check: bool = False,
         crop_size: int = 1024,
@@ -94,6 +95,7 @@ class InriaClipped(Dataset):
         self.data_info = data_info
         self.crop_size = crop_size
         self.stride=stride
+        self.city_names = city_names
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
@@ -148,6 +150,16 @@ class InriaClipped(Dataset):
         else:
             return 2
 
+    def _filter_cities(self, data):
+        import re
+
+        path = pathlib.Path(data)
+        name = re.findall('[a-z\-]+', path.name)[0]
+        if self.city_names is None or name in self.city_names:
+            return True
+        return False
+
+
     def _classify_split_clip(self, data):
         path = pathlib.Path(data)
         if path.parents[0].name == 'train':
@@ -192,6 +204,8 @@ class InriaClipped(Dataset):
             dp, 3, self._classify_split_clip, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
         )
         dp = eval(f'{self._split}_dp') if self._split != 'train_val' else Concater(train_dp, val_dp)
+
+        dp = Filter(dp, self._filter_cities)
 
         img_dp, ann_dp = Demultiplexer(
             dp, 2, self._classify_archive_clip, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
@@ -276,13 +290,17 @@ class InriaClipped(Dataset):
 
 
     def __len__(self) -> int:
-        return {
+        base_len = {
             'train': _TRAIN_LEN,
             'val': _VAL_LEN,
             'train_val': _TRAIN_LEN + _VAL_LEN,
             'test': _TEST_LEN
 
         }[self._split]
+        if self.city_names is not None:
+            base_len = int(base_len / 5 * len(self.city_names))
+
+        return base_len
 
 if __name__ == '__main__':
     dp = Landslide4Sense('./')
