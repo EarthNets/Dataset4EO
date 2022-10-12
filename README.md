@@ -23,25 +23,33 @@ Todo List
 
 - [x] Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
 - [x] Assign specific datasets to each of the member;
-- [X] preprocess the datasets in a AI-ready style;
-- [X] re-distribute processed datasets and add citations;
-- [X] implementing dataset classes for downloading;
+- [x] preprocess the datasets in a AI-ready style;
+- [x] re-distribute processed datasets and add citations;
+- [x] implementing dataset classes for downloading;
+- [x] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
+- [x] supporting dataloaders in a easy-to-use way for custom projects;
+- [x] benchmarking cutting-edge CV backbones and models on RS data;
 - [ ] implementing the random sampler for geo-spatial datasets;
-- [X] supporting for heigh-level repos for specific tasks: obejct detection, segmentation and so forth;
-- [X] supporting dataloaders in a easy-to-use way for custom projects;
-- [ ] benchmarking all the cutting-edge backbones and task-specific models;
 
 # Supported datasets:
 
-- [x] [RSUSS](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#cityscapes)
-- [x] [LandSlide4Sense](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-voc)
-- [x] [Eurosat](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#ade20k)
-- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
-- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
-- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
-- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
-- [ ] [XXXX](https://github.com/open-mmlab/mmsegmentation/blob/master/docs/en/dataset_prepare.md#pascal-context)
+- [x] [DFC2020](https://ieee-dataport.org/competitions/2020-ieee-grss-data-fusion-contest)
+- [x] [LandSlide4Sense](https://www.iarai.ac.at/landslide4sense/)
+- [x] [Eurosat](https://github.com/phelber/EuroSAT#)
+- [x] [AID](https://captain-whu.github.io/AID/)
+- [x] [DIOR](http://www.escience.cn/people/JunweiHan/DIOR.html)
+- [x] [DOTA 2.0](https://captain-whu.github.io/DOTA/index.html)
+- [x] [fMoW](https://github.com/fMoW/dataset)
+- [x] [GeoNRW](https://github.com/gbaier/geonrw)
+- [x] [LoveDA](https://github.com/Junjue-Wang/LoveDA)
+- [x] [NWPU_VHR10](https://github.com/chaozhong2010/VHR-10_dataset_coco)
+- [x] [RSUSS](https://github.com/EarthNets/RSI-MMSegmentation)
+- [x] [BigEarthNet](https://bigearth.net/)
+- [x] [SEASONET](https://zenodo.org/record/5850307#.Y0cayXbP1D8)
+- [x] [SSL4EO_S12](https://github.com/zhu-xlab/SSL4EO-S12)
+- [x] [Vaihingen](https://www.isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx)
 
+Continually updating
 
 ## How to use
 
@@ -89,3 +97,6 @@ tfs = transforms.Compose(transforms.RandomHorizontalFlip(),
                                  
 ndp = ndp.map(tfs)
 ```
+
+## Citation
+Coming soon
