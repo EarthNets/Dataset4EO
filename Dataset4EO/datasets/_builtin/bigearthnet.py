@@ -58,6 +58,19 @@ class BigEarthNetResource(ManualDownloadResource):
 class BigEarthNet(Dataset):
     """
     - **homepage**: https://bigearth.net/
+    - preparation:
+        - download and extract `BigEarthNet-S2-v1.0.tar.gz`
+        - run `tools/convert_datasets/bigearthnet_convert_rgb.py` to prepare RGB images and gather corresponding labels in `19_labels.csv`
+            - `BigEarthNet-v1.0-RGB/`
+            - `19_labels.csv`
+        - download train/val/test split file
+            - https://git.tu-berlin.de/rsim/BigEarthNet-MM_19-classes_models/-/raw/master/splits/train.csv?inline=false
+            - https://git.tu-berlin.de/rsim/BigEarthNet-MM_19-classes_models/-/raw/master/splits/val.csv?inline=false
+            - https://git.tu-berlin.de/rsim/BigEarthNet-MM_19-classes_models/-/raw/master/splits/test.csv?inline=false
+        - split the `19_labels.csv` w.r.t the splits
+            - `19_labels_train.csv`
+            - `19_labels_val.csv`
+            - `19_labels_test.csv`
     """
 
     def __init__(
@@ -80,12 +93,27 @@ class BigEarthNet(Dataset):
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
     def _resources(self) -> List[OnlineResource]:
-        resource = BigEarthNetResource(
+        resource_rgb = BigEarthNetResource(
             file_name = self.dir_name,
             preprocess = None,
             sha256 = None
         )
-        return [resource]
+        resource_train = BigEarthNetResource(
+            file_name = '19_labels_train.csv',
+            preprocess = None,
+            sha256 = None
+        )        
+        resource_val = BigEarthNetResource(
+            file_name = '19_labels_val.csv',
+            preprocess = None,
+            sha256 = None
+        )        
+        resource_test = BigEarthNetResource(
+            file_name = '19_labels_test.csv',
+            preprocess = None,
+            sha256 = None
+        )        
+        return [resource_rgb, resource_train, resource_val, resource_test]
 
 
     def _prepare_sample(self, idx):
