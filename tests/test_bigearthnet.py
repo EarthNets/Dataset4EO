@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader2
 import time
 from tqdm import tqdm
 
-datasets_dir = '../../Datasets/Dataset4EO'
+datasets_dir = '/mnt/d/codes/datasets/BigEarthNet/BigEarthNet-S2-v1.0/'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':

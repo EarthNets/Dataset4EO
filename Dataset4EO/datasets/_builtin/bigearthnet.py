@@ -25,7 +25,7 @@ from torchdata.datapipes.iter import (
 
 from torchdata.datapipes.map import SequenceWrapper
 
-from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset
+from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset, ManualDownloadResource
 from Dataset4EO.datasets.utils._internal import (
     path_accessor,
     getitem,
@@ -47,6 +47,13 @@ def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
 
+class BigEarthNetResource(ManualDownloadResource):
+    def __init__(self, **kwargs: Any) -> None:
+
+        super().__init__('For data download, please refer to https://bigearth.net/',
+                         **kwargs)
+
+
 @register_dataset(NAME)
 class BigEarthNet(Dataset):
     """
@@ -65,10 +72,21 @@ class BigEarthNet(Dataset):
 
         self._split = self._verify_str_arg(split, "split", ("train", "val", "test"))
         self.root = root
+        self.dir_name = 'BigEarthNet-v1.0-RGB'
         self._categories = _info()["categories"]
         self.data_info = data_info
+        self.data_prefix = os.path.join(self.root,self.dir_name)
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
+
+    def _resources(self) -> List[OnlineResource]:
+        resource = BigEarthNetResource(
+            file_name = self.dir_name,
+            preprocess = None,
+            sha256 = None
+        )
+        return [resource]
+
 
     def _prepare_sample(self, idx):
         data_info = self.data_item[idx]
@@ -94,7 +112,6 @@ class BigEarthNet(Dataset):
                
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
-        self._decompress_dir()
         self._prepare_list()
 
         dp = SequenceWrapper(range(self.__len__()))
