@@ -15,3 +15,5 @@ from .ssl4eo_s12 import SSL4EO_S12
 from .vaihingen import Vaihingen
 from .season_net import SeasonNet
 from .fmow import FMoW
+from .bigearthnet import BigEarthNet
+from .geonrw import GeoNRW
