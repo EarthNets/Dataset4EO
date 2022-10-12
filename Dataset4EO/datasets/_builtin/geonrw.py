@@ -57,6 +57,20 @@ class GeoNRWResource(ManualDownloadResource):
 class GeoNRW(Dataset):
     """
     - **homepage**: https://ieee-dataport.org/open-access/geonrw
+    - prepare dataset:
+        - download and extract data from https://ieee-dataport.org/open-access/geonrw
+        - run `tools/convert_datasets/geonrw.py` to reorganize the data w.r.t mmsegmentation
+            - nrw_dataset_mmseg/
+                - ann_dir
+                    - train
+                    - test
+                - dem_dir
+                    - train
+                    - test
+                - img_dir
+                    - train
+                    - test
+    
     """
 
     def __init__(
