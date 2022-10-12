@@ -98,4 +98,11 @@ Don't forget to give the project a star! Thanks again!
 5. Open a Pull Request
 
 # Citation
-Coming soon
+```BibTeX
+@article{earthnets4eo,
+    title={EarthNets: Empowering AI in Earth Observation},
+    author={Zhitong Xiong, Fahong Zhang, Yi Wang, Yilei Shi, Xiao Xiang Zhu},
+    journal = {arXiv:2210.04936},
+    year={2022}
+}
+```
