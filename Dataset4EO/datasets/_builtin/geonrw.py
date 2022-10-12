@@ -70,6 +70,8 @@ class GeoNRW(Dataset):
 
         self._split = self._verify_str_arg(split, "split", ("train", "test"))
         self.root = root
+        self.dir_name = 'nrw_dataset_mmseg'
+        self.data_prefix = os.path.join(self.root,self.dir_name)
         self._categories = _info()["categories"]
         self.CLASSES = self._categories
         self.PALETTE = [
@@ -87,6 +89,15 @@ class GeoNRW(Dataset):
         self.data_info = data_info
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
+
+
+    def _resources(self) -> List[OnlineResource]:
+        resource = GeoNRWResource(
+            file_name = self.dir_name,
+            preprocess = None,
+            sha256 = None
+        )
+        return [resource]    
 
     def _prepare_sample(self, data):
 
@@ -111,13 +122,13 @@ class GeoNRW(Dataset):
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        image_dp = FileLister(root=os.path.join(self.root, 'img_dir'), recursive=True)
+        image_dp = FileLister(root=os.path.join(self.data_prefix, 'img_dir'), recursive=True)
         train_image_dp, test_image_dp = image_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
-        label_dp = FileLister(root=os.path.join(self.root, 'ann_dir'), recursive=True)
+        label_dp = FileLister(root=os.path.join(self.data_prefix, 'ann_dir'), recursive=True)
         train_label_dp, test_label_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
                 drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)        
-        #dem_dp = FileLister(root=os.path.join(self.root, 'dem_dir'), recursive=True)
+        #dem_dp = FileLister(root=os.path.join(self.data_prefix, 'dem_dir'), recursive=True)
         #train_dem_dp, test_dem_dp = label_dp.demux(num_instances=2, classifier_fn=self._classify_archive,\
         #        drop_none=True, buffer_size=INFINITE_BUFFER_SIZE)
 

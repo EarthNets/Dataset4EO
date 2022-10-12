@@ -12,7 +12,7 @@ import numpy as np
 
 import tempfile
 
-tr = datasets.vaihingen.GeoNRW('/mnt/d/codes/datasets/Vaihingen', split='train')
+tr = datasets.geonrw.GeoNRW('/mnt/d/codes/datasets/', split='train')
 #tr = tr.to_map_datapipe()
 
 from torch.utils.data import DataLoader2
