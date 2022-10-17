@@ -110,6 +110,7 @@ Don't forget to give the project a star! Thanks again!
 
 # Acknowledgment
 We thank the following open dataset collections:
+
 1. https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-12760
 2. https://github.com/chrieke/awesome-satellite-imagery-datasets
 3. https://github.com/zhangbin0917/Awesome-Remote-Sensing-Dataset
@@ -124,3 +125,5 @@ We thank the following open dataset collections:
 12. https://github.com/MinZHANG-WHU/Change-Detection-Review
 13. http://datahub.geocradle.eu/search/type/dataset
 14. https://homepages.inf.ed.ac.uk/rbf/CVonline/Imagedbase.htm#remote
+15. https://www.cosmiqworks.org/projects/
+16. https://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLII-1-W2/1/2019/isprs-archives-XLII-1-W2-1-2019.pdf
