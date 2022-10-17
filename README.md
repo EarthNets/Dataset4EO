@@ -10,7 +10,7 @@ It aims to provide composable Iterable-style and Map-style building blocks calle
 
 Todo List
 
-- [x] Re-organize mroe than 180 datasets in Remote sensing cimmunity in a task-oriented way;
+- [x] Re-organize mroe than 400 datasets in Remote sensing cimmunity in a task-oriented way;
 - [x] Assign specific datasets to each of the member;
 - [x] preprocess the datasets in a AI-ready style;
 - [x] re-distribute processed datasets and add citations;
