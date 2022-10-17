@@ -107,3 +107,20 @@ Don't forget to give the project a star! Thanks again!
     year={2022}
 }
 ```
+
+# Acknowledgment
+We thank the following open dataset collections:
+1. https://www.dlr.de/eoc/en/desktopdefault.aspx/tabid-12760
+2. https://github.com/chrieke/awesome-satellite-imagery-datasets
+3. https://github.com/zhangbin0917/Awesome-Remote-Sensing-Dataset
+4. https://github.com/robmarkcole/satellite-image-deep-learning#lists-of-datasets
+5. https://eod-grss-ieee.com/dataset-search
+6. https://mlhub.earth/datasets
+7. https://github.com/biasvariancelabs/aitlas-arena
+8. https://github.com/Agri-Hub/Callisto-Dataset-Collection
+9. https://github.com/wenhwu/awesome-remote-sensing-change-detection
+10. https://github.com/pubgeo/datasets
+11. http://eodata.bvlabs.ai/#/
+12. https://github.com/MinZHANG-WHU/Change-Detection-Review
+13. http://datahub.geocradle.eu/search/type/dataset
+14. https://homepages.inf.ed.ac.uk/rbf/CVonline/Imagedbase.htm#remote
