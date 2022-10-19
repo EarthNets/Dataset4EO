@@ -5,7 +5,7 @@
 
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
-# Composable data loading based on [TorchData](https://github.com/pytorch/data)
+## Composable data loading based on [TorchData](https://github.com/pytorch/data)
 It aims to provide composable Iterable-style and Map-style building blocks called DataPipes that work well out of the box with the PyTorch's DataLoader. It contains functionality to reproduce many different datasets in TorchVision and TorchText, namely including loading, parsing, caching, and several other utilities (e.g. hash checking).
 
 Todo List
