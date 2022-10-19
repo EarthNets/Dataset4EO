@@ -18,7 +18,7 @@ Todo List
 - [x] benchmarking cutting-edge CV backbones and models on RS data;
 - [ ] implementing the random sampler for geo-spatial datasets;
 
-# Supported datasets:
+## Supported datasets:
 
 - [x] [DFC2020](https://ieee-dataport.org/competitions/2020-ieee-grss-data-fusion-contest)
 - [x] [LandSlide4Sense](https://www.iarai.ac.at/landslide4sense/)
