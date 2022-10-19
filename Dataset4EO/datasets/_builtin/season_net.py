@@ -261,32 +261,6 @@ class SeasonNet(Dataset):
         val_dp = FileOpener([iter(val_dp).__next__()], mode='r').parse_csv()
         test_dp = FileOpener([iter(test_dp).__next__()], mode='r').parse_csv()
 
-        # train_list = list(iter(train_dp))
-        # val_list = list(iter(val_dp))
-        # test_list = list(iter(test_dp))
-
-        # train_meta = {}
-        # for idx in train_list:
-        #     meta = self.meta_list[int(idx[0]) + 1]
-        #     img_name = meta[-1].split('/')[-1]
-        #     train_meta[img_name] = meta
-
-        # val_meta = {}
-        # for idx in val_list:
-        #     meta = self.meta_list[int(idx[0]) + 1]
-        #     img_name = meta[-1].split('/')[-1]
-        #     val_meta[img_name] = meta
-
-        # test_meta = {}
-        # for idx in test_list:
-        #     meta = self.meta_list[int(idx[0]) + 1]
-        #     img_name = meta[-1].split('/')[-1]
-        #     test_meta[img_name] = meta
-
-        # self.train_meta = train_meta
-        # self.val_meta = val_meta
-        # self.test_meta = test_meta
-
         train_dp = Mapper(train_dp, self._idx2meta)
         val_dp = Mapper(val_dp, self._idx2meta)
         test_dp = Mapper(test_dp, self._idx2meta)
@@ -295,21 +269,6 @@ class SeasonNet(Dataset):
 
         dp = eval(f'{self._split}_dp')
         dp = Filter(dp, self._filter_season)
-        # temp = iter(dp)
-        # temp2 = temp.__next__()
-
-        # if self.season == 'all':
-        #     season_dp = Concater(spring_dp, summer_dp, fall_dp, winter_dp, snow_dp)
-        # else:
-        #     season_dp = eval(f'{self.season}_dp')
-
-        # dp = Filter(season_dp, self._filter_split)
-
-        # img_dp, ann_dp = Demultiplexer(
-        #     dp, 2, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        # )
-
-        # dp = Zipper(img_dp, ann_dp)
 
         dp = Mapper(dp, self._get_img_ann)
         # dp = Mapper(dp, self._prepare_sample)
