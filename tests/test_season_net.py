@@ -13,7 +13,7 @@ datasets_dir = '../../Datasets/Dataset4EO/SeasonNet'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = SeasonNet(datasets_dir, split='train', season='all')
+    dp = SeasonNet(datasets_dir, split='test_1k', season='all')
     data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=4, shuffle=True,
                               drop_last=False)
 

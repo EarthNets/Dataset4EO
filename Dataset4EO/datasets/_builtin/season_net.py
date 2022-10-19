@@ -68,6 +68,7 @@ _VAL_10K_SUMMER = 2733
 _VAL_10K_FALL = 2822
 _VAL_10K_WINTER = 1276
 _VAL_10K_SNOW = 562
+_TEST_1K = 1000
 
 img_norm_cfg = dict(
     spring = dict(mean = [628.76989558,665.58249172,432.48175105],
@@ -119,7 +120,7 @@ class SeasonNet(Dataset):
     ) -> None:
 
         # assert split in ['train_rural', 'train_urban', 'val_rural', 'val_urban', 'test_rural', 'test_urban']
-        assert split in ['train', 'val', 'test', 'val_10k']
+        assert split in ['train', 'val', 'test', 'val_10k', 'test_1k']
         assert season in ['spring', 'summer', 'fall', 'winter', 'snow', 'all']
 
         self._split = split
@@ -290,6 +291,7 @@ class SeasonNet(Dataset):
         val_dp = Mapper(val_dp, self._idx2meta)
         test_dp = Mapper(test_dp, self._idx2meta)
         val_10k_dp = itertools.islice(val_dp, 10000)
+        test_1k_dp = itertools.islice(test_dp, 1000)
 
         dp = eval(f'{self._split}_dp')
         dp = Filter(dp, self._filter_season)
