@@ -5,7 +5,9 @@
 
 ![example workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
 
-# Composable data loading based on [TorchData](https://github.com/pytorch/data)
+[Homepage of the project](https://earthnets.nicepage.io/)
+
+## Composable data loading based on [TorchData](https://github.com/pytorch/data)
 It aims to provide composable Iterable-style and Map-style building blocks called DataPipes that work well out of the box with the PyTorch's DataLoader. It contains functionality to reproduce many different datasets in TorchVision and TorchText, namely including loading, parsing, caching, and several other utilities (e.g. hash checking).
 
 Todo List
@@ -18,7 +20,7 @@ Todo List
 - [x] benchmarking cutting-edge CV backbones and models on RS data;
 - [ ] implementing the random sampler for geo-spatial datasets;
 
-# Supported datasets:
+## Supported datasets:
 
 - [x] [DFC2020](https://ieee-dataport.org/competitions/2020-ieee-grss-data-fusion-contest)
 - [x] [LandSlide4Sense](https://www.iarai.ac.at/landslide4sense/)
