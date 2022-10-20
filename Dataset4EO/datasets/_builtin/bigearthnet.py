@@ -39,7 +39,7 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "BigEarthNet"
+NAME = "bigearthnet"
 
 
 @register_info(NAME)

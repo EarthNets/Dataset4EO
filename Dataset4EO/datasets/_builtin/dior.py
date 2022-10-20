@@ -2,6 +2,7 @@ import os
 import tarfile
 import enum
 import functools
+import itertools
 import pathlib
 from tqdm import tqdm
 import h5py
@@ -44,6 +45,7 @@ _TRAIN_LEN = 5862
 _VAL_LEN = 5863
 _TRAIN_VAL_LEN = 5862 + 5863
 _TEST_LEN = 11738
+_TEST_1K_LEN = 1000
 
 
 @register_info(NAME)
@@ -66,7 +68,7 @@ class DIOR(Dataset):
         skip_integrity_check: bool = False,
     ) -> None:
 
-        assert split == 'train' or split == 'val' or split == 'test' or split == 'trainval'
+        assert split in ['train', 'val', 'test', 'test_1k']
         self._split = split
         self.root = root
         self._categories = _info()["categories"]
@@ -160,6 +162,7 @@ class DIOR(Dataset):
         train_split = LineReader(train_split)
         val_split = LineReader(val_split)
         test_split = LineReader(test_split)
+        test_1k_split = itertools.islice(test_split, 1000)
 
         if self._split == 'trainval':
             split_dp = train_split.concat(val_split)
@@ -187,7 +190,8 @@ class DIOR(Dataset):
             'train': _TRAIN_LEN,
             'val': _VAL_LEN,
             'test': _TEST_LEN,
-            'trainval': _TRAIN_VAL_LEN
+            'trainval': _TRAIN_VAL_LEN,
+            'test_1k': _TEST_1K_LEN
         }[self._split]
 
 if __name__ == '__main__':
