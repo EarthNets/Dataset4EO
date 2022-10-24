@@ -4,6 +4,7 @@ import itertools
 import pathlib
 from typing import Optional, Sequence, Tuple, Callable, IO, Any, Union, NoReturn
 from urllib.parse import urlparse
+import pdb
 
 from torchdata.datapipes.iter import (
     IterableWrapper,
@@ -114,7 +115,10 @@ class OnlineResource(abc.ABC):
         if not file_candidates:
             file_candidates = {self.download(root, skip_integrity_check=skip_integrity_check)}
         # If the only thing we find is the raw file, we use it and optionally perform some preprocessing steps.
+        # Apply integrity check to this raw file as well
         if file_candidates == {path}:
+            if not skip_integrity_check:
+                self._check_sha256(path)
             if self._preprocess is not None:
                 path = self._preprocess(path)
         # Otherwise, we use the path with the fewest suffixes. This gives us the decompressed > raw priority that we

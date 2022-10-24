@@ -11,7 +11,7 @@ datasets_dir = '../../Datasets/Dataset4EO/landslide4sense'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = landslide4sense.Landslide4Sense(datasets_dir, split='train', data_info=True)
+    dp = landslide4sense.Landslide4Sense(datasets_dir, split='train', data_info=False)
     data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=4, shuffle=True,
                               drop_last=True)
     for epoch in range(1):
