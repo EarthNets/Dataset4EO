@@ -49,7 +49,7 @@ def resize_image_tensor(
         image.reshape((-1, num_channels, old_height, old_width)),
         size=size,
         interpolation=interpolation.value,
-        max_size=max_size,
+        # max_size=max_size,
         antialias=antialias,
     ).reshape(batch_shape + (num_channels, new_height, new_width))
 
