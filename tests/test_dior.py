@@ -7,19 +7,19 @@ from torch.utils.data import DataLoader2
 import time
 from tqdm import tqdm
 
-datasets_dir = '../../Datasets/Dataset4EO'
+datasets_dir = '../../Datasets/Dataset4EO/DIOR'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = dior.DIOR(datasets_dir, split='test_1k')
-    data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=4, shuffle=True,
-                              drop_last=True)
-    for epoch in range(1):
-        t1 = time.time()
-        for it in tqdm(data_loader):
-            pass
-            print(it)
-        t2 = time.time()
-        print('loading time: {}'.format(t2-t1))
+    dp = dior.DIOR(datasets_dir, split='train')
+    # data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=1, shuffle=True,
+    #                           drop_last=True)
+    t1 = time.time()
+    for it in dp:
+        pass
+        print(it)
+        break
+    t2 = time.time()
+    print('loading time: {}'.format(t2-t1))
 
 

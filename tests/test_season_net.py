@@ -13,8 +13,8 @@ datasets_dir = '../../Datasets/Dataset4EO/SeasonNet'
 from torchdata.dataloader2 import MultiProcessingReadingService
 
 if __name__ == '__main__':
-    dp = SeasonNet(datasets_dir, split='test_1k', season='all')
-    data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=4, shuffle=True,
+    dp = SeasonNet(datasets_dir, split='test_1k', season='fall')
+    data_loader = DataLoader2(dp.shuffle(), batch_size=1, num_workers=1, shuffle=True,
                               drop_last=False)
 
     img_sum = np.zeros(3)
@@ -24,10 +24,8 @@ if __name__ == '__main__':
         t1 = time.time()
         for i, item in enumerate(tqdm(data_loader)):
             img = tifffile.imread(item['filename']).astype(np.float32)
-            img_sum += img.sum(axis=0).sum(axis=0)
-            img_sum_squ += (img ** 2).sum(axis=0).sum(axis=0)
-            if i == num_ite:
-                break
+            # img_sum += img.sum(axis=0).sum(axis=0)
+            # img_sum_squ += (img ** 2).sum(axis=0).sum(axis=0)
 
         t2 = time.time()
         print('loading time: {}'.format(t2-t1))

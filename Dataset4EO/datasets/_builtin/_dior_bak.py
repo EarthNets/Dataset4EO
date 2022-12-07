@@ -21,8 +21,7 @@ from torchdata.datapipes.iter import (
     Demultiplexer,
     IterKeyZipper,
     LineReader,
-    Zipper,
-    Concater,
+    Zipper
 )
 
 from torchdata.datapipes.map import SequenceWrapper
@@ -48,17 +47,11 @@ _TRAIN_VAL_LEN = 5862 + 5863
 _TEST_LEN = 11738
 _TEST_1K_LEN = 1000
 
+
 @register_info(NAME)
 def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
-class DIORResource(ManualDownloadResource):
-    def __init__(self, **kwargs: Any) -> None:
-        """
-        # Download DIOR data manually:
-        """
-        super().__init__('For data download, please refer to https://drive.google.com/drive/folders/1UdlgHk49iu6WpcJ5467iT-UqNPpx__CC',
-                         **kwargs)
 
 @register_dataset(NAME)
 class DIOR(Dataset):
@@ -83,46 +76,28 @@ class DIOR(Dataset):
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
+        pdb.set_trace()
+
     _CHECKSUMS = {
-        'ImageSets.zip': '682a3e858d9c76fa7727031ddd1a0619e9cb85a1aee354265895e1856df7742c',
-        'Annotations.zip': 'e5ae9ba732cf2bc1c944de7a5caf5631929488cb10cb797b0b3722da2b0c6d72',
-        'JPEGImages-trainval.zip': '5e3757944739cffc8ba7de537db868e0a0ad86c8dfb44fa42c9dc88d6f327747',
-        'JPEGImages-test.zip': '8aa1e0e1496fd7a9f8cec7018ff3c9a196e9f9f47ef2aba2cb36f2dbf1368375'
+        "all": ("https://syncandshare.lrz.de/dl/firng4uPNLx9FLPxdBFmP5X/DIOR.zip",
+                "7a674c72a23ccca91eaf46c7cebdaa2bb9dbd6056af4ecf5c213f32f3d42ad92"),
     }
 
     def get_classes(self):
         return self._categories
 
     def _resources(self) -> List[OnlineResource]:
-
-        split_resource = DIORResource(
-            file_name = 'ImageSets.zip',
+        resource = HttpResource(
+            url = self._CHECKSUMS['all'][0],
             preprocess = 'extract',
-            sha256 = self._CHECKSUMS['ImageSets.zip']
+            sha256 = self._CHECKSUMS['all'][1]
         )
 
-        ann_resource = DIORResource(
-            file_name = 'Annotations.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['Annotations.zip']
-        )
-
-        img_trainval_resource = DIORResource(
-            file_name = 'JPEGImages-trainval.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['JPEGImages-trainval.zip']
-        )
-
-        img_test_resource = DIORResource(
-            file_name = 'JPEGImages-test.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['JPEGImages-test.zip']
-        )
-
-        return [split_resource, ann_resource, img_trainval_resource, img_test_resource]
+        return [resource]
 
     def _prepare_sample(self, data):
 
+        pdb.set_trace()
         image_data, ann_data = data[1]
         image_path, image_buffer = image_data
         ann_path, ann_buffer = ann_data
@@ -155,15 +130,6 @@ class DIOR(Dataset):
         else:
             return None
 
-    def _classify_ann(self, data):
-        path = pathlib.Path(data[0])
-        if path.name.endswith('xml') and path.parent.name == 'Horizontal Bounding Boxes':
-            return 0
-        elif path.name.endswith('xml') and path.parent.name == 'Oriented Bounding Boxes':
-            return 1
-        else:
-            return None
-
     def _split_key_fn(self, data: Tuple[str, Any]) -> Tuple[str, str]:
         return data[1].decode('UTF-8')
 
@@ -182,10 +148,21 @@ class DIOR(Dataset):
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        split_dp, ann_dp, trainval_img_dp, test_img_dp = resource_dps
-
-        """ prepare split """
+        split_dp, img_dp, ann_dp_h, ann_dp_o = Demultiplexer(
+            resource_dps[0], 4, self._classify_archive, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
+        )
+        pdb.set_trace()
         train_split, val_split, test_split = Demultiplexer(split_dp, 3, self._classify_split)
+        # img_dp = Filter(img_dp, self._select_split)
+        # dp = Zipper(img_dp, ann_dp_h, ann_dp_o)
+        dp = IterKeyZipper(
+            img_dp, ann_dp_h,
+            key_fn=self._images_key_fn,
+            ref_key_fn=self._anns_key_fn,
+            buffer_size=INFINITE_BUFFER_SIZE,
+            keep_key=False
+        )
+
         train_split = LineReader(train_split)
         val_split = LineReader(val_split)
         test_split = LineReader(test_split)
@@ -196,31 +173,14 @@ class DIOR(Dataset):
         else:
             split_dp = eval(f'{self._split}_split')
 
-        """ prepare images """
-        img_dp = Concater(trainval_img_dp, test_img_dp)
-
-        """ prepare annotations """
-        ann_dp_h, ann_dp_o = Demultiplexer(
-            ann_dp, 2, self._classify_ann, drop_none=True, buffer_size=INFINITE_BUFFER_SIZE
-        )
-
-        """ correlate the images and the horizontal annotations"""
-        img_ann_dp = IterKeyZipper(
-            img_dp, ann_dp_h,
-            key_fn=self._images_key_fn,
-            ref_key_fn=self._anns_key_fn,
-            buffer_size=INFINITE_BUFFER_SIZE,
-            keep_key=False
-        )
-
-        """ correlate the images, annotations and the split """
         dp = IterKeyZipper(
-            split_dp, img_ann_dp,
+            split_dp, dp,
             key_fn=self._split_key_fn,
             ref_key_fn=self._dp_key_fn,
             buffer_size=INFINITE_BUFFER_SIZE,
             keep_key=False
         )
+
         # dp = Zipper(img_dp, ann_dp)
 
         ndp = Mapper(dp, self._prepare_sample)

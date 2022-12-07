@@ -11,8 +11,10 @@ from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
 from xml.etree import ElementTree
 from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
+import seaborn as sns
 import pdb
 import numpy as np
+import matplotlib as mpl
 
 from torchdata.datapipes.iter import (
     IterDataPipe,
@@ -69,6 +71,7 @@ _VAL_10K_FALL = 2822
 _VAL_10K_WINTER = 1276
 _VAL_10K_SNOW = 562
 _TEST_1K = 1000
+_TEST_1K_FALL = 279
 
 img_norm_cfg = dict(
     spring = dict(mean = [628.76989558,665.58249172,432.48175105],
@@ -119,7 +122,6 @@ class SeasonNet(Dataset):
         skip_integrity_check: bool = False,
     ) -> None:
 
-        # assert split in ['train_rural', 'train_urban', 'val_rural', 'val_urban', 'test_rural', 'test_urban']
         assert split in ['train', 'val', 'test', 'val_10k', 'test_1k']
         assert season in ['spring', 'summer', 'fall', 'winter', 'snow', 'all']
 
@@ -129,7 +131,16 @@ class SeasonNet(Dataset):
         self.root = root
         self._categories = _info()["categories"]
         self.CLASSES = self._categories
-        self.PALETTE = [[128, 0, 0], [0, 128, 0], [128, 128, 0], [0, 0, 128], [128, 0, 128], [0, 128, 128], [128, 128, 128]]
+        # self.PALETTE = (np.array(sns.color_palette('bright', 33)) * 255).astype(np.uint8).tolist()
+
+        PALETTE1 = mpl.cm.get_cmap('tab20')
+        PALETTE2 = mpl.cm.get_cmap('tab20b')
+
+        PALETTE = [PALETTE1(i/20) for i in range(20)] + [PALETTE2(i/20) for i in range(20)]
+        PALETTE = PALETTE[:33]
+        self.PALETTE = (np.array(PALETTE)[:, :3] * 255).astype(np.uint8).tolist()
+
+
         self.data_info = data_info
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
@@ -243,8 +254,6 @@ class SeasonNet(Dataset):
 
         return img_info
 
-
-
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
         spring_dp, summer_dp, fall_dp, winter_dp, snow_dp, meta_dp, split_dp = resource_dps
@@ -269,7 +278,6 @@ class SeasonNet(Dataset):
 
         dp = eval(f'{self._split}_dp')
         dp = Filter(dp, self._filter_season)
-
         dp = Mapper(dp, self._get_img_ann)
         # dp = Mapper(dp, self._prepare_sample)
         dp = hint_shuffling(dp)
