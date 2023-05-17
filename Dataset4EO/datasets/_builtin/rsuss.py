@@ -7,8 +7,9 @@ import h5py
 import torch
 from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
 from xml.etree import ElementTree
-from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
+from torchdata.dataloader2 import DataLoader2, MultiProcessingReadingService
+
 import pathlib
 import pdb
 import numpy as np
@@ -18,7 +19,7 @@ from PIL import Image
 
 from torchdata.datapipes.iter import Mapper
 
-from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset
+from Dataset4EO.datasets.utils import OnlineResource, HttpResource, Dataset, ManualDownloadResource
 from Dataset4EO.datasets.utils._internal import (
     path_accessor,
     getitem,
@@ -34,9 +35,9 @@ from .._api import register_dataset, register_info
 
 NAME = "rsuss"
 FNAME = "RSUSS"
-_TRAIN_LEN = 5137
+_TRAIN_LEN = 6304
 _VAL_LEN = 1059
-_TEST_LEN = 3144
+_TEST_LEN = 4144
 
 
 @register_info(NAME)
@@ -66,45 +67,15 @@ class RSUSS(Dataset):
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
-    _TRAIN_VAL_ARCHIVES = {
-        "trainval": ("landslide4sense.tar", "c7f6678d50c7003eba47b3cace8053c9bfa6b4692cd1630fe2d6b7bec11ccc77"),
-    }
-
-    def decompress_integrity_check(self, decom_dir):
-        train_img_dir = os.path.join(decom_dir, 'train', 'img')
-        train_mask_dir = os.path.join(decom_dir, 'train', 'mask')
-        val_img_dir = os.path.join(decom_dir, 'val', 'img')
-
-        if not os.path.exists(train_img_dir) or not os.path.exists(train_mask_dir) or not os.path.exists(val_img_dir):
-            return False
-
-        num_train_img = len(os.listdir(train_img_dir))
-        num_train_mask = len(os.listdir(train_mask_dir))
-        num_val_img = len(os.listdir(val_img_dir))
-
-        return True
-        return (num_train_img == _TRAIN_LEN) and \
-                (num_train_mask == _TRAIN_LEN) and \
-                (num_val_img == _VAL_LEN)
-
-    def _resources(self) -> List[OnlineResource]:
-        file_name, sha256 = self._TRAIN_VAL_ARCHIVES['trainval']
-        decom_dir = os.path.join(self.root, 'landslide4sense')
-        self.decom_dir = decom_dir
-        archive = HttpResource("https://syncandshare.lrz.de/dl/fiLurHQ9Cy4NwvmPGYQe7RWM/{}".format(file_name), sha256=sha256)
-
-        if not self.decompress_integrity_check(decom_dir):
-            print('Decompressing the tar file...')
-            with tarfile.open(os.path.join(self.root, file_name), 'r:gz') as tar:
-                tar.extractall(decom_dir)
-                tar.close()
-
-        return [archive]
-
     def _is_in_folder(self, data: Tuple[str, Any], *, name: str, depth: int = 1) -> bool:
         path = pathlib.Path(data)
         in_folder =  name in str(path.parent)
         return in_folder
+
+    def _resources(self) -> List[OnlineResource]:
+        instructions = 'download it from ...'
+        archive = ManualDownloadResource(instructions, file_name='RSUSS.zip')
+        return [archive]
     
     def _prepare_sample(self, data):
         label_path, label = None, None
@@ -112,13 +83,6 @@ class RSUSS(Dataset):
             image_path, height_path = data
         else:
             (image_path, height_path), label_path = data
-        #img = h5py.File(image_path, 'r')['image'][()]
-        #img = torch.tensor(img).permute(2, 0, 1)
-        #height = h5py.File(height_path, 'r')['image'][()]
-        #height = torch.tensor(height)
-        #if label_path:
-        #    label = h5py.File(label_path, 'r')['image'][()]
-        #    label = torch.tensor(label)
 
         if self._split == 'train' and self.mode == 'unsupervised':
             return (image_path, height_path, None)
