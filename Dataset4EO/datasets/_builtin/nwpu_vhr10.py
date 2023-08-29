@@ -2,13 +2,13 @@ import os
 import tarfile
 import enum
 import functools
+import itertools
 import pathlib
 from tqdm import tqdm
 import h5py
 import torch
 from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
 from xml.etree import ElementTree
-from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
 import pdb
 import numpy as np
@@ -20,6 +20,8 @@ from torchdata.datapipes.iter import (
     Demultiplexer,
     IterKeyZipper,
     LineReader,
+    Zipper,
+    Concater,
 )
 
 from torchdata.datapipes.map import SequenceWrapper
@@ -47,6 +49,13 @@ _VAL_LEN = 245
 def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
+class NWPU_VHR10Resource(ManualDownloadResource):
+    def __init__(self, **kwargs: Any) -> None:
+        """
+        # Download DIOR data manually:
+        """
+        super().__init__('For data download, please refer to https://drive.google.com/drive/folders/1UdlgHk49iu6WpcJ5467iT-UqNPpx__CC',
+                         **kwargs)
 
 @register_dataset(NAME)
 class NWPU_VHR10(Dataset):
@@ -72,17 +81,24 @@ class NWPU_VHR10(Dataset):
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
     _CHECKSUMS = {
-        "all": ("https://drive.google.com/file/d/1--foZ3dV5OCsqXQXT84UeKtrAqc5CkAE",
-                "a417f01609ff7cf723751e17c95075afb7debcb1d3b4ed8e06a2d99f6c8c4fb6"),
+        "NWPU VHR-10 dataset": 'a417f01609ff7cf723751e17c95075afb7debcb1d3b4ed8e06a2d99f6c8c4fb6',
     }
 
     def _resources(self) -> List[OnlineResource]:
         resource = HttpResource(
-            file_name = 'NWPU_VHR10.rar',
-            url = self._CHECKSUMS['all'][0],
+            file_name = 'NWPU VHR-10 dataset.rar',
+            url = self._CHECKSUMS['NWPU VHR-10 dataset'][0],
             # preprocess = 'extract',
             sha256 = self._CHECKSUMS['all'][1]
         )
+
+        resource = NWPU_VHR10Resource(
+            file_name = 'ImageSets.zip',
+            preprocess = 'extract',
+            sha256 = self._CHECKSUMS['ImageSets.zip']
+        )
+
+
 
         return [resource]
 

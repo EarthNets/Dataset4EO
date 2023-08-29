@@ -40,7 +40,7 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 
 from .._api import register_dataset, register_info
 
-NAME = "dior"
+NAME = "isaid"
 _TRAIN_LEN = 5862
 _VAL_LEN = 5863
 _TRAIN_VAL_LEN = 5862 + 5863
@@ -51,18 +51,21 @@ _TEST_1K_LEN = 1000
 def _info() -> Dict[str, Any]:
     return dict(categories=read_categories_file(NAME))
 
-class DIORResource(ManualDownloadResource):
+class ISAIDResource(ManualDownloadResource):
     def __init__(self, **kwargs: Any) -> None:
         """
-        # Download DIOR data manually:
+        # Download iSAID data manually:
         """
-        super().__init__('For data download, please refer to https://drive.google.com/drive/folders/1UdlgHk49iu6WpcJ5467iT-UqNPpx__CC',
+        super().__init__('For data download and preparation, please refer to
+                         https://captain-whu.github.io/iSAID/.
+                         Make sure that the folder structure is the same as what is shown in
+                         https://github.com/CAPTAIN-WHU/iSAID_Devkit',
                          **kwargs)
 
 @register_dataset(NAME)
-class DIOR(Dataset):
+class ISAID(Dataset):
     """
-    - **paper link**: https://arxiv.org/abs/1909.00133?context=cs.LG.html
+    - **website**: https://captain-whu.github.io/iSAID/
     """
 
     def __init__(
@@ -74,7 +77,7 @@ class DIOR(Dataset):
         skip_integrity_check: bool = False,
     ) -> None:
 
-        assert split in ['train', 'val', 'test', 'test_1k', 'trainval', 'test_10']
+        assert split in ['train', 'val', 'test']
         self._split = split
         self.root = root
         self._categories = _info()["categories"]
@@ -82,43 +85,24 @@ class DIOR(Dataset):
 
         super().__init__(root, skip_integrity_check=skip_integrity_check)
 
-    _CHECKSUMS = {
-        'ImageSets.zip': '682a3e858d9c76fa7727031ddd1a0619e9cb85a1aee354265895e1856df7742c',
-        'Annotations.zip': 'e5ae9ba732cf2bc1c944de7a5caf5631929488cb10cb797b0b3722da2b0c6d72',
-        'JPEGImages-trainval.zip': '5e3757944739cffc8ba7de537db868e0a0ad86c8dfb44fa42c9dc88d6f327747',
-        'JPEGImages-test.zip': '8aa1e0e1496fd7a9f8cec7018ff3c9a196e9f9f47ef2aba2cb36f2dbf1368375'
-    }
-
     def get_classes(self):
         return self._categories
 
     def _resources(self) -> List[OnlineResource]:
 
-        split_resource = DIORResource(
-            file_name = 'ImageSets.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['ImageSets.zip']
+        train_resource = ISAIDResource(
+            file_name = 'train/images',
+            preprocess = None,
+            sha256 = None
         )
 
-        ann_resource = DIORResource(
-            file_name = 'Annotations.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['Annotations.zip']
+        val_resource = ISAIDResource(
+            file_name = 'val/images',
+            preprocess = None,
+            sha256 = None
         )
 
-        img_trainval_resource = DIORResource(
-            file_name = 'JPEGImages-trainval.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['JPEGImages-trainval.zip']
-        )
-
-        img_test_resource = DIORResource(
-            file_name = 'JPEGImages-test.zip',
-            preprocess = 'extract',
-            sha256 = self._CHECKSUMS['JPEGImages-test.zip']
-        )
-
-        return [split_resource, ann_resource, img_trainval_resource, img_test_resource]
+        return [train_resource, val_resource]
 
     def _prepare_sample(self, data):
 
@@ -140,12 +124,6 @@ class DIOR(Dataset):
             return 1
         elif path.name.endswith('test.txt'):
             return 2
-        elif path.name.endswith('test_1k.txt'):
-            return 3
-        elif path.name.endswith('test_10.txt'):
-            return 4
-        else:
-            raise ValueError(f'name {path.name} not found as a split file')
 
     def _classify_archive(self, data):
         path = pathlib.Path(data[0])
@@ -190,12 +168,11 @@ class DIOR(Dataset):
         split_dp, ann_dp, trainval_img_dp, test_img_dp = resource_dps
 
         """ prepare split """
-        train_split, val_split, test_split, test_split_1k, test_split_10 = Demultiplexer(split_dp, 5, self._classify_split)
+        train_split, val_split, test_split = Demultiplexer(split_dp, 3, self._classify_split)
         train_split = LineReader(train_split)
         val_split = LineReader(val_split)
         test_split = LineReader(test_split)
-        test_1k_split = LineReader(test_split_1k)
-        test_10_split = LineReader(test_split_10)
+        test_1k_split = itertools.islice(test_split, 1000)
 
         if self._split == 'trainval':
             split_dp = train_split.concat(val_split)

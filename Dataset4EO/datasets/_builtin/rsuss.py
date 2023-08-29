@@ -7,7 +7,6 @@ import h5py
 import torch
 from typing import Any, Dict, List, Optional, Tuple, BinaryIO, cast, Union
 from xml.etree import ElementTree
-from torch.utils.data import DataLoader2
 from Dataset4EO import transforms
 import pathlib
 import pdb
