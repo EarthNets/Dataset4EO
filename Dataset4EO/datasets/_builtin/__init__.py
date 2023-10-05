@@ -17,3 +17,4 @@ from .season_net import SeasonNet
 from .fmow import FMoW
 from .bigearthnet import BigEarthNet
 from .geonrw import GeoNRW
+from .fair1m import Fair1M
