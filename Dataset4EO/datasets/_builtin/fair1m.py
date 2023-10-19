@@ -41,9 +41,9 @@ from Dataset4EO.features import BoundingBox, Label, EncodedImage
 from .._api import register_dataset, register_info
 
 NAME = "fair1m"
-_TRAIN_LEN = 16487
-_VAL_LEN = 8286
-_TEST_LEN = 18020
+_TRAIN_LEN = 16488
+_VAL_LEN = 8287
+_TEST_LEN = 18021
 _TEST_1K_LEN = 1000
 
 @register_info(NAME)

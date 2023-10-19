@@ -18,3 +18,8 @@ from .fmow import FMoW
 from .bigearthnet import BigEarthNet
 from .geonrw import GeoNRW
 from .fair1m import Fair1M
+from .five_billion import FiveBillion
+from .satlas_s1 import SatlasS1
+from .satlas_s2 import SatlasS2
+from .satlas_naip import SatlasNAIP
+from .hyper_11k import Hyper11k
