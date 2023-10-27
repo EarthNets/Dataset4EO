@@ -143,7 +143,7 @@ class SatlasNAIP(Dataset):
 
     def _datapipe(self, resource_dps: List[IterDataPipe]) -> IterDataPipe[Dict[str, Any]]:
 
-        dp, = resource_dps
+        dp = resource_dps
         ndp = Mapper(dp, self._prepare_sample)
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
