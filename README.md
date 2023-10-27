@@ -37,6 +37,7 @@ Todo List
 - [x] [SEASONET](https://zenodo.org/record/5850307#.Y0cayXbP1D8)
 - [x] [SSL4EO_S12](https://github.com/zhu-xlab/SSL4EO-S12)
 - [x] [Vaihingen](https://www.isprs.org/education/benchmarks/UrbanSemLab/2d-sem-label-vaihingen.aspx)
+- [x] [Satlas](https://satlas-pretrain.allen.ai)
 
 Continually updating
 
