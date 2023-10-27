@@ -148,7 +148,7 @@ class SatlasNAIP(Dataset):
         ndp = hint_shuffling(ndp)
         ndp = hint_sharding(ndp)
 
-        train_img_dp, = ndp
+        train_img_dp = ndp
         train_1k_img_dp = itertools.islice(train_img_dp, 1000)
         train_10k_img_dp = itertools.islice(train_img_dp, 10000)
 
