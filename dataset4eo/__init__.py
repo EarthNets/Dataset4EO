@@ -19,5 +19,6 @@ builtin_datasets = {
     "levircd": "snchen1230/LEVIRCD",
     "levircd+": "snchen1230/LEVIRCDPlus",
     "gid-15": "snchen1230/GID-15",
-    "loveda": "snchen1230/LoveDA"
+    "loveda": "snchen1230/LoveDA",
+    "exebenchfire": "snchen1230/ExEBench.Fire"
     }

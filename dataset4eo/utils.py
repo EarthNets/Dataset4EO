@@ -68,7 +68,7 @@ def load_hdf5_chunk(
                     channels.append(hdf5_file[channel_name][:])
                 else:
                     raise KeyError(f"Channel '{channel_name}' not found in HDF5 file.")
-            data_dict['image'] = np.stack(channels, axis=-1)
+            data_dict['image'] = np.stack(channels, axis=0)
     return data_dict
 
 
