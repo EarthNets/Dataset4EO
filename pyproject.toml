@@ -23,7 +23,7 @@ dependencies = [
     "torchvision==0.16.2",
     "numpy==1.26.4",
     "torchgeo",
-    "litdata",
+    "litdata==0.2.35",
     "fastparquet",
     "h5py",
 ]
